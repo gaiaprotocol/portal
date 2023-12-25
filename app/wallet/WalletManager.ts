@@ -3,7 +3,6 @@ import {
   createConfig,
   fetchBalance,
   getAccount,
-  mainnet,
   signMessage,
   watchAccount,
 } from "@wagmi/core";
@@ -14,6 +13,7 @@ import {
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/html";
 import { EventContainer } from "common-app-module";
+import { viemChains } from "../blockchain/Blockchains.js";
 
 class WalletManager extends EventContainer {
   private web3modal!: Web3Modal;
@@ -31,23 +31,21 @@ class WalletManager extends EventContainer {
   }
 
   public init(projectId: string) {
-    const chains = [mainnet];
-
-    const { publicClient } = configureChains(chains, [
+    const { publicClient } = configureChains(viemChains, [
       w3mProvider({ projectId }),
     ]);
 
     const wagmiConfig = createConfig({
       autoConnect: true,
-      connectors: w3mConnectors({ projectId, chains }),
+      connectors: w3mConnectors({ projectId, chains: viemChains }),
       publicClient,
     });
 
-    const ethereumClient = new EthereumClient(wagmiConfig, chains);
+    const ethereumClient = new EthereumClient(wagmiConfig, viemChains);
 
     this.web3modal = new Web3Modal({
       projectId,
-      themeMode: "light",
+      themeMode: "dark",
       themeVariables: {
         "--w3m-accent-color": "#9B4CFF",
         "--w3m-background-color": "#9B4CFF",

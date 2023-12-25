@@ -8,6 +8,7 @@ import messages_en from "../locales/en.yml";
 import messages_ko from "../locales/ko.yml";
 import BridgeView from "./bridge/BridgeView.js";
 import Config from "./Config.js";
+import Env from "./Env.js";
 import HistoryView from "./history/HistoryView.js";
 import Layout from "./layout/Layout.js";
 import WalletManager from "./wallet/WalletManager.js";
@@ -20,6 +21,8 @@ msg.setMessages({
 MaterialIconSystem.launch();
 
 export default async function initialize(config: Config) {
+  Env.dev = config.dev;
+
   AppInitializer.initialize(
     config.supabaseUrl,
     config.supabaseAnonKey,
