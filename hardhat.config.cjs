@@ -23,18 +23,24 @@ if (process.env.PRIVATE_KEY) {
 
 module.exports = {
   solidity: {
-    compilers: [
-      {
-        version: "0.8.20",
-        settings: {
-          evmVersion: "paris",
-          optimizer: {
-            enabled: true,
-            runs: 200,
-          },
+    compilers: [{
+      version: "0.5.6",
+      settings: {
+        optimizer: {
+          enabled: true,
+          runs: 200,
         },
       },
-    ],
+    }, {
+      version: "0.8.20",
+      settings: {
+        evmVersion: "paris",
+        optimizer: {
+          enabled: true,
+          runs: 200,
+        },
+      },
+    }],
   },
   networks: {
     mainnet: {
