@@ -1,4 +1,4 @@
-import { getNetwork, getWalletClient } from "@wagmi/core";
+import { getNetwork, getWalletClient, switchNetwork } from "@wagmi/core";
 import { ErrorAlert, EventContainer, msg } from "common-app-module";
 import {
   BaseContract,
@@ -56,7 +56,7 @@ export default abstract class Contract<CT extends BaseContract>
     }
 
     if (chain.id !== Blockchains[this.chain].chainId) {
-      //TODO: await new SwitchBlockchainPopup().wait();
+      await switchNetwork({ chainId: Blockchains[this.chain].chainId });
     }
 
     const signer = new JsonRpcSigner(
