@@ -14,9 +14,12 @@ export default class BridgeView extends View {
     Layout.append(
       this.container = el(
         ".bridge-view",
-        this.chooseAsset = new ChooseAsset(),
-        this.chooseChains = new ChooseChains(),
-        this.executeBridge = new ExecuteBridge(),
+        el(
+          ".steps",
+          this.chooseAsset = new ChooseAsset(),
+          this.chooseChains = new ChooseChains(),
+          this.executeBridge = new ExecuteBridge(),
+        ),
       ),
     );
     this.render(params.asset, params.fromChain, params.toChain);
@@ -31,6 +34,8 @@ export default class BridgeView extends View {
     fromChain: string | undefined,
     toChain: string | undefined,
   ) {
-    //TODO:
+    this.container.deleteClass("asset-selected", "chain-selected");
+    if (asset) this.container.addClass("asset-selected");
+    if (fromChain && toChain) this.container.addClass("chain-selected");
   }
 }

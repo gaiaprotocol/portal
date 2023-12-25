@@ -423,6 +423,7 @@ button.component > .title {
   display: flex;
   align-items: center;
   padding: 0 20px;
+  z-index: 999990;
 }
 @container (width < 1280px) {
   .title-bar {
@@ -472,6 +473,103 @@ button.component > .title {
 }
 .title-bar-wallet-display > .name {
   font-size: 14px;
+  font-weight: bold;
+}
+.asset-list::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.asset-list > .asset-list-item {
+  float: left;
+  margin-right: 16px;
+  margin-bottom: 16px;
+}
+.asset-list-item {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 16px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  cursor: pointer;
+}
+.asset-list-item > main {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  gap: 6px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.8) 100%);
+}
+.asset-list-item > main > h3 {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: bold;
+}
+.asset-list-item > main > .chain-logo-container {
+  display: flex;
+}
+.asset-list-item > main > .chain-logo-container > img {
+  margin-right: -2px;
+  width: 16px;
+  height: 16px;
+}
+.asset-list-item > main > .checkbox {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  border: 1px solid var(--accent-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+}
+.bridge-view {
+  padding: 16px;
+}
+.bridge-view > .steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.step-display {
+  border: 1px solid var(--line-color);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.step-display > header {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.step-display > header > .step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  background-color: var(--accent-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+.step-display > header > h3 {
+  font-size: 16px;
   font-weight: bold;
 }
 

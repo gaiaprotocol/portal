@@ -4,9 +4,9 @@ import Mix from "../asset-details/Mix.js";
 import AssetInfo from "./AssetInfo.js";
 
 const Assets: { [id: string]: AssetInfo } = {
-  ijm: Injeolmi,
-  mix: Mix,
   ["klaydice-special-dice-nft"]: KlaydiceSpecialDice,
+  mix: Mix,
+  ijm: Injeolmi,
 };
 
 export default Assets;
