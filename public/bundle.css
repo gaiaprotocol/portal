@@ -1,1 +1,392 @@
+/***
+    The new CSS reset - version 1.8.4 (last updated 14.2.2023)
+    GitHub page: https://github.com/elad2412/the-new-css-reset
+***/
+
+/*
+    Remove all the styles of the "User-Agent-Stylesheet", except for the 'display' property
+    - The "symbol *" part is to solve Firefox SVG sprite bug
+ */
+ *:where(:not(html, iframe, canvas, img, svg, video, audio, summary):not(svg *, symbol *)) {
+    all: unset;
+    display: revert;
+}
+
+/* Preferred box-sizing value */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Reapply the pointer cursor for anchor tags */
+a, button {
+    cursor: revert;
+}
+
+/* Remove list styles (bullets/numbers) */
+ol, ul, menu {
+    list-style: none;
+}
+
+/* For images to not be able to exceed their container */
+img {
+    max-inline-size: 100%;
+    max-block-size: 100%;
+}
+
+/* removes spacing between cells in tables */
+table {
+    border-collapse: collapse;
+}
+
+/* Safari - solving issue when using user-select:none on the <body> text input doesn't working */
+input, textarea {
+    -webkit-user-select: auto;
+}
+
+/* revert the 'white-space' property for textarea elements on Safari */
+textarea {
+    white-space: revert;
+}
+
+/* minimum style to allow to style meter element */
+meter {
+    -webkit-appearance: revert;
+    appearance: revert;
+}
+
+/* preformatted text - use only for this feature */
+:where(pre) {
+    all: revert;
+}
+
+/* reset default text opacity of input placeholder */
+::placeholder {
+    color: unset;
+}
+
+/* remove default dot (•) sign */
+::marker {
+    content: initial;
+}
+
+/* fix the feature of 'hidden' attribute.
+   display:revert; revert to element instead of attribute */
+:where([hidden]) {
+    display: none;
+}
+
+/* revert for bug in Chromium browsers
+   - fix for the content editable attribute will work properly.
+   - webkit-user-select: auto; added for Safari in case of using user-select:none on wrapper element*/
+:where([contenteditable]:not([contenteditable="false"])) {
+    -moz-user-modify: read-write;
+    -webkit-user-modify: read-write;
+    overflow-wrap: break-word;
+    -webkit-line-break: after-white-space;
+    -webkit-user-select: auto;
+}
+
+/* apply back the draggable feature - exist only in Chromium and Safari */
+:where([draggable="true"]) {
+    -webkit-user-drag: element;
+}
+
+/* Revert Modal native behavior */
+:where(dialog:modal) {
+    all: revert;
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlvAw.ttf) format('truetype');
+}
+:root {
+  --wrapper-bg-color: #121212;
+  --content-bg-color: #141414;
+  --text-color: #fff;
+  --line-color: #252527;
+  --accent-color: #C1A87D;
+  --popup-bg-color: rgba(0, 0, 0, 0.5);
+  --button-bg-color: rgba(193, 168, 125, 0.12);
+  --hover-color: rgba(193, 168, 125, 0.12);
+  width: 100%;
+  height: 100%;
+  background-color: var(--wrapper-bg-color);
+  color: var(--text-color);
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+}
+body {
+  width: 100%;
+  height: 100%;
+  container-type: inline-size;
+}
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.profile-image {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #252525;
+  background-size: cover;
+}
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 100, 'GRAD' 0, 'opsz' 24;
+}
+button.component {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  color: var(--accent-color);
+  line-height: 1em;
+}
+button.component.disabled {
+  cursor: not-allowed;
+}
+button.component.contained {
+  border: 1px solid var(--accent-color);
+  border-radius: 6px;
+  background-color: var(--button-bg-color);
+}
+button.component > .title {
+  text-transform: capitalize;
+}
+.nav-bar.component {
+  position: fixed;
+  left: calc(50% - 1280px / 2);
+  top: 0;
+  z-index: 999990;
+  width: 90px;
+  height: 100%;
+  background-color: var(--wrapper-bg-color);
+  border-right: 1px solid var(--line-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  padding-bottom: 32px;
+  overflow-y: auto;
+}
+@container (width < 1280px) {
+  .nav-bar.component {
+    left: 0;
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    height: calc(90px + env(safe-area-inset-bottom));
+    padding-bottom: calc(6px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line-color);
+    border-right: none;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
+    padding-bottom: 0;
+    overflow-y: visible;
+  }
+  .nav-bar.component::before,
+  .nav-bar.component::after {
+    content: '';
+  }
+}
+.nav-bar.component > h1.logo {
+  padding: 21px 0;
+}
+@container (width < 1280px) {
+  .nav-bar.component > h1.logo {
+    display: none;
+  }
+}
+.nav-bar.component > h1.logo > a > img {
+  max-width: 55px;
+  max-height: 55px;
+}
+.nav-bar.component > a.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  font-size: 12px;
+}
+.nav-bar.component > a.menu > .icon {
+  font-size: 42px;
+}
+.nav-bar.component > a.menu.active {
+  color: var(--accent-color);
+}
+.splash-screen.component {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background-color: var(--bg-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.splash-screen.component > img {
+  max-width: 120px;
+  max-height: 120px;
+}
+.popup-background {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 999998;
+  width: 100%;
+  height: 100%;
+  background-color: var(--popup-bg-color);
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  padding: 20px 0;
+}
+.popup.component {
+  max-width: 614px;
+  width: 90%;
+  margin: auto;
+  border: 1px solid var(--line-color);
+  border-radius: 16px;
+  background-color: var(--content-bg-color);
+}
+.popup.component > header {
+  display: flex;
+  align-items: center;
+  padding: 30px;
+}
+.popup.component > header > h1 {
+  flex-grow: 1;
+  font-size: 24px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+@keyframes loading-spinner-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.loading-spinner.component:after {
+  content: " ";
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--text-color);
+  border-color: var(--text-color) transparent var(--text-color) transparent;
+  animation: loading-spinner-animation 1.2s linear infinite;
+}
+.file-drop-area.component.highlight {
+  outline: 2px dotted var(--primary-color);
+}
+.rich-display.component:empty {
+  display: none;
+}
+.rich-display.component > .image-container > a {
+  cursor: pointer;
+}
+.rich-display.component > .image-container > a > img {
+  border-radius: 12px;
+  max-height: 320px;
+  object-fit: cover;
+}
+.post-display.sofi-component {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+  padding: 20px;
+  /*@media @phone {
+        gap: 6px;
+    }*/
+}
+.post-display.sofi-component > main {
+  flex-grow: 1;
+}
+.post-display.sofi-component .author-profile-image {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #252525;
+  background-size: cover;
+  cursor: pointer;
+}
+.post-display.sofi-component .author {
+  padding-top: 4px;
+  display: flex;
+  gap: 4px;
+}
+.post-display.sofi-component .author > .name {
+  font-weight: 700;
+  cursor: pointer;
+}
+.post-display.sofi-component .author > .x-username {
+  color: #595959;
+  cursor: pointer;
+}
+.post-display.sofi-component button.owner-menu {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+.post-display.sofi-component .message {
+  margin-top: 6px;
+}
+.post-display.sofi-component .rich-display {
+  margin-top: 20px;
+}
+.post-display.sofi-component .date {
+  margin-top: 20px;
+  color: #595959;
+  font-size: 12px;
+}
+.post-display.sofi-component .actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 30px;
+}
+.post-display.sofi-component .actions > button {
+  display: flex;
+  gap: 16px;
+  cursor: pointer;
+  align-items: center;
+}
+.post-thread.sofi-component > .post-display,
+.post-thread.sofi-component > .post-form {
+  border-bottom: 1px solid #242424;
+}
+:root {
+  --wrapper-bg-color: #0A0A0A;
+  --content-bg-color: #131313;
+  --text-color: #fff;
+  --line-color: #242424;
+  --accent-color: #9B4CFF;
+  --popup-bg-color: rgba(0, 0, 0, 0.5);
+  --button-bg-color: rgba(155, 76, 255, 0.12);
+  --hover-color: rgba(155, 76, 255, 0.12);
+}
 

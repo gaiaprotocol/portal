@@ -4,9 +4,17 @@ import {
   msg,
   Router,
 } from "common-app-module";
+import messages_en from "../locales/en.yml";
+import messages_ko from "../locales/ko.yml";
+import BridgeView from "./bridge/BridgeView.js";
 import Config from "./Config.js";
+import HistoryView from "./history/HistoryView.js";
+import Layout from "./layout/Layout.js";
 
-msg.setMessages({});
+msg.setMessages({
+  en: messages_en,
+  ko: messages_ko,
+});
 
 MaterialIconSystem.launch();
 
@@ -25,8 +33,8 @@ export default async function initialize(config: Config) {
       "{asset}/{fromChain}",
       "{asset}/{fromChain}/{toChain}",
     ],
-    Bridge,
+    BridgeView,
     ["history"],
   );
-  Router.route("history", History);
+  Router.route("history", HistoryView);
 }
