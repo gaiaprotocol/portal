@@ -10,6 +10,26 @@ const Mix: AssetInfo = {
     [BlockchainType.Ethereum]: "0x5DB69B9f173f9D9FA91b7cDCc4Dc9939C0499CFe",
     [BlockchainType.Polygon]: "0x5085a6879Af6767732c51CA0fc7422d41d9aAEf6",
   },
+
+  send: async (
+    toChainId: number,
+    receiver: string,
+    ids: bigint[],
+    amounts: bigint[],
+  ) => {
+    //TODO: implement
+  },
+
+  receive: async (
+    fromChainId: number,
+    sendId: string,
+    sender: string,
+    ids: bigint[],
+    amounts: bigint[],
+    signature: string,
+  ) => {
+    //TODO: implement
+  },
 };
 
 export default Mix;

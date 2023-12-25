@@ -11,6 +11,26 @@ const Injeolmi: AssetInfo = {
     [BlockchainType.Polygon]: "0x9b23804ede399ebf86612b560Ac0451f1448185a",
     [BlockchainType.BNB]: "0xf258F061aE2D68d023eA6e7Cceef97962785c6c1",
   },
+
+  send: async (
+    toChainId: number,
+    receiver: string,
+    ids: bigint[],
+    amounts: bigint[],
+  ) => {
+    //TODO: implement
+  },
+
+  receive: async (
+    fromChainId: number,
+    sendId: string,
+    sender: string,
+    ids: bigint[],
+    amounts: bigint[],
+    signature: string,
+  ) => {
+    //TODO: implement
+  },
 };
 
 export default Injeolmi;

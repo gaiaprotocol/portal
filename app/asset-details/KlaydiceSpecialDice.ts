@@ -13,12 +13,33 @@ const KlaydiceSpecialDice: AssetInfo = {
     [BlockchainType.BNB]: "0x1dDB2C0897daF18632662E71fdD2dbDC0eB3a9Ec",
     [BlockchainType.Bifrost]: "0xdf98e88944be3bc7C861135dAc617AD562EBB8D0",
   },
+
   fetchMetadata: async (tokenId: string) => {
     const data = metadata.find((m) => String(m.id) === tokenId);
     if (!data) {
       throw new Error(`Metadata not found for ${tokenId}`);
     }
     return { name: data.n, image: data.i };
+  },
+
+  send: async (
+    toChainId: number,
+    receiver: string,
+    ids: bigint[],
+    amounts: bigint[],
+  ) => {
+    //TODO: implement
+  },
+
+  receive: async (
+    fromChainId: number,
+    sendId: string,
+    sender: string,
+    ids: bigint[],
+    amounts: bigint[],
+    signature: string,
+  ) => {
+    //TODO: implement
   },
 };
 
