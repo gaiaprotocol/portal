@@ -2,13 +2,13 @@ import {
   BodyNode,
   DomNode,
   el,
-  Icon,
   MaterialIcon,
   msg,
   NavBar,
   View,
   ViewParams,
 } from "common-app-module";
+import TitleBar from "./TitleBar.js";
 
 export default class Layout extends View {
   private static current: Layout;
@@ -18,6 +18,7 @@ export default class Layout extends View {
   }
 
   private navBar: NavBar;
+  private titleBar: TitleBar;
   private content: DomNode;
 
   constructor(params: ViewParams, uri: string) {
@@ -44,8 +45,10 @@ export default class Layout extends View {
             },
           ],
         }),
-        this.content = el(
+        el(
           "main",
+          this.titleBar = new TitleBar(),
+          this.content = el("section.content"),
         ),
       ),
     );
@@ -64,5 +67,6 @@ export default class Layout extends View {
         uri.indexOf("/") === -1 ? uri.length : uri.indexOf("/"),
       ),
     );
+    this.titleBar.changeTitle(uri);
   }
 }

@@ -17,6 +17,11 @@
   },
   "type": "module",
   "dependencies": {
+    "@wagmi/core": "^1.4.9",
+    "@web3modal/ethereum": "^2.7.1",
+    "@web3modal/html": "^2.7.1",
+    "ethers": "^6.8.1",
+    "viem": "^1.5.3",
     "common-app-module": "^0.0.2"
   },
   "devDependencies": {

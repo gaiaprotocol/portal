@@ -1,3 +1,6 @@
+/*!******************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!../common-app-module/style/reset.css ***!
+  \******************************************************************************************************************/
 /***
     The new CSS reset - version 1.8.4 (last updated 14.2.2023)
     GitHub page: https://github.com/elad2412/the-new-css-reset
@@ -98,6 +101,9 @@ meter {
 :where(dialog:modal) {
     all: revert;
 }
+/*!*********************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/less-loader/dist/cjs.js!./public/style/main.less ***!
+  \*********************************************************************************************************************************************/
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
@@ -139,12 +145,12 @@ button {
   justify-content: center;
   cursor: pointer;
 }
-.profile-image {
+.avatar {
   flex-shrink: 0;
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: #252525;
+  background-color: #252527;
   background-size: cover;
 }
 .material-symbols-outlined {
@@ -325,12 +331,12 @@ button.component > .title {
 .post-display.sofi-component > main {
   flex-grow: 1;
 }
-.post-display.sofi-component .author-profile-image {
+.post-display.sofi-component .author-avatar {
   flex-shrink: 0;
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: #252525;
+  background-color: #252527;
   background-size: cover;
   cursor: pointer;
 }
@@ -388,5 +394,90 @@ button.component > .title {
   --popup-bg-color: rgba(0, 0, 0, 0.5);
   --button-bg-color: rgba(155, 76, 255, 0.12);
   --hover-color: rgba(155, 76, 255, 0.12);
+}
+.layout {
+  height: 100%;
+  overflow-y: auto;
+}
+.layout > main {
+  width: 1280px;
+  min-height: 100%;
+  margin: 0 auto;
+  padding-top: 56px;
+  padding-left: 90px;
+  background-color: var(--content-bg-color);
+  border-right: 1px solid var(--line-color);
+}
+@container (width < 1280px) {
+  .layout > main {
+    width: 100%;
+    padding-left: 0;
+    padding-bottom: calc(90px + env(safe-area-inset-bottom));
+    border-right: none;
+  }
+}
+.title-bar {
+  position: fixed;
+  left: calc(50% - 1280px / 2 + 90px);
+  top: 0;
+  width: calc(1280px - 90px - 1px);
+  height: 56px;
+  background-color: var(--content-bg-color);
+  border-bottom: 1px solid var(--line-color);
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+@container (width < 1280px) {
+  .title-bar {
+    left: 0;
+    width: 100%;
+  }
+}
+.title-bar > section.wallet {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.side-panel {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 999998;
+  width: 100%;
+  height: 100%;
+  background-color: var(--popup-bg-color);
+}
+.side-panel > main {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 360px;
+  height: 100%;
+  border-left: 1px solid var(--line-color);
+  background-color: var(--content-bg-color);
+}
+.title-bar-wallet-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--accent-color);
+  border-radius: 19px;
+  padding: 5px 10px 5px 5px;
+  cursor: pointer;
+}
+.title-bar-wallet-display:hover {
+  background-color: var(--accent-color);
+}
+.title-bar-wallet-display > .avatar {
+  width: 26px;
+  height: 26px;
+}
+.title-bar-wallet-display > .name {
+  font-size: 14px;
+  font-weight: bold;
 }
 

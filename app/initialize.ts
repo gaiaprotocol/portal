@@ -10,6 +10,7 @@ import BridgeView from "./bridge/BridgeView.js";
 import Config from "./Config.js";
 import HistoryView from "./history/HistoryView.js";
 import Layout from "./layout/Layout.js";
+import WalletManager from "./wallet/WalletManager.js";
 
 msg.setMessages({
   en: messages_en,
@@ -24,6 +25,8 @@ export default async function initialize(config: Config) {
     config.supabaseAnonKey,
     config.dev,
   );
+
+  WalletManager.init(config.walletConnectProjectId);
 
   Router.route("**", Layout);
   Router.route(
