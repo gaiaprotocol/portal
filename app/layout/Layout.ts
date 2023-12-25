@@ -9,6 +9,7 @@ import {
   ViewParams,
 } from "common-app-module";
 import TitleBar from "./TitleBar.js";
+import Assets from "../asset/Assets.js";
 
 export default class Layout extends View {
   private static current: Layout;
@@ -61,6 +62,7 @@ export default class Layout extends View {
   }
 
   private changeUri(uri: string): void {
+    if (Assets[uri] || Assets[uri.substring(0, uri.indexOf("/"))]) uri = "";
     this.navBar.active(
       uri === "" ? "bridge" : uri.substring(
         0,

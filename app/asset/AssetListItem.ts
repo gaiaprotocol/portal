@@ -5,10 +5,11 @@ export default class AssetListItem extends DomNode {
   private chainLogoContainer: DomNode;
   private checkbox: Checkbox;
 
-  constructor(assetId: string, asset: AssetInfo) {
+  constructor(public assetId: string, asset: AssetInfo) {
     super(".asset-list-item");
-    this.style({ backgroundImage: `url(${asset.logo})` });
-    this.append(
+    this.addAllowedEvents("select", "deselect");
+
+    this.style({ backgroundImage: `url(${asset.logo})` }).append(
       el(
         "main",
         el("h3", asset.name),
@@ -25,5 +26,21 @@ export default class AssetListItem extends DomNode {
         }),
       );
     }
+
+    this.onDom("click", () => this.checkbox.toggle());
+    this.checkbox.on("check", () => this.fireEvent("select"));
+    this.checkbox.on("uncheck", () => this.fireEvent("deselect"));
+  }
+
+  public select() {
+    this.checkbox.check();
+  }
+
+  public deselect() {
+    this.checkbox.uncheck();
+  }
+
+  public toggle() {
+    this.checkbox.toggle();
   }
 }

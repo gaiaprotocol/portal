@@ -1,3 +1,6 @@
+/*!******************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!../common-app-module/style/reset.css ***!
+  \******************************************************************************************************************/
 /***
     The new CSS reset - version 1.8.4 (last updated 14.2.2023)
     GitHub page: https://github.com/elad2412/the-new-css-reset
@@ -98,6 +101,9 @@ meter {
 :where(dialog:modal) {
     all: revert;
 }
+/*!*********************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/less-loader/dist/cjs.js!./public/style/main.less ***!
+  \*********************************************************************************************************************************************/
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
@@ -298,6 +304,40 @@ button.component > .title {
   border-color: var(--text-color) transparent var(--text-color) transparent;
   animation: loading-spinner-animation 1.2s linear infinite;
 }
+.checkbox.component {
+  position: relative;
+  height: 27px;
+  width: 27px;
+}
+.checkbox.component > .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  border: 1px solid var(--accent-color);
+  border-radius: 50%;
+}
+.checkbox.component > .checkmark:after {
+  display: none;
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--accent-color);
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.checkbox.component > input:checked ~ .checkmark {
+  background-color: #fff;
+}
+.checkbox.component > input:checked ~ .checkmark:after {
+  display: block;
+}
 .file-drop-area.component.highlight {
   outline: 2px dotted var(--primary-color);
 }
@@ -388,6 +428,7 @@ button.component > .title {
   --popup-bg-color: rgba(0, 0, 0, 0.5);
   --button-bg-color: rgba(155, 76, 255, 0.12);
   --hover-color: rgba(155, 76, 255, 0.12);
+  --surface-bg-color: #252527;
 }
 .layout {
   height: 100%;
@@ -528,13 +569,6 @@ button.component > .title {
   position: absolute;
   top: 16px;
   right: 16px;
-  border: 1px solid var(--accent-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
 }
 .bridge-view {
   padding: 16px;
@@ -544,9 +578,12 @@ button.component > .title {
   flex-direction: column;
   gap: 16px;
 }
+.bridge-view.asset-selected > .steps > .step-display.step-2 > main {
+  display: flex;
+}
 .step-display {
-  border: 1px solid var(--line-color);
   border-radius: 16px;
+  background-color: var(--surface-bg-color);
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -571,5 +608,6 @@ button.component > .title {
 .step-display > header > h3 {
   font-size: 16px;
   font-weight: bold;
+  text-transform: capitalize;
 }
 

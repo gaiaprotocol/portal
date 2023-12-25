@@ -15,7 +15,7 @@ export default class ExecuteBridge extends StepDisplay {
 
   constructor() {
     super(".execute-bridge", 3, "Execute Bridge");
-    this.append(
+    this.container.append(
       this.input = el("input.amount", { placeholder: "Amount" }),
       this.approveButton = new Button({
         title: "Approve",

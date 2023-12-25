@@ -5,5 +5,18 @@
         display       : flex;
         flex-direction: column;
         gap           : 16px;
+
+        >.step-display.step-2>main,
+        >.step-display.step-3>main {
+            //TODO: display: none;
+        }
+    }
+
+    &.asset-selected {
+        >.steps {
+            >.step-display.step-2>main {
+                display: flex;
+            }
+        }
     }
 }

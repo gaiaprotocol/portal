@@ -1,12 +1,12 @@
 import { el, View, ViewParams } from "common-app-module";
 import Layout from "../layout/Layout.js";
-import ChooseAsset from "./steps/ChooseAsset.js";
-import ChooseChains from "./steps/ChooseChains.js";
 import ExecuteBridge from "./steps/ExecuteBridge.js";
+import SelectAsset from "./steps/SelectAsset.js";
+import SelectChains from "./steps/SelectChains.js";
 
 export default class BridgeView extends View {
-  private chooseAsset: ChooseAsset;
-  private chooseChains: ChooseChains;
+  private selectAsset: SelectAsset;
+  private selectChains: SelectChains;
   private executeBridge: ExecuteBridge;
 
   constructor(params: ViewParams) {
@@ -16,8 +16,8 @@ export default class BridgeView extends View {
         ".bridge-view",
         el(
           ".steps",
-          this.chooseAsset = new ChooseAsset(),
-          this.chooseChains = new ChooseChains(),
+          this.selectAsset = new SelectAsset(),
+          this.selectChains = new SelectChains(),
           this.executeBridge = new ExecuteBridge(),
         ),
       ),
@@ -37,5 +37,8 @@ export default class BridgeView extends View {
     this.container.deleteClass("asset-selected", "chain-selected");
     if (asset) this.container.addClass("asset-selected");
     if (fromChain && toChain) this.container.addClass("chain-selected");
+
+    this.selectAsset.selectAsset(asset);
+    this.selectChains.selectChains(fromChain, toChain);
   }
 }
