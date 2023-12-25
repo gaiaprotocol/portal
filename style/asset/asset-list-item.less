@@ -8,6 +8,10 @@
     background-position: center center;
     cursor             : pointer;
 
+    @container (width < @safe-width) {
+        width: calc(50% - 16px);
+    }
+
     >main {
         position        : absolute;
         left            : 0;

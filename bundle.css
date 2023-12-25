@@ -511,6 +511,9 @@ button.component > .title {
   font-size: 14px;
   font-weight: bold;
 }
+.asset-list {
+  padding-left: 16px;
+}
 .asset-list::after {
   content: '';
   display: table;
@@ -530,6 +533,11 @@ button.component > .title {
   background-repeat: no-repeat;
   background-position: center center;
   cursor: pointer;
+}
+@container (width < 1280px) {
+  .asset-list-item {
+    width: calc(50% - 16px);
+  }
 }
 .asset-list-item > main {
   position: absolute;
@@ -573,18 +581,21 @@ button.component > .title {
   flex-direction: column;
   gap: 16px;
 }
+.bridge-view > .steps > .step-display.step-1 {
+  padding-right: 0;
+  padding-bottom: 0;
+}
 .bridge-view.asset-selected > .steps > .step-display.step-2 > main {
   display: flex;
 }
 .step-display {
   border-radius: 16px;
   background-color: var(--surface-bg-color);
-  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 .step-display > header {
+  padding: 16px;
   display: flex;
   gap: 16px;
   align-items: center;
