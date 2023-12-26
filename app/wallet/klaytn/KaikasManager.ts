@@ -13,6 +13,7 @@ class KaikasManager extends EventContainer implements KlaytnWalletManager {
 
   constructor() {
     super();
+    this.addAllowedEvents("accountChanged");
     if (this.installed) this.provider = new ethers.BrowserProvider(this.klaytn);
   }
 
@@ -26,10 +27,12 @@ class KaikasManager extends EventContainer implements KlaytnWalletManager {
   public async connect() {
     this.store.delete("temp-disconnected");
     await this.klaytn?.request({ method: "eth_requestAccounts" });
+    this.fireEvent("accountChanged");
   }
 
   public async disconnect() {
     this.store.set("temp-disconnected", true);
+    this.fireEvent("accountChanged");
   }
 }
 

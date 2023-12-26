@@ -14,6 +14,11 @@ class KlipManager extends EventContainer implements KlaytnWalletManager {
 
   public installed = true;
 
+  constructor() {
+    super();
+    this.addAllowedEvents("accountChanged");
+  }
+
   public async getAddress(): Promise<string | undefined> {
     return this.store.get<string>("address");
   }
@@ -44,11 +49,12 @@ class KlipManager extends EventContainer implements KlaytnWalletManager {
     const address =
       (await this.request("QR 코드로 Klip 접속", res)).klaytn_address;
     this.store.set("address", address, true);
+    this.fireEvent("accountChanged");
   }
 
   public async disconnect() {
     this.store.delete("address");
-    location.reload();
+    this.fireEvent("accountChanged");
   }
 }
 

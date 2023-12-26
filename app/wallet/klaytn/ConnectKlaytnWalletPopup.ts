@@ -11,6 +11,9 @@ import KaikasManager from "./KaikasManager.js";
 import KlipManager from "./KlipManager.js";
 
 export default class ConnectKlaytnWalletPopup extends Popup {
+  private resolve: (() => void) | undefined;
+  private reject: (() => void) | undefined;
+
   constructor() {
     super({ barrierDismissible: true });
     this.append(
@@ -36,12 +39,15 @@ export default class ConnectKlaytnWalletPopup extends Popup {
             click: async () => {
               if (KaikasManager.installed) {
                 await KaikasManager.connect();
+                this.resolve?.();
+                this.reject = undefined;
                 this.delete();
               } else {
                 window.open(
                   "https://chrome.google.com/webstore/detail/kaikas/jblndlipeogpafnldhgmapagcccfchpi",
                   "_blank",
                 );
+                this.reject?.();
               }
             },
           }),
@@ -50,6 +56,8 @@ export default class ConnectKlaytnWalletPopup extends Popup {
             title: "Connect using Klip",
             click: async () => {
               await KlipManager.connect();
+              this.resolve?.();
+              this.reject = undefined;
               this.delete();
             },
           }),
@@ -63,5 +71,14 @@ export default class ConnectKlaytnWalletPopup extends Popup {
         ),
       ),
     );
+
+    this.on("delete", () => this.reject?.());
+  }
+
+  public async wait(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.resolve = resolve;
+      this.reject = reject;
+    });
   }
 }
