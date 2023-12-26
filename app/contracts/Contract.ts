@@ -10,7 +10,7 @@ import {
 } from "ethers";
 import BlockchainType from "../blockchain/BlockchainType.js";
 import Blockchains from "../blockchain/Blockchains.js";
-import WalletManager from "../wallet/WalletManager.js";
+import EvmWalletManager from "../wallet/EvmWalletManager.js";
 
 export default abstract class Contract<CT extends BaseContract>
   extends EventContainer {
@@ -35,7 +35,7 @@ export default abstract class Contract<CT extends BaseContract>
   }
 
   protected async getWriteContract(): Promise<CT> {
-    if (WalletManager.connected !== true) await WalletManager.connect();
+    if (EvmWalletManager.connected !== true) await EvmWalletManager.connect();
 
     const walletClient = await getWalletClient();
     if (!walletClient) {

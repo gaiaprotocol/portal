@@ -1,5 +1,6 @@
 import { Button, DomNode, el } from "common-app-module";
 import TransactionList from "../../history/TransactionList.js";
+import WalletManager from "../../wallet/WalletManager.js";
 import StepDisplay from "./StepDisplay.js";
 
 // input amount
@@ -28,6 +29,13 @@ export default class ExecuteBridge extends StepDisplay {
       }),
       this.transactionList = new TransactionList(),
     );
+  }
+
+  public init(
+    fromWalletManager: WalletManager,
+    toWalletManager: WalletManager,
+  ) {
+    //TODO:
   }
 
   private async checkApprove() {

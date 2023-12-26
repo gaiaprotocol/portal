@@ -1,5 +1,6 @@
 import { DomNode, el, Select } from "common-app-module";
 import Assets from "../../asset/Assets.js";
+import WalletSelector from "../../wallet/WalletSelector.js";
 
 export default class ChainSelector extends DomNode {
   private assetId: string | undefined;
@@ -7,6 +8,7 @@ export default class ChainSelector extends DomNode {
   private _except: string | undefined;
 
   private select: Select<string>;
+  private walletSelector: WalletSelector;
 
   constructor() {
     super(".chain-selector");
@@ -17,6 +19,7 @@ export default class ChainSelector extends DomNode {
         placeholder: "Select chain",
         options: [],
       }),
+      this.walletSelector = new WalletSelector(),
     );
 
     this.select.on("change", (chain) => {
@@ -59,5 +62,6 @@ export default class ChainSelector extends DomNode {
     if (this._chain === chain) return;
     this._chain = chain;
     this.select.value = chain;
+    this.walletSelector.chain = chain;
   }
 }
