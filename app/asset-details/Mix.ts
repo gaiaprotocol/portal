@@ -2,7 +2,7 @@ import AssetInfo from "../asset/AssetInfo.js";
 import BlockchainType from "../blockchain/BlockchainType.js";
 
 const Mix: AssetInfo = {
-  name: "Mix",
+  name: "DSC Mix",
   symbol: "MIX",
   logo: "/images/asset-logos/mix.png",
   addresses: {
