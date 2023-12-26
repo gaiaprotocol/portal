@@ -32,7 +32,7 @@ const Blockchains: { [chain: string]: BlockchainInfo } = {
   },
   [BlockchainType.Klaytn]: {
     chainId: 8217,
-    rpc: klaytn.rpcUrls.default.http[0],
+    rpc: "https://public-en-cypress.klaytn.net",
     blockExplorer: klaytn.blockExplorers.default,
     walletManager: KlaytnWalletManager,
   },

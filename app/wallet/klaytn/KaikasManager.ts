@@ -14,7 +14,10 @@ class KaikasManager extends EventContainer implements KlaytnWalletManager {
   constructor() {
     super();
     this.addAllowedEvents("accountChanged");
-    if (this.installed) this.provider = new ethers.BrowserProvider(this.klaytn);
+    if (this.installed) {
+      this.provider = new ethers.BrowserProvider(this.klaytn);
+      this.klaytn.on("accountsChanged", () => this.fireEvent("accountChanged"));
+    }
   }
 
   public async getAddress(): Promise<string | undefined> {

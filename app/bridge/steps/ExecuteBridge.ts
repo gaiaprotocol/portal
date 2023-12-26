@@ -2,6 +2,7 @@ import { Button, DomNode, el } from "common-app-module";
 import Assets from "../../asset/Assets.js";
 import BlockchainType from "../../blockchain/BlockchainType.js";
 import TransactionList from "../../history/TransactionList.js";
+import TokenList from "../../token/TokenList.js";
 import WalletManager from "../../wallet/WalletManager.js";
 import StepDisplay from "./StepDisplay.js";
 
@@ -10,6 +11,7 @@ import StepDisplay from "./StepDisplay.js";
 // send
 // receive
 export default class ExecuteBridge extends StepDisplay {
+  private tokenListContainer: DomNode;
   private input: DomNode<HTMLInputElement>;
   private approveButton: Button;
   private sendButton: Button;
@@ -19,6 +21,7 @@ export default class ExecuteBridge extends StepDisplay {
   constructor() {
     super(".execute-bridge", 3, "Execute Bridge");
     this.container.append(
+      this.tokenListContainer = el(".token-list-container"),
       this.input = el("input.amount", { placeholder: "Amount" }),
       this.approveButton = new Button({
         title: "Approve",
@@ -40,10 +43,11 @@ export default class ExecuteBridge extends StepDisplay {
     toChain: BlockchainType,
     toWallet: WalletManager,
   ) {
+    this.tokenListContainer.empty();
     const asset = Assets[assetId];
     if (asset) {
-      const balance = await asset.fetchBalance(fromChain, fromWallet);
-      console.log(balance);
+      const tokens = await asset.fetchTokens(fromChain, fromWallet);
+      this.tokenListContainer.append(new TokenList(asset, tokens));
     }
   }
 

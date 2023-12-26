@@ -1,5 +1,6 @@
 import BlockchainType from "../blockchain/BlockchainType.js";
 import WalletManager from "../wallet/WalletManager.js";
+import AssetType from "./AssetType.js";
 
 export interface AssetMetadata {
   name: string;
@@ -7,17 +8,23 @@ export interface AssetMetadata {
 }
 
 export default interface AssetInfo {
+  type: AssetType;
   name: string;
   symbol: string;
+  decimals?: number;
   logo: string;
+
   addresses: { [chain: string]: string };
   senderAddress?: string;
 
-  fetchMetadata?: (tokenId: string) => Promise<AssetMetadata>;
-  fetchBalance: (
+  fetchTokens: (
     chain: BlockchainType,
     wallet: WalletManager,
-  ) => Promise<{ [tokenId: string]: bigint }>;
+  ) => Promise<{
+    id: bigint;
+    amount: bigint;
+    metadata?: AssetMetadata;
+  }[]>;
 
   send: (
     toChainId: number,

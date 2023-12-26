@@ -78,4 +78,8 @@ export default class ChainSelector extends DomNode {
   public get wallet() {
     return this.walletSelector.wallet;
   }
+
+  public get walletAddress() {
+    return this.walletSelector.address;
+  }
 }

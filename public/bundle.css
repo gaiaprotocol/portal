@@ -711,6 +711,11 @@ button.component > .title {
   max-width: 912px;
   margin: auto;
 }
+@container (width < 1280px) {
+  .bridge-view {
+    padding: 16px;
+  }
+}
 .bridge-view > .steps {
   display: flex;
   flex-direction: column;

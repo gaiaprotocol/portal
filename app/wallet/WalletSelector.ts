@@ -16,6 +16,7 @@ import WalletManager from "./WalletManager.js";
 export default class WalletSelector extends DomNode {
   private _chain: BlockchainType | undefined;
   public wallet: (WalletManager & EventContainer) | undefined;
+  public address: string | undefined;
 
   constructor() {
     super(".wallet-selector");
@@ -50,8 +51,8 @@ export default class WalletSelector extends DomNode {
   private async render() {
     this.empty();
     if (this.wallet) {
-      const address = await this.wallet.getAddress();
-      if (!address) {
+      this.address = await this.wallet.getAddress();
+      if (!this.address) {
         this.append(
           new Button({
             title: "Connect Wallet",
@@ -59,7 +60,7 @@ export default class WalletSelector extends DomNode {
           }),
         );
       } else {
-        new WalletDisplay(address).appendTo(this).onDom(
+        new WalletDisplay(this.address).appendTo(this).onDom(
           "click",
           (event) => {
             if (this._chain) {
@@ -73,8 +74,8 @@ export default class WalletSelector extends DomNode {
                   icon: new MaterialIcon("content_copy"),
                   title: "Copy address",
                   click: () => {
-                    if (address) {
-                      navigator.clipboard.writeText(address);
+                    if (this.address) {
+                      navigator.clipboard.writeText(this.address);
                     }
                     new Snackbar({ message: "Address copied to clipboard" });
                   },
@@ -83,7 +84,7 @@ export default class WalletSelector extends DomNode {
                   title: `View on ${chain.blockExplorer.name}`,
                   click: () =>
                     window.open(
-                      `${chain.blockExplorer.url}/address/${address}`,
+                      `${chain.blockExplorer.url}/address/${this.address}`,
                       "_blank",
                     ),
                 }, {

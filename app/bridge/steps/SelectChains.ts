@@ -40,15 +40,22 @@ export default class SelectChains extends StepDisplay {
   private checkComplete() {
     const fromChain = this.fromChainSelector.chain;
     const fromWallet = this.fromChainSelector.wallet;
+    const fromWalletAddress = this.fromChainSelector.walletAddress;
     const toChain = this.toChainSelector.chain;
     const toWallet = this.toChainSelector.wallet;
+    const toWalletAddress = this.toChainSelector.walletAddress;
+
     if (
-      this.assetId && fromChain && fromWallet && toChain && toWallet && (
+      this.assetId && fromChain && fromWallet && fromWalletAddress && toChain &&
+      toWallet && toWalletAddress &&
+      (
         this.prevCompletedData.asset !== this.assetId ||
         this.prevCompletedData.fromChain !== fromChain ||
-        this.prevCompletedData.toChain !== toChain ||
         this.prevCompletedData.fromWallet !== fromWallet ||
-        this.prevCompletedData.toWallet !== toWallet
+        this.prevCompletedData.fromWalletAddress !== fromWalletAddress ||
+        this.prevCompletedData.toChain !== toChain ||
+        this.prevCompletedData.toWallet !== toWallet ||
+        this.prevCompletedData.toWalletAddress !== toWalletAddress
       )
     ) {
       this.fireEvent(
@@ -59,12 +66,15 @@ export default class SelectChains extends StepDisplay {
         toChain,
         toWallet,
       );
+
       this.prevCompletedData = {
         asset: this.assetId,
         fromChain,
-        toChain,
         fromWallet,
+        fromWalletAddress,
+        toChain,
         toWallet,
+        toWalletAddress,
       };
     }
   }

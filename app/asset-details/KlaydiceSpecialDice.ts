@@ -1,4 +1,5 @@
-import AssetInfo from "../asset/AssetInfo.js";
+import AssetInfo, { AssetMetadata } from "../asset/AssetInfo.js";
+import AssetType from "../asset/AssetType.js";
 import BlockchainType from "../blockchain/BlockchainType.js";
 import NftUtilContract from "../contracts/NftUtilContract.js";
 import metadata from "./klaydice-special-dice-metadata.json" assert {
@@ -6,6 +7,7 @@ import metadata from "./klaydice-special-dice-metadata.json" assert {
 };
 
 const KlaydiceSpecialDice: AssetInfo = {
+  type: AssetType.ERC721,
   name: "KLAYDICE - Special DICE NFT",
   symbol: "DICE",
   logo:
@@ -15,24 +17,33 @@ const KlaydiceSpecialDice: AssetInfo = {
     [BlockchainType.Bifrost]: "0xdf98e88944be3bc7C861135dAc617AD562EBB8D0",
   },
 
-  fetchMetadata: async (tokenId: string) => {
-    const data = metadata.find((m) => String(m.id) === tokenId);
-    if (!data) {
-      throw new Error(`Metadata not found for ${tokenId}`);
-    }
-    return { name: data.n, image: data.i };
-  },
-
-  fetchBalance: async (chain, wallet) => {
+  fetchTokens: async (chain, wallet) => {
     const walletAddress = await wallet.getAddress();
-    if (!walletAddress) return {};
-    const tokenIds = await new NftUtilContract(chain, wallet).getTotalTokenIds(
+    if (!walletAddress) return [];
+
+    const tokenIds = await new NftUtilContract(chain, wallet).getTokenIds(
       KlaydiceSpecialDice.addresses[chain],
       walletAddress,
     );
-    const result: { [tokenId: string]: bigint } = {};
-    for (const tokenId of tokenIds) {
-      result[tokenId.toString()] = 1n;
+
+    const result: {
+      id: bigint;
+      amount: bigint;
+      metadata?: AssetMetadata;
+    }[] = [];
+
+    for (const id of tokenIds) {
+      const m = metadata.find((m) => m.id === Number(id));
+      result.push({
+        id,
+        amount: 1n,
+        metadata: m
+          ? {
+            name: `Special DICE NFT - ${m.n}`,
+            image: `https://public.nftstatic.com/static/nft/res/${m.i}.png`,
+          }
+          : undefined,
+      });
     }
     return result;
   },

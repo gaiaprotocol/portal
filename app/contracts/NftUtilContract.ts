@@ -16,7 +16,7 @@ export default class NftUtilContract extends Contract<ERC721GEnumerableUtil> {
     super(NftUtilArtifact.abi, chain, addresses[chain], wallet);
   }
 
-  public async getTotalTokenIds(
+  public async getTokenIds(
     nftAddress: string,
     owner: string,
   ): Promise<bigint[]> {
