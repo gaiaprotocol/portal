@@ -539,6 +539,9 @@ button.component > .title {
     width: calc(50% - 16px);
   }
 }
+.asset-list-item.selected {
+  outline: 1px solid var(--accent-color);
+}
 .asset-list-item > main {
   position: absolute;
   left: 0;
