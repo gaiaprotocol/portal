@@ -4,6 +4,7 @@ import Assets from "../../asset/Assets.js";
 export default class ChainSelector extends DomNode {
   private assetId: string | undefined;
   private _chain: string | undefined;
+  private _except: string | undefined;
 
   private select: Select<string>;
 
@@ -32,10 +33,19 @@ export default class ChainSelector extends DomNode {
     const options: { dom: DomNode; value: string }[] = [];
     if (assetId && Assets[assetId]) {
       for (const chain of Object.keys(Assets[assetId].addresses)) {
+        if (chain === this._except) continue;
         options.push({ dom: el(".option", chain), value: chain });
       }
     }
     this.select.options = options;
+  }
+
+  public set except(chain: string | undefined) {
+    if (this._except === chain) return;
+    this._except = chain;
+    const asset = this.assetId;
+    this.assetId = undefined;
+    this.asset = asset;
   }
 
   public get chain() {
@@ -43,6 +53,9 @@ export default class ChainSelector extends DomNode {
   }
 
   public set chain(chain: string | undefined) {
+    if (chain && !this.select.options.find((o) => o.value === chain)) {
+      chain = undefined;
+    }
     if (this._chain === chain) return;
     this._chain = chain;
     this.select.value = chain;

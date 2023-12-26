@@ -44,6 +44,12 @@ export default class SelectChains extends StepDisplay {
     toChain: string | undefined,
   ) {
     this.fromChainSelector.chain = fromChain;
+    this.toChainSelector.except = fromChain;
     this.toChainSelector.chain = toChain;
+
+    if (
+      this.fromChainSelector.chain !== fromChain ||
+      this.toChainSelector.chain !== toChain
+    ) setTimeout(() => this.route());
   }
 }
