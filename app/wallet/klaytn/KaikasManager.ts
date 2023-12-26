@@ -19,7 +19,7 @@ class KaikasManager extends EventContainer implements KlaytnWalletManager {
   public async getAddress(): Promise<string | undefined> {
     if (this.store.get("temp-disconnected")) return undefined;
     return this.provider
-      ? (await this.provider.listAccounts())[0].address
+      ? (await this.provider.listAccounts())[0]?.address
       : undefined;
   }
 

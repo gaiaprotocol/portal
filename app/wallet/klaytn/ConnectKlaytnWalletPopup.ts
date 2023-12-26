@@ -1,7 +1,9 @@
 import {
   Button,
+  ButtonType,
   Component,
   el,
+  Icon,
   Popup,
   ResponsiveImage,
 } from "common-app-module";
@@ -14,7 +16,16 @@ export default class ConnectKlaytnWalletPopup extends Popup {
     this.append(
       new Component(
         ".popup.connect-klaytn-wallet-popup",
-        el("header", el("h1", "Connect using Klaytn Wallet")),
+        el(
+          "header",
+          el("h1", "Connect using Klaytn Wallet"),
+          new Button({
+            tag: ".close",
+            type: ButtonType.Text,
+            icon: new Icon("x"),
+            click: () => this.delete(),
+          }),
+        ),
         el(
           "main",
           new Button({
@@ -22,17 +33,32 @@ export default class ConnectKlaytnWalletPopup extends Popup {
             title: KaikasManager.installed
               ? "Connect using Kaikas"
               : "Install Kaikas",
-            click: () => {
-              KaikasManager.installed ? KaikasManager.connect() : window.open(
-                "https://chrome.google.com/webstore/detail/kaikas/jblndlipeogpafnldhgmapagcccfchpi",
-                "_blank",
-              );
+            click: async () => {
+              if (KaikasManager.installed) {
+                await KaikasManager.connect();
+                this.delete();
+              } else {
+                window.open(
+                  "https://chrome.google.com/webstore/detail/kaikas/jblndlipeogpafnldhgmapagcccfchpi",
+                  "_blank",
+                );
+              }
             },
           }),
           new Button({
             icon: new ResponsiveImage("img", "/images/wallet-logos/klip.png"),
             title: "Connect using Klip",
-            click: () => KlipManager.connect(),
+            click: async () => {
+              await KlipManager.connect();
+              this.delete();
+            },
+          }),
+        ),
+        el(
+          "footer",
+          new Button({
+            title: "Cancel",
+            click: () => this.delete(),
           }),
         ),
       ),

@@ -140,6 +140,9 @@ body {
   overflow: hidden;
   container-type: inline-size;
 }
+p {
+  line-height: 1.6em;
+}
 button {
   display: flex;
   align-items: center;
@@ -165,6 +168,7 @@ button.component {
   padding: 8px 16px;
   color: var(--accent-color);
   line-height: 1em;
+  gap: 8px;
 }
 button.component.disabled {
   cursor: not-allowed;
@@ -279,13 +283,21 @@ button.component > .title {
 .popup.component > header {
   display: flex;
   align-items: center;
-  padding: 30px;
+  padding: 24px;
 }
 .popup.component > header > h1 {
   flex-grow: 1;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: bold;
   text-transform: capitalize;
+}
+.popup.component > main {
+  padding: 0 24px;
+}
+.popup.component > footer {
+  padding: 24px;
+  display: flex;
+  justify-content: flex-end;
 }
 @keyframes loading-spinner-animation {
   0% {
@@ -633,6 +645,29 @@ button.component > .title {
 .wallet-display > .name {
   font-size: 14px;
   font-weight: bold;
+}
+.connect-klaytn-wallet-popup {
+  max-width: 420px !important;
+}
+.connect-klaytn-wallet-popup > main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.klip-qr-popup {
+  max-width: 420px !important;
+}
+.klip-qr-popup > main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.klip-qr-popup > main > .qr > img {
+  border-radius: 6px;
+}
+.klip-qr-popup > main > p {
+  text-align: center;
 }
 .bridge-view {
   padding: 32px 16px;
