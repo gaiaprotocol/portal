@@ -8,6 +8,14 @@
     background-position: center center;
     cursor             : pointer;
 
+    @container (width < @safe-width) {
+        width: calc(50% - 16px);
+    }
+
+    &.selected {
+        outline: 1px solid var(--accent-color);
+    }
+
     >main {
         position        : absolute;
         left            : 0;

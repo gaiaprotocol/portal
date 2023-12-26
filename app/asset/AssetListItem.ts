@@ -28,8 +28,16 @@ export default class AssetListItem extends DomNode {
     }
 
     this.onDom("click", () => this.checkbox.toggle());
-    this.checkbox.on("check", () => this.fireEvent("select"));
-    this.checkbox.on("uncheck", () => this.fireEvent("deselect"));
+
+    this.checkbox.on("check", () => {
+      this.addClass("selected");
+      this.fireEvent("select");
+    });
+
+    this.checkbox.on("uncheck", () => {
+      this.deleteClass("selected");
+      this.fireEvent("deselect");
+    });
   }
 
   public select() {
