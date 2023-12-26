@@ -1,0 +1,25 @@
+.select-chains {
+    >main {
+        padding       : 0 16px 16px 16px;
+        display       : flex;
+        align-items   : center;
+        gap           : 16px;
+        container-type: inline-size;
+
+        @container (width < 432px) {
+            flex-direction: column;
+
+            >.icon {
+                transform: rotate(90deg);
+            }
+        }
+
+        >.chain-selector {
+            width: 50%;
+
+            @container (width < 432px) {
+                width: 100%;
+            }
+        }
+    }
+}

@@ -299,6 +299,47 @@ button.component > .title {
   border-color: var(--text-color) transparent var(--text-color) transparent;
   animation: loading-spinner-animation 1.2s linear infinite;
 }
+.select.component {
+  position: relative;
+  border: 1px solid var(--line-color);
+  border-radius: 6px;
+  background-color: var(--content-bg-color);
+  cursor: pointer;
+}
+.select.component > .value {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  line-height: 1em;
+  text-transform: capitalize;
+}
+.select.component > .value:empty::before {
+  content: attr(data-empty-message);
+}
+.select.component > .option-container {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: -1px;
+  z-index: 1;
+  border: 1px solid var(--accent-color);
+  border-radius: 6px;
+  background-color: var(--content-bg-color);
+  min-width: 120px;
+}
+.select.component > .option-container > .option {
+  padding: 8px 12px;
+  text-transform: capitalize;
+}
+.select.component > .option-container > .option:hover {
+  background-color: var(--accent-color);
+}
+.select.component.open {
+  border: 1px solid var(--accent-color);
+}
+.select.component.open > .option-container {
+  display: block;
+}
 .checkbox.component {
   position: relative;
   height: 27px;
@@ -467,12 +508,6 @@ button.component > .title {
     width: 100%;
   }
 }
-.title-bar > section.wallet {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
 .side-panel {
   position: fixed;
   left: 0;
@@ -491,28 +526,9 @@ button.component > .title {
   border-left: 1px solid var(--line-color);
   background-color: var(--content-bg-color);
 }
-.title-bar-wallet-display {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid var(--accent-color);
-  border-radius: 19px;
-  padding: 5px 10px 5px 5px;
-  cursor: pointer;
-}
-.title-bar-wallet-display:hover {
-  background-color: var(--accent-color);
-}
-.title-bar-wallet-display > .avatar {
-  width: 26px;
-  height: 26px;
-}
-.title-bar-wallet-display > .name {
-  font-size: 14px;
-  font-weight: bold;
-}
 .asset-list {
   padding-left: 16px;
+  container-type: inline-size;
 }
 .asset-list::after {
   content: '';
@@ -534,7 +550,7 @@ button.component > .title {
   background-position: center center;
   cursor: pointer;
 }
-@container (width < 1280px) {
+@container (width < 432px) {
   .asset-list-item {
     width: calc(50% - 16px);
   }
@@ -577,7 +593,9 @@ button.component > .title {
   right: 16px;
 }
 .bridge-view {
-  padding: 16px;
+  padding: 32px 16px;
+  max-width: 912px;
+  margin: auto;
 }
 .bridge-view > .steps {
   display: flex;
@@ -588,8 +606,15 @@ button.component > .title {
   padding-right: 0;
   padding-bottom: 0;
 }
+.bridge-view > .steps > .step-display.step-2 > main,
+.bridge-view > .steps > .step-display.step-3 > main {
+  display: none;
+}
 .bridge-view.asset-selected > .steps > .step-display.step-2 > main {
   display: flex;
+}
+.bridge-view.asset-selected.chain-selected > .steps > .step-display.step-3 > main {
+  display: block;
 }
 .step-display {
   border-radius: 16px;
@@ -618,5 +643,33 @@ button.component > .title {
   font-size: 16px;
   font-weight: bold;
   text-transform: capitalize;
+}
+.select-chains > main {
+  padding: 0 16px 16px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  container-type: inline-size;
+}
+@container (width < 432px) {
+  .select-chains > main {
+    flex-direction: column;
+  }
+  .select-chains > main > .icon {
+    transform: rotate(90deg);
+  }
+}
+.select-chains > main > .chain-selector {
+  width: 50%;
+}
+@container (width < 432px) {
+  .select-chains > main > .chain-selector {
+    width: 100%;
+  }
+}
+.chain-selector {
+  padding: 16px;
+  background-color: var(--content-bg-color);
+  border-radius: 12px;
 }
 
