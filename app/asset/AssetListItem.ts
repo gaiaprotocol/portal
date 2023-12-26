@@ -21,7 +21,7 @@ export default class AssetListItem extends DomNode {
     for (const [index, chain] of Object.keys(asset.addresses).entries()) {
       this.chainLogoContainer.append(
         el("img.chain-logo", {
-          src: `./images/blockchain-logos/${chain}.svg`,
+          src: `/images/blockchain-logos/${chain}.svg`,
           style: { zIndex: 100 - index },
         }),
       );

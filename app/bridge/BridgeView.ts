@@ -39,6 +39,6 @@ export default class BridgeView extends View {
     if (fromChain && toChain) this.container.addClass("chain-selected");
 
     this.selectAsset.selectAsset(asset);
-    this.selectChains.selectChains(fromChain, toChain);
+    this.selectChains.selectAsset(asset).selectChains(fromChain, toChain);
   }
 }

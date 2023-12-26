@@ -1,5 +1,7 @@
 .bridge-view {
-    padding: 16px;
+    padding  : 32px 16px;
+    max-width: 912px;
+    margin   : auto;
 
     >.steps {
         display       : flex;
@@ -13,7 +15,7 @@
 
         >.step-display.step-2>main,
         >.step-display.step-3>main {
-            //TODO: display: none;
+            display: none;
         }
     }
 
@@ -21,6 +23,14 @@
         >.steps {
             >.step-display.step-2>main {
                 display: flex;
+            }
+        }
+
+        &.chain-selected {
+            >.steps {
+                >.step-display.step-3>main {
+                    display: block;
+                }
             }
         }
     }
