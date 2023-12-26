@@ -134,6 +134,9 @@ body {
   overflow: hidden;
   container-type: inline-size;
 }
+p {
+  line-height: 1.6em;
+}
 button {
   display: flex;
   align-items: center;
@@ -159,6 +162,7 @@ button.component {
   padding: 8px 16px;
   color: var(--accent-color);
   line-height: 1em;
+  gap: 8px;
 }
 button.component.disabled {
   cursor: not-allowed;
@@ -273,13 +277,21 @@ button.component > .title {
 .popup.component > header {
   display: flex;
   align-items: center;
-  padding: 30px;
+  padding: 24px;
 }
 .popup.component > header > h1 {
   flex-grow: 1;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: bold;
   text-transform: capitalize;
+}
+.popup.component > main {
+  padding: 0 24px;
+}
+.popup.component > footer {
+  padding: 24px;
+  display: flex;
+  justify-content: flex-end;
 }
 @keyframes loading-spinner-animation {
   0% {
@@ -298,6 +310,22 @@ button.component > .title {
   border: 2px solid var(--text-color);
   border-color: var(--text-color) transparent var(--text-color) transparent;
   animation: loading-spinner-animation 1.2s linear infinite;
+}
+.dropdown-menu.component {
+  position: fixed;
+  z-index: 999998;
+  border: 1px solid var(--accent-color);
+  border-radius: 6px;
+  background-color: var(--content-bg-color);
+}
+.dropdown-menu.component > ul > li > button {
+  padding: 8px 12px;
+  min-width: 120px;
+  cursor: pointer;
+  text-transform: capitalize;
+}
+.dropdown-menu.component > ul > li > button:hover {
+  background-color: var(--accent-color);
 }
 .select.component {
   position: relative;
@@ -592,6 +620,49 @@ button.component > .title {
   top: 16px;
   right: 16px;
 }
+.wallet-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--line-color);
+  border-radius: 19px;
+  padding: 5px 10px 5px 5px;
+  cursor: pointer;
+}
+.wallet-display:hover {
+  background-color: var(--accent-color);
+}
+.wallet-display > .avatar {
+  width: 26px;
+  height: 26px;
+}
+.wallet-display > .name {
+  font-size: 14px;
+  font-weight: bold;
+}
+.connect-klaytn-wallet-popup {
+  max-width: 420px !important;
+}
+.connect-klaytn-wallet-popup > main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.klip-qr-popup {
+  max-width: 420px !important;
+}
+.klip-qr-popup > main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.klip-qr-popup > main > .qr > img {
+  border-radius: 6px;
+}
+.klip-qr-popup > main > p {
+  text-align: center;
+}
 .bridge-view {
   padding: 32px 16px;
   max-width: 912px;
@@ -644,12 +715,14 @@ button.component > .title {
   font-weight: bold;
   text-transform: capitalize;
 }
+.select-chains {
+  container-type: inline-size;
+}
 .select-chains > main {
   padding: 0 16px 16px 16px;
   display: flex;
   align-items: center;
   gap: 16px;
-  container-type: inline-size;
 }
 @container (width < 432px) {
   .select-chains > main {
@@ -671,5 +744,8 @@ button.component > .title {
   padding: 16px;
   background-color: var(--content-bg-color);
   border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
