@@ -317,15 +317,52 @@ button.component > .title {
   border: 1px solid var(--accent-color);
   border-radius: 6px;
   background-color: var(--content-bg-color);
+  min-width: 120px;
+  overflow: hidden;
+}
+.dropdown-menu.component > ul {
+  display: flex;
+  flex-direction: column;
 }
 .dropdown-menu.component > ul > li > button {
   padding: 8px 12px;
-  min-width: 120px;
   cursor: pointer;
   text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
 }
 .dropdown-menu.component > ul > li > button:hover {
   background-color: var(--accent-color);
+}
+.snackbar.component {
+  position: fixed;
+  left: 0;
+  bottom: 20px;
+  z-index: 999998;
+  width: 100%;
+}
+@container (width < 1280px) {
+  .snackbar.component {
+    bottom: calc(110px + env(safe-area-inset-bottom));
+  }
+}
+.snackbar.component > main {
+  max-width: 532px;
+  width: 90%;
+  margin: auto;
+  background-color: var(--content-bg-color);
+  border: 1px solid var(--line-color);
+  display: flex;
+  align-items: center;
+  border-radius: 19px;
+  padding-left: 20px;
+  gap: 8px;
+}
+.snackbar.component > main > p {
+  flex-grow: 1;
 }
 .select.component {
   position: relative;
