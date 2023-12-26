@@ -1,4 +1,5 @@
 import { MaterialIcon, Router } from "common-app-module";
+import BlockchainType from "../../blockchain/BlockchainType.js";
 import { default as ChainSelector } from "./ChainSelector.js";
 import StepDisplay from "./StepDisplay.js";
 
@@ -40,8 +41,8 @@ export default class SelectChains extends StepDisplay {
   }
 
   public selectChains(
-    fromChain: string | undefined,
-    toChain: string | undefined,
+    fromChain: BlockchainType | undefined,
+    toChain: BlockchainType | undefined,
   ) {
     this.fromChainSelector.chain = fromChain;
     this.toChainSelector.except = fromChain;
