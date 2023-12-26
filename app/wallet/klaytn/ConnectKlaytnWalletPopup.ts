@@ -21,7 +21,7 @@ export default class ConnectKlaytnWalletPopup extends Popup {
         ".popup.connect-klaytn-wallet-popup",
         el(
           "header",
-          el("h1", "Connect using Klaytn Wallet"),
+          el("h1", "Connect to Klaytn"),
           new Button({
             tag: ".close",
             type: ButtonType.Text,

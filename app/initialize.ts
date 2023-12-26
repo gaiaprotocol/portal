@@ -22,6 +22,7 @@ MaterialIconSystem.launch();
 
 export default async function initialize(config: Config) {
   Env.dev = config.dev;
+  Env.infuraKey = config.infuraKey;
 
   AppInitializer.initialize(
     config.supabaseUrl,

@@ -15,10 +15,11 @@ import WalletManager from "./WalletManager.js";
 
 export default class WalletSelector extends DomNode {
   private _chain: BlockchainType | undefined;
-  private walletManager: (WalletManager & EventContainer) | undefined;
+  public wallet: (WalletManager & EventContainer) | undefined;
 
   constructor() {
     super(".wallet-selector");
+    this.addAllowedEvents("complete");
     this.render();
   }
 
@@ -26,20 +27,20 @@ export default class WalletSelector extends DomNode {
     if (this._chain === chain) return;
     this._chain = chain;
 
-    if (this.walletManager) this.offDelegate(this.walletManager);
+    if (this.wallet) this.offDelegate(this.wallet);
 
     if (!chain) {
-      this.walletManager = undefined;
+      this.wallet = undefined;
     } else if (chain === BlockchainType.Klaytn) {
-      this.walletManager = KlaytnWalletManager;
+      this.wallet = KlaytnWalletManager;
     } else {
-      this.walletManager = EvmWalletManager;
+      this.wallet = EvmWalletManager;
     }
     this.render();
 
-    if (this.walletManager) {
+    if (this.wallet) {
       this.onDelegate(
-        this.walletManager,
+        this.wallet,
         "accountChanged",
         () => this.render(),
       );
@@ -48,48 +49,54 @@ export default class WalletSelector extends DomNode {
 
   private async render() {
     this.empty();
-    if (this.walletManager) {
-      const address = await this.walletManager.getAddress();
+    if (this.wallet) {
+      const address = await this.wallet.getAddress();
       if (!address) {
         this.append(
           new Button({
             title: "Connect Wallet",
-            click: () => this.walletManager?.connect(),
+            click: () => this.wallet?.connect(),
           }),
         );
       } else {
-        const walletDisplay = new WalletDisplay(address).appendTo(this);
-        walletDisplay.onDom("click", (event) => {
-          if (this._chain) {
-            event.stopPropagation();
-            const rect = this.rect;
-            const chain = Blockchains[this._chain];
-            new DropdownMenu({
-              left: rect.left,
-              top: rect.bottom,
-              items: [{
-                icon: new MaterialIcon("content_copy"),
-                title: "Copy address",
-                click: () => {
-                  navigator.clipboard.writeText(address);
-                  new Snackbar({ message: "Address copied to clipboard" });
-                },
-              }, {
-                icon: new MaterialIcon("open_in_new"),
-                title: `View on ${chain.blockExplorer.name}`,
-                click: () =>
-                  window.open(
-                    `${chain.blockExplorer.url}/address/${address}`,
-                    "_blank",
-                  ),
-              }, {
-                icon: new MaterialIcon("logout"),
-                title: "Disconnect",
-                click: () => this.walletManager?.disconnect(),
-              }],
-            });
-          }
-        });
+        new WalletDisplay(address).appendTo(this).onDom(
+          "click",
+          (event) => {
+            if (this._chain) {
+              event.stopPropagation();
+              const rect = this.rect;
+              const chain = Blockchains[this._chain];
+              new DropdownMenu({
+                left: rect.left,
+                top: rect.bottom,
+                items: [{
+                  icon: new MaterialIcon("content_copy"),
+                  title: "Copy address",
+                  click: () => {
+                    if (address) {
+                      navigator.clipboard.writeText(address);
+                    }
+                    new Snackbar({ message: "Address copied to clipboard" });
+                  },
+                }, {
+                  icon: new MaterialIcon("open_in_new"),
+                  title: `View on ${chain.blockExplorer.name}`,
+                  click: () =>
+                    window.open(
+                      `${chain.blockExplorer.url}/address/${address}`,
+                      "_blank",
+                    ),
+                }, {
+                  icon: new MaterialIcon("logout"),
+                  title: "Disconnect",
+                  click: () => this.wallet?.disconnect(),
+                }],
+              });
+            }
+          },
+        );
+
+        this.fireEvent("complete");
       }
     }
   }

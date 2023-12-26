@@ -10,6 +10,11 @@ const Mix: AssetInfo = {
     [BlockchainType.Ethereum]: "0x5DB69B9f173f9D9FA91b7cDCc4Dc9939C0499CFe",
     [BlockchainType.Polygon]: "0x5085a6879Af6767732c51CA0fc7422d41d9aAEf6",
   },
+  senderAddress: "0xDeE2b8539c2321450a99f6728633DEf8d069262F",
+
+  fetchBalance: async (chain, wallet) => {
+    throw new Error("Not implemented");
+  },
 
   send: async (
     toChainId: number,

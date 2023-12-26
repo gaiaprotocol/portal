@@ -10,6 +10,7 @@ export default class SelectChains extends StepDisplay {
 
   constructor() {
     super(".select-chains", 2, "Select chains");
+    this.addAllowedEvents("complete");
 
     this.container.append(
       this.fromChainSelector = new ChainSelector(),
@@ -19,6 +20,9 @@ export default class SelectChains extends StepDisplay {
 
     this.fromChainSelector.on("select", () => this.route());
     this.toChainSelector.on("select", () => this.route());
+
+    this.fromChainSelector.on("complete", () => this.checkComplete());
+    this.toChainSelector.on("complete", () => this.checkComplete());
   }
 
   private route() {
@@ -29,6 +33,39 @@ export default class SelectChains extends StepDisplay {
       if (!fromChain) Router.go(`/${this.assetId}`);
       else if (!toChain) Router.go(`/${this.assetId}/${fromChain}`);
       else Router.go(`/${this.assetId}/${fromChain}/${toChain}`);
+    }
+  }
+
+  private prevCompletedData: any = {};
+  private checkComplete() {
+    const fromChain = this.fromChainSelector.chain;
+    const fromWallet = this.fromChainSelector.wallet;
+    const toChain = this.toChainSelector.chain;
+    const toWallet = this.toChainSelector.wallet;
+    if (
+      this.assetId && fromChain && fromWallet && toChain && toWallet && (
+        this.prevCompletedData.asset !== this.assetId ||
+        this.prevCompletedData.fromChain !== fromChain ||
+        this.prevCompletedData.toChain !== toChain ||
+        this.prevCompletedData.fromWallet !== fromWallet ||
+        this.prevCompletedData.toWallet !== toWallet
+      )
+    ) {
+      this.fireEvent(
+        "complete",
+        this.assetId,
+        fromChain,
+        fromWallet,
+        toChain,
+        toWallet,
+      );
+      this.prevCompletedData = {
+        asset: this.assetId,
+        fromChain,
+        toChain,
+        fromWallet,
+        toWallet,
+      };
     }
   }
 

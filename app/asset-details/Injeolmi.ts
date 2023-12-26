@@ -11,6 +11,11 @@ const Injeolmi: AssetInfo = {
     [BlockchainType.Polygon]: "0x9b23804ede399ebf86612b560Ac0451f1448185a",
     [BlockchainType.BNB]: "0xf258F061aE2D68d023eA6e7Cceef97962785c6c1",
   },
+  senderAddress: "0x19f112c05Fad52e5C58E5A4628548aBB45bc8697",
+
+  fetchBalance: async (chain, wallet) => {
+    throw new Error("Not implemented");
+  },
 
   send: async (
     toChainId: number,

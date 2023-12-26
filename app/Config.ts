@@ -6,10 +6,4 @@ export default interface Config {
 
   walletConnectProjectId: string;
   infuraKey: string;
-
-  contracts: {
-    [contract: string]: {
-      [chain: string]: string;
-    };
-  };
 }

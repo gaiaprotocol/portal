@@ -1,5 +1,5 @@
 import { getNetwork, getWalletClient, switchNetwork } from "@wagmi/core";
-import { ErrorAlert, EventContainer, msg } from "common-app-module";
+import { ErrorAlert, msg } from "common-app-module";
 import {
   BaseContract,
   BrowserProvider,
@@ -11,25 +11,20 @@ import {
 import BlockchainType from "../blockchain/BlockchainType.js";
 import Blockchains from "../blockchain/Blockchains.js";
 import EvmWalletManager from "../wallet/EvmWalletManager.js";
+import WalletManager from "../wallet/WalletManager.js";
 
-export default abstract class Contract<CT extends BaseContract>
-  extends EventContainer {
+export default abstract class Contract<CT extends BaseContract> {
   protected viewContract!: CT;
 
-  private chain!: string;
-  private address!: string;
-
-  constructor(private abi: Interface | InterfaceAbi) {
-    super();
-  }
-
-  public init(chain: BlockchainType, address: string) {
-    this.chain = chain;
-    this.address = address;
-
+  constructor(
+    private abi: Interface | InterfaceAbi,
+    private chain: BlockchainType,
+    private address: string,
+    private wallet: WalletManager,
+  ) {
     this.viewContract = new ethers.Contract(
-      this.address,
-      this.abi,
+      address,
+      abi,
       new ethers.JsonRpcProvider(Blockchains[chain].rpc),
     ) as any;
   }

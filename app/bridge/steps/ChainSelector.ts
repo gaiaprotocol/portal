@@ -13,7 +13,7 @@ export default class ChainSelector extends DomNode {
 
   constructor() {
     super(".chain-selector");
-    this.addAllowedEvents("select");
+    this.addAllowedEvents("select", "complete");
 
     this.append(
       this.select = new Select({
@@ -29,6 +29,14 @@ export default class ChainSelector extends DomNode {
       this.walletSelector.chain = chain;
       this.fireEvent("select", chain);
     });
+
+    this.walletSelector.on("complete", () => {
+      if (this._chain) this.fireEvent("complete");
+    });
+  }
+
+  public get asset() {
+    return this.assetId;
   }
 
   public set asset(assetId: string | undefined) {
@@ -65,5 +73,9 @@ export default class ChainSelector extends DomNode {
     this._chain = chain;
     this.select.value = chain;
     this.walletSelector.chain = chain;
+  }
+
+  public get wallet() {
+    return this.walletSelector.wallet;
   }
 }

@@ -1,5 +1,6 @@
 import AssetInfo from "../asset/AssetInfo.js";
 import BlockchainType from "../blockchain/BlockchainType.js";
+import NftUtilContract from "../contracts/NftUtilContract.js";
 import metadata from "./klaydice-special-dice-metadata.json" assert {
   type: "json",
 };
@@ -20,6 +21,20 @@ const KlaydiceSpecialDice: AssetInfo = {
       throw new Error(`Metadata not found for ${tokenId}`);
     }
     return { name: data.n, image: data.i };
+  },
+
+  fetchBalance: async (chain, wallet) => {
+    const walletAddress = await wallet.getAddress();
+    if (!walletAddress) return {};
+    const tokenIds = await new NftUtilContract(chain, wallet).getTotalTokenIds(
+      KlaydiceSpecialDice.addresses[chain],
+      walletAddress,
+    );
+    const result: { [tokenId: string]: bigint } = {};
+    for (const tokenId of tokenIds) {
+      result[tokenId.toString()] = 1n;
+    }
+    return result;
   },
 
   send: async (

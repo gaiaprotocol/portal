@@ -1,4 +1,6 @@
 import { Button, DomNode, el } from "common-app-module";
+import Assets from "../../asset/Assets.js";
+import BlockchainType from "../../blockchain/BlockchainType.js";
 import TransactionList from "../../history/TransactionList.js";
 import WalletManager from "../../wallet/WalletManager.js";
 import StepDisplay from "./StepDisplay.js";
@@ -31,11 +33,18 @@ export default class ExecuteBridge extends StepDisplay {
     );
   }
 
-  public init(
-    fromWalletManager: WalletManager,
-    toWalletManager: WalletManager,
+  public async init(
+    assetId: string,
+    fromChain: BlockchainType,
+    fromWallet: WalletManager,
+    toChain: BlockchainType,
+    toWallet: WalletManager,
   ) {
-    //TODO:
+    const asset = Assets[assetId];
+    if (asset) {
+      const balance = await asset.fetchBalance(fromChain, fromWallet);
+      console.log(balance);
+    }
   }
 
   private async checkApprove() {
