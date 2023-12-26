@@ -3,6 +3,10 @@
     max-width: 912px;
     margin   : auto;
 
+    @container (width < @safe-width) {
+        padding: 16px;
+    }
+
     >.steps {
         display       : flex;
         flex-direction: column;

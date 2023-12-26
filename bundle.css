@@ -705,6 +705,11 @@ button.component > .title {
   max-width: 912px;
   margin: auto;
 }
+@container (width < 1280px) {
+  .bridge-view {
+    padding: 16px;
+  }
+}
 .bridge-view > .steps {
   display: flex;
   flex-direction: column;
@@ -783,7 +788,7 @@ button.component > .title {
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 .chain-selector > .wallet-selector:empty {
   display: none;
