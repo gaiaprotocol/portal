@@ -785,4 +785,7 @@ button.component > .title {
   flex-direction: column;
   gap: 16px;
 }
+.chain-selector > .wallet-selector:empty {
+  display: none;
+}
 
