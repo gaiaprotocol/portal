@@ -118,9 +118,11 @@ meter {
   --text-color: #fff;
   --line-color: #252527;
   --accent-color: #C1A87D;
+  --error-color: #FF0000;
   --popup-bg-color: rgba(0, 0, 0, 0.5);
   --button-bg-color: rgba(193, 168, 125, 0.12);
   --hover-color: rgba(193, 168, 125, 0.12);
+  --disable-color: rgba(255, 255, 255, 0.5);
   width: 100%;
   height: 100%;
   background-color: var(--wrapper-bg-color);
@@ -137,11 +139,22 @@ body {
 p {
   line-height: 1.6em;
 }
+a {
+  cursor: pointer;
+}
 button {
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+::placeholder {
+  color: var(--disable-color);
+}
+.clearfix::after {
+  content: '';
+  display: table;
+  clear: both;
 }
 .avatar {
   flex-shrink: 0;
@@ -363,6 +376,18 @@ button.component > .title {
 }
 .snackbar.component > main > p {
   flex-grow: 1;
+}
+.input.component > textarea,
+.input.component > input {
+  width: 100%;
+  border: 1px solid var(--line-color);
+  background-color: var(--content-bg-color);
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+.input.component > textarea:focus,
+.input.component > input:focus {
+  border: 1px solid var(--accent-color);
 }
 .select.component {
   position: relative;
@@ -591,6 +616,25 @@ button.component > .title {
   border-left: 1px solid var(--line-color);
   background-color: var(--content-bg-color);
 }
+.asset-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.asset-display > h4 {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+.asset-display > .amount {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.asset-display > .amount > .symbol {
+  font-size: 12px;
+  color: var(--disable-color);
+}
 .asset-list {
   padding-left: 16px;
   container-type: inline-size;
@@ -656,6 +700,86 @@ button.component > .title {
   position: absolute;
   top: 16px;
   right: 16px;
+}
+.token-list {
+  padding-left: 16px;
+}
+.token-list::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.token-list > .token-list-item {
+  float: left;
+  margin-right: 16px;
+  margin-bottom: 16px;
+}
+.token-list-item {
+  min-width: 320px;
+}
+.token-list-item.invalid > .form > .input {
+  color: var(--error-color);
+  font-weight: bold;
+}
+.token-list-item.nft {
+  cursor: pointer;
+}
+.token-list-item.nft > .info {
+  border-radius: 16px;
+}
+.token-list-item.nft,
+.token-list-item.multi-token {
+  width: 120px;
+  border-radius: 16px;
+}
+.token-list-item.nft.selected,
+.token-list-item.multi-token.selected {
+  outline: 1px solid var(--accent-color);
+}
+.token-list-item > .info {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 16px 16px 0 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.token-list-item > .info > main {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  gap: 4px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.8) 100%);
+}
+.token-list-item > .info > main > h3 {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: bold;
+}
+.token-list-item > .info > main > h4 {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 12px;
+  color: var(--disable-color);
+}
+.token-list-item > .form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.token-list-item.multi-token > .form {
+  padding: 10px 12px;
 }
 .wallet-display {
   display: flex;
@@ -770,7 +894,7 @@ button.component > .title {
   .select-chains > main {
     flex-direction: column;
   }
-  .select-chains > main > .icon {
+  .select-chains > main > a {
     transform: rotate(90deg);
   }
 }
@@ -790,7 +914,9 @@ button.component > .title {
   flex-direction: column;
   gap: 12px;
 }
-.chain-selector > .wallet-selector:empty {
-  display: none;
+.execute-bridge > main > .action-container {
+  padding: 0px 16px 16px 16px;
+  display: flex;
+  gap: 16px;
 }
 
