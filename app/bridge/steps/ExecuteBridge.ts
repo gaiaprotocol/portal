@@ -13,7 +13,6 @@ export default class ExecuteBridge extends StepDisplay {
   private _setup: BridgeSetup | undefined;
 
   private tokenListContainer: DomNode;
-  private input: DomNode<HTMLInputElement>;
   private approveButton: Button;
   private sendButton: Button;
   private receiveButton: Button;
@@ -23,7 +22,6 @@ export default class ExecuteBridge extends StepDisplay {
     super(".execute-bridge", 3, "Execute Bridge");
     this.container.append(
       this.tokenListContainer = el(".token-list-container"),
-      this.input = el("input.amount", { placeholder: "Amount" }),
       this.approveButton = new Button({
         title: "Approve",
       }),
@@ -64,7 +62,9 @@ export default class ExecuteBridge extends StepDisplay {
           this._setup.fromChain!,
           this._setup.fromWallet!,
         );
-        this.tokenListContainer.append(new TokenList(asset, tokens));
+        new TokenList(asset, tokens).appendTo(
+          this.tokenListContainer,
+        ).on("changeAmount", () => this.checkApprove());
       }
     }
   }

@@ -683,6 +683,9 @@ button.component > .title {
   top: 16px;
   right: 16px;
 }
+.token-list-item.selected {
+  outline: 1px solid var(--accent-color);
+}
 .wallet-display {
   display: flex;
   align-items: center;
@@ -815,5 +818,8 @@ button.component > .title {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+.execute-bridge > main {
+  padding: 0 16px 16px 16px;
 }
 

@@ -48,7 +48,9 @@ export default class ChainSelector extends DomNode {
     this.fireEvent("change");
 
     this.balanceDisplay.empty();
-    if (this.assetId && this._chain && this.wallet) {
+    if (
+      this.assetId && this._chain && this.wallet && this.walletSelector.address
+    ) {
       const asset = Assets[this.assetId];
       if (asset) {
         const balance = await asset.fetchBalance(this._chain, this.wallet);
