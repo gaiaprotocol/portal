@@ -4,8 +4,11 @@ import {
   disconnect,
   fetchBalance,
   getAccount,
+  getNetwork,
+  getWalletClient,
   mainnet,
   signMessage,
+  switchNetwork,
   watchAccount,
 } from "@wagmi/core";
 import {
@@ -14,9 +17,12 @@ import {
   w3mProvider,
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/html";
-import { EventContainer } from "common-app-module";
+import { ErrorAlert, EventContainer, msg } from "common-app-module";
+import { BrowserProvider, JsonRpcSigner } from "ethers";
 import { defineChain } from "viem";
 import { bsc, polygon } from "viem/chains";
+import BlockchainType from "../blockchain/BlockchainType.js";
+import Blockchains from "../blockchain/Blockchains.js";
 import WalletManager from "./WalletManager.js";
 
 export const bifrost = defineChain({
@@ -128,6 +134,41 @@ class EvmWalletManager extends EventContainer implements WalletManager {
 
   public async disconnect() {
     await disconnect();
+  }
+
+  public async getSigner(_chain: BlockchainType): Promise<JsonRpcSigner> {
+    if (this.connected !== true) await this.connect();
+
+    const walletClient = await getWalletClient();
+    if (!walletClient) {
+      new ErrorAlert({
+        title: msg("no-wallet-connected-title"),
+        message: msg("no-wallet-connected-message"),
+      });
+      throw new Error("No wallet connected");
+    }
+
+    const { chain } = getNetwork();
+    if (!chain) {
+      new ErrorAlert({
+        title: msg("invalid-network-title"),
+        message: msg("invalid-network-message"),
+      });
+      throw new Error("Invalid network");
+    }
+
+    if (chain.id !== Blockchains[_chain].chainId) {
+      await switchNetwork({ chainId: Blockchains[_chain].chainId });
+    }
+
+    return new JsonRpcSigner(
+      new BrowserProvider(walletClient.transport, {
+        chainId: chain.id,
+        name: chain.name,
+        ensAddress: chain.contracts?.ensRegistry?.address,
+      }),
+      walletClient.account.address,
+    );
   }
 }
 

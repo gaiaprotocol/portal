@@ -1,5 +1,7 @@
 import { EventContainer, Store } from "common-app-module";
+import { JsonRpcSigner } from "ethers";
 import QrCode from "qrcode";
+import BlockchainType from "../../blockchain/BlockchainType.js";
 import KlaytnWalletManager from "./KlaytnWalletManager.js";
 import KlipQrPopup from "./KlipQrPopup.js";
 
@@ -55,6 +57,47 @@ class KlipManager extends EventContainer implements KlaytnWalletManager {
   public async disconnect() {
     this.store.delete("address");
     this.fireEvent("accountChanged");
+  }
+
+  public async getSigner(
+    chain: BlockchainType,
+  ): Promise<JsonRpcSigner | undefined> {
+    return undefined;
+  }
+
+  public async runContractMethod(
+    address: string,
+    abi: any,
+    _params: any[],
+    value?: BigNumberish,
+  ) {
+    const params: any[] = [];
+    for (const param of _params) {
+      if (Array.isArray(param) === true) {
+        const ps: any[] = [];
+        for (const p of param) {
+          if (p instanceof BigNumber) {
+            ps.push(p.toString());
+          } else {
+            ps.push(p);
+          }
+        }
+        params.push(ps);
+      } else if (param instanceof BigNumber) {
+        params.push(param.toString());
+      } else {
+        params.push(param);
+      }
+    }
+
+    const res = await klipSDK.prepare.executeContract({
+      bappName: Klip.BAPP_NAME,
+      to: address,
+      abi: JSON.stringify(abi),
+      params: JSON.stringify(params),
+      value: (value === undefined ? 0 : value).toString(),
+    });
+    await this.request(res);
   }
 }
 

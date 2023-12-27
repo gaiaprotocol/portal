@@ -20,6 +20,12 @@ export default class Erc20Contract extends Contract<ERC20> {
   }
 
   public async approve(spender: string, amount: bigint): Promise<void> {
-    //TODO: await this.sendContract.approve(spender, amount);
+    const writeContract = await this.getWriteContract();
+    if (writeContract) {
+      const tx = await writeContract.approve(spender, amount);
+      await tx.wait();
+    } else {
+      // 수동으로 명령 실행
+    }
   }
 }

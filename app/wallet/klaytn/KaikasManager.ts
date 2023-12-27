@@ -1,5 +1,7 @@
 import { EventContainer, Store } from "common-app-module";
-import { ethers } from "ethers";
+import { JsonRpcSigner, ethers } from "ethers";
+import BlockchainType from "../../blockchain/BlockchainType.js";
+import Blockchains from "../../blockchain/Blockchains.js";
 import KlaytnWalletManager from "./KlaytnWalletManager.js";
 
 class KaikasManager extends EventContainer implements KlaytnWalletManager {
@@ -36,6 +38,21 @@ class KaikasManager extends EventContainer implements KlaytnWalletManager {
   public async disconnect() {
     this.store.set("temp-disconnected", true);
     this.fireEvent("accountChanged");
+  }
+
+  public async getSigner(
+    chain: BlockchainType,
+  ): Promise<JsonRpcSigner | undefined> {
+    const chainId = parseInt(this.klaytn.networkVersion);
+    if (chainId !== Blockchains[chain].chainId) {
+      await this.klaytn.request({
+        method: "wallet_switchEthereumChain",
+        params: [{
+          chainId: ethers.toQuantity(Blockchains[chain].chainId),
+        }],
+      });
+    }
+    return await this.provider?.getSigner();
   }
 }
 

@@ -1,4 +1,6 @@
 import { EventContainer } from "common-app-module";
+import { JsonRpcSigner } from "ethers";
+import BlockchainType from "../blockchain/BlockchainType.js";
 import WalletManager from "./WalletManager.js";
 import ConnectKlaytnWalletPopup from "./klaytn/ConnectKlaytnWalletPopup.js";
 import KaikasManager from "./klaytn/KaikasManager.js";
@@ -48,6 +50,12 @@ class KlaytnWalletManager extends EventContainer implements WalletManager {
 
   public async disconnect() {
     await this.internalWallet?.disconnect();
+  }
+
+  public async getSigner(
+    chain: BlockchainType,
+  ): Promise<JsonRpcSigner | undefined> {
+    return await this.internalWallet?.getSigner(chain);
   }
 }
 
