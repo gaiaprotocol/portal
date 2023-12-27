@@ -25,7 +25,7 @@ export default class Erc20Contract extends Contract<ERC20> {
       const tx = await writeContract.approve(spender, amount);
       await tx.wait();
     } else {
-      // 수동으로 명령 실행
+      await this.writeManual("approve", [spender, amount]);
     }
   }
 }

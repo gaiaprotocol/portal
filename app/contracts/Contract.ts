@@ -25,4 +25,17 @@ export default abstract class Contract<CT extends BaseContract> {
       ? new ethers.Contract(this.address, this.abi, signer) as any
       : undefined;
   }
+
+  protected async writeManual(
+    method: string,
+    params: any[],
+    value?: bigint,
+  ): Promise<void> {
+    if (!this.wallet.writeManual) throw new Error("Not supported");
+    await this.wallet.writeManual(this.address, this.abi, {
+      method,
+      params,
+      value,
+    });
+  }
 }

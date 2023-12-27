@@ -1,4 +1,4 @@
-import { JsonRpcSigner } from "ethers";
+import { Interface, InterfaceAbi, JsonRpcSigner } from "ethers";
 import BlockchainType from "../blockchain/BlockchainType.js";
 
 export default interface WalletManager {
@@ -6,4 +6,13 @@ export default interface WalletManager {
   connect(): Promise<void>;
   disconnect(): Promise<void>;
   getSigner(chain: BlockchainType): Promise<JsonRpcSigner | undefined>;
+  writeManual?(
+    address: string,
+    abi: Interface | InterfaceAbi,
+    run: {
+      method: string;
+      params?: any[];
+      value?: bigint;
+    },
+  ): Promise<void>;
 }
