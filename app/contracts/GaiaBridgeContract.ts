@@ -14,8 +14,111 @@ export const addresses: { [chain: string]: string } = {
   [BlockchainType.Bifrost]: "0x9f69C2a06c97fCAAc1E586b30Ea681c43975F052",
 };
 
+export enum TokenType {
+  ETH,
+  ERC20,
+  ERC1155,
+  ERC721,
+}
+
+interface TokenDataToBeBridged {
+  tokenType: TokenType;
+  tokenName: string;
+  tokenAddress: string;
+  ids: bigint[];
+  amounts: bigint[];
+}
+
 export default class GaiaBridgeContract extends Contract<GaiaBridge> {
   constructor(chain: BlockchainType, wallet: WalletManager) {
     super(GaiaBridgeArtifact.abi, chain, addresses[chain], wallet);
+  }
+
+  public async sendTokens(
+    toChainId: number,
+    receiver: string,
+    tokenData: TokenDataToBeBridged,
+    data: string,
+    sigs: { r: string; _vs: string }[],
+  ): Promise<bigint> {
+    const writeContract = await this.getWriteContract();
+    if (writeContract) {
+      const tx = await writeContract.sendTokens(
+        toChainId,
+        receiver,
+        tokenData,
+        data,
+        sigs,
+      );
+      const receipt = await tx.wait();
+      if (!receipt) throw new Error("No receipt");
+
+      const walletAddress = await this.wallet.getAddress();
+      const events = await writeContract.queryFilter(
+        writeContract.filters.SendTokens(
+          walletAddress,
+          toChainId,
+          receiver,
+        ),
+        receipt.blockNumber,
+        receipt.blockNumber,
+      );
+      if (!events || events.length === 0) throw new Error("No events");
+      return events[events.length - 1]?.args?.[4];
+    } else {
+      await this.writeManual("approve", [
+        toChainId,
+        receiver,
+        tokenData,
+        data,
+        sigs,
+      ]);
+
+      const walletAddress = await this.wallet.getAddress();
+      const events = await this.viewContract.queryFilter(
+        this.viewContract.filters.SendTokens(
+          walletAddress,
+          toChainId,
+          receiver,
+        ),
+        -2000,
+      );
+      if (!events || events.length === 0) throw new Error("No events");
+      return events[events.length - 1]?.args?.[4];
+    }
+  }
+
+  public async receiveTokens(
+    sender: string,
+    fromChainId: number,
+    receiver: string,
+    tokenData: TokenDataToBeBridged,
+    sendingId: bigint,
+    feeData: string,
+    sigs: { r: string; _vs: string }[],
+  ): Promise<void> {
+    const writeContract = await this.getWriteContract();
+    if (writeContract) {
+      const tx = await writeContract.receiveTokens(
+        sender,
+        fromChainId,
+        receiver,
+        tokenData,
+        sendingId,
+        feeData,
+        sigs,
+      );
+      await tx.wait();
+    } else {
+      await this.writeManual("receiveTokens", [
+        sender,
+        fromChainId,
+        receiver,
+        tokenData,
+        sendingId,
+        feeData,
+        sigs,
+      ]);
+    }
   }
 }

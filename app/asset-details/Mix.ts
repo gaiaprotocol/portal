@@ -1,6 +1,8 @@
 import AssetInfo from "../asset/AssetInfo.js";
 import AssetType from "../asset/AssetType.js";
 import BlockchainType from "../blockchain/BlockchainType.js";
+import Blockchains from "../blockchain/Blockchains.js";
+import MixSenderContract from "../contracts/MixSenderContract.js";
 import Erc20Contract from "../contracts/standard/Erc20Contract.js";
 
 const Mix: AssetInfo = {
@@ -57,24 +59,31 @@ const Mix: AssetInfo = {
     throw new Error("Not implemented");
   },
 
-  send: async (
-    toChainId: number,
-    receiver: string,
-    ids: bigint[],
-    amounts: bigint[],
-  ) => {
-    //TODO: implement
+  send: async (chain, wallet, toChain, receiver, amounts) => {
+    const toChainId = Blockchains[chain]?.chainId;
+    if (toChainId) {
+      return await new MixSenderContract(chain, wallet).sendOverHorizon(
+        toChainId,
+        receiver,
+        amounts[0],
+      );
+    }
   },
 
-  receive: async (
-    fromChainId: number,
-    sendId: string,
-    sender: string,
-    ids: bigint[],
-    amounts: bigint[],
-    signature: string,
-  ) => {
-    //TODO: implement
+  receive: async (chain, wallet, fromChain, sender, sendingId, amounts) => {
+    const fromChainId = Blockchains[fromChain]?.chainId;
+    const toChainId = Blockchains[chain]?.chainId;
+    if (fromChainId && toChainId) {
+      const signature = ""; //TODO: implement
+      await new MixSenderContract(chain, wallet).receiveOverHorizon(
+        fromChainId,
+        toChainId,
+        sender,
+        sendingId,
+        amounts[0],
+        signature,
+      );
+    }
   },
 };
 

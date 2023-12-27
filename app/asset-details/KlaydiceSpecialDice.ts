@@ -1,12 +1,19 @@
+import { ethers } from "ethers";
 import AssetInfo, { AssetMetadata } from "../asset/AssetInfo.js";
 import AssetType from "../asset/AssetType.js";
 import BlockchainType from "../blockchain/BlockchainType.js";
-import { addresses as GaiaBridgeAddresses } from "../contracts/GaiaBridgeContract.js";
+import Blockchains from "../blockchain/Blockchains.js";
+import GaiaBridgeContract, {
+  addresses as GaiaBridgeAddresses,
+  TokenType,
+} from "../contracts/GaiaBridgeContract.js";
 import NftUtilContract from "../contracts/NftUtilContract.js";
 import Erc721Contract from "../contracts/standard/Erc721Contract.js";
 import metadata from "./klaydice-special-dice-metadata.json" assert {
   type: "json",
 };
+
+const TOKEN_NAME = "klaydice-special-dice-nft";
 
 const KlaydiceSpecialDice: AssetInfo = {
   type: AssetType.ERC721,
@@ -89,24 +96,64 @@ const KlaydiceSpecialDice: AssetInfo = {
     );
   },
 
-  send: async (
-    toChainId: number,
-    receiver: string,
-    ids: bigint[],
-    amounts: bigint[],
-  ) => {
-    //TODO: implement
+  send: async (chain, wallet, toChain, receiver, amounts) => {
+    const toChainId = Blockchains[toChain]?.chainId;
+    if (toChainId) {
+      return await new GaiaBridgeContract(chain, wallet).sendTokens(
+        toChainId,
+        receiver,
+        {
+          tokenType: TokenType.ERC721,
+          tokenName: TOKEN_NAME,
+          tokenAddress: KlaydiceSpecialDice.addresses[chain],
+          ids: Object.keys(amounts).map((id) => BigInt(id)),
+          amounts: Object.values(amounts),
+        },
+        "0x",
+        [],
+      );
+    }
   },
 
-  receive: async (
-    fromChainId: number,
-    sendId: string,
-    sender: string,
-    ids: bigint[],
-    amounts: bigint[],
-    signature: string,
-  ) => {
-    //TODO: implement
+  receive: async (chain, wallet, fromChain, sender, sendingId, amounts) => {
+    const fromChainId = Blockchains[fromChain]?.chainId;
+    const toChainId = Blockchains[chain]?.chainId;
+    const walletAddress = await wallet.getAddress();
+
+    if (fromChainId && toChainId && walletAddress) {
+      const results: {
+        address: string;
+        signature: { r: string; _vs: string };
+      }[] = [];
+
+      const signature = ""; //TODO: implement
+      const sSig = ethers.Signature.from(signature);
+      results.push({
+        address: "0x0",
+        signature: { r: sSig.r, _vs: sSig.yParityAndS },
+      });
+
+      results.sort((
+        a,
+        b,
+      ) => (BigInt(a.address) < BigInt(b.address) ? -1 : 1));
+
+      await new GaiaBridgeContract(chain, wallet).receiveTokens(
+        sender,
+        fromChainId,
+        walletAddress,
+        {
+          tokenType: TokenType.ERC721,
+          tokenName: TOKEN_NAME,
+          tokenAddress: KlaydiceSpecialDice.addresses[chain],
+          ids: Object.keys(amounts).map((id) => BigInt(id)),
+          amounts: Object.values(amounts),
+        },
+        sendingId,
+        "0x",
+        results.map((result) => result.signature),
+      );
+    }
   },
 };
 

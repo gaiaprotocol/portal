@@ -44,18 +44,19 @@ export default interface AssetInfo {
   ) => Promise<void>;
 
   send: (
-    toChainId: number,
+    chain: BlockchainType,
+    wallet: WalletManager,
+    toChain: BlockchainType,
     receiver: string,
-    ids: bigint[],
-    amounts: bigint[],
-  ) => Promise<void>;
+    amounts: { [tokenId: string]: bigint },
+  ) => Promise<bigint | undefined>;
 
   receive: (
-    fromChainId: number,
-    sendId: string,
+    chain: BlockchainType,
+    wallet: WalletManager,
+    fromChain: BlockchainType,
     sender: string,
-    ids: bigint[],
-    amounts: bigint[],
-    signature: string,
+    sendingId: bigint,
+    amounts: { [tokenId: string]: bigint },
   ) => Promise<void>;
 }

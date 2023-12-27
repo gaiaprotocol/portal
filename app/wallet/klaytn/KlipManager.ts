@@ -65,6 +65,21 @@ class KlipManager extends EventContainer implements KlaytnWalletManager {
     return undefined;
   }
 
+  private processParams(param: any): any {
+    if (Array.isArray(param)) {
+      return param.map(this.processParams);
+    } else if (typeof param === "bigint") {
+      return param.toString();
+    } else if (typeof param === "object" && param !== null) {
+      const processedObject: any = {};
+      Object.keys(param).forEach((key) => {
+        processedObject[key] = this.processParams(param[key]);
+      });
+      return processedObject;
+    }
+    return param;
+  }
+
   public async writeManual(
     address: string,
     abi: Interface | InterfaceAbi,
@@ -74,25 +89,6 @@ class KlipManager extends EventContainer implements KlaytnWalletManager {
       value?: bigint | undefined;
     },
   ): Promise<void> {
-    const params: any[] = [];
-    for (const param of run.params ?? []) {
-      if (Array.isArray(param) === true) {
-        const ps: any[] = [];
-        for (const p of param) {
-          if (typeof p === "bigint") {
-            ps.push(p.toString());
-          } else {
-            ps.push(p);
-          }
-        }
-        params.push(ps);
-      } else if (typeof param === "bigint") {
-        params.push(param.toString());
-      } else {
-        params.push(param);
-      }
-    }
-
     const res = await prepare.executeContract({
       bappName: BAPP_NAME,
       to: address,
@@ -101,7 +97,7 @@ class KlipManager extends EventContainer implements KlaytnWalletManager {
           abi.name === run.method && abi.type === "function"
         )[0],
       ),
-      params: JSON.stringify(params),
+      params: JSON.stringify((run.params ?? []).map(this.processParams)),
       value: (run.value === undefined ? 0 : run.value).toString(),
     });
     await this.request("스마트 계약 실행", res);

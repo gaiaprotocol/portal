@@ -10,7 +10,7 @@ export default abstract class Contract<CT extends BaseContract> {
     private abi: Interface | InterfaceAbi,
     private chain: BlockchainType,
     private address: string,
-    private wallet: WalletManager,
+    protected wallet: WalletManager,
   ) {
     this.viewContract = new ethers.Contract(
       address,

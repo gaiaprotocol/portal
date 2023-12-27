@@ -1,6 +1,8 @@
 import AssetInfo from "../asset/AssetInfo.js";
 import AssetType from "../asset/AssetType.js";
 import BlockchainType from "../blockchain/BlockchainType.js";
+import Blockchains from "../blockchain/Blockchains.js";
+import InjeolmiSenderContract from "../contracts/InjeolmiSenderContract.js";
 import Erc20Contract from "../contracts/standard/Erc20Contract.js";
 
 const Injeolmi: AssetInfo = {
@@ -63,24 +65,29 @@ const Injeolmi: AssetInfo = {
     ).approve(Injeolmi.senderAddresses[chain], amounts[0]);
   },
 
-  send: async (
-    toChainId: number,
-    receiver: string,
-    ids: bigint[],
-    amounts: bigint[],
-  ) => {
-    //TODO: implement
+  send: async (chain, wallet, toChain, receiver, amounts) => {
+    const toChainId = Blockchains[chain]?.chainId;
+    if (toChainId) {
+      return await new InjeolmiSenderContract(toChain, wallet).sendOverHorizon(
+        toChainId,
+        receiver,
+        amounts[0],
+      );
+    }
   },
 
-  receive: async (
-    fromChainId: number,
-    sendId: string,
-    sender: string,
-    ids: bigint[],
-    amounts: bigint[],
-    signature: string,
-  ) => {
-    //TODO: implement
+  receive: async (chain, wallet, fromChain, sender, sendingId, amounts) => {
+    const fromChainId = Blockchains[fromChain]?.chainId;
+    if (fromChainId) {
+      const signature = ""; //TODO: implement
+      await new InjeolmiSenderContract(chain, wallet).receiveOverHorizon(
+        fromChainId,
+        sender,
+        sendingId,
+        amounts[0],
+        signature,
+      );
+    }
   },
 };
 

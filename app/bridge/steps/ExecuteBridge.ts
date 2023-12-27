@@ -73,7 +73,15 @@ export default class ExecuteBridge extends StepDisplay {
     const amounts = this.tokneList?.amounts;
     const fromChain = this._setup?.fromChain;
     const fromWallet = this._setup?.fromWallet;
-    if (asset && amounts && fromChain && fromWallet) {
+    const fromWalletAddress = this._setup?.fromWalletAddress;
+    const toChain = this._setup?.toChain;
+    const toWallet = this._setup?.toWallet;
+    const toWalletAddress = this._setup?.toWalletAddress;
+
+    if (
+      asset && amounts && fromChain && fromWallet && fromWalletAddress &&
+      toChain && toWallet && toWalletAddress
+    ) {
       const approved = await asset.checkApprovalToSender(
         fromChain,
         fromWallet,
@@ -92,12 +100,20 @@ export default class ExecuteBridge extends StepDisplay {
           }),
         );
       } else {
+        let sendingId: bigint | undefined;
+
         const sendButton = new Button({
           title: "Send",
           click: async () => {
             sendButton.disable();
             try {
-              //TODO: await asset.send();
+              sendingId = await asset.send(
+                fromChain,
+                fromWallet,
+                toChain,
+                toWalletAddress,
+                amounts,
+              );
               receiveButton.enable();
             } catch (e: any) {
               new ErrorAlert({
@@ -113,20 +129,29 @@ export default class ExecuteBridge extends StepDisplay {
           title: "Receive",
           disabled: true,
           click: async () => {
-            receiveButton.disable();
-            try {
-              //TODO: await asset.receive();
-              sendButton.enable();
-              new Alert({
-                title: "Receive success",
-                message: "Receive success",
-              });
-            } catch (e: any) {
-              new ErrorAlert({
-                title: "Receive failed",
-                message: e.message,
-              });
-              receiveButton.enable();
+            if (sendingId) {
+              receiveButton.disable();
+              try {
+                await asset.receive(
+                  toChain,
+                  toWallet,
+                  fromChain,
+                  fromWalletAddress,
+                  sendingId,
+                  amounts,
+                );
+                sendButton.enable();
+                new Alert({
+                  title: "Receive success",
+                  message: "Receive success",
+                });
+              } catch (e: any) {
+                new ErrorAlert({
+                  title: "Receive failed",
+                  message: e.message,
+                });
+                receiveButton.enable();
+              }
             }
           },
         });
