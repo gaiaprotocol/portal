@@ -2,8 +2,9 @@ import AssetInfo, { AssetMetadata } from "../asset/AssetInfo.js";
 import AssetType from "../asset/AssetType.js";
 import BlockchainType from "../blockchain/BlockchainType.js";
 import NftUtilContract from "../contracts/NftUtilContract.js";
+import Erc721Contract from "../contracts/standard/Erc721Contract.js";
 import metadata from "./klaydice-special-dice-metadata.json" assert {
-  type: "json",
+  type: "json"
 };
 
 const KlaydiceSpecialDice: AssetInfo = {
@@ -15,6 +16,17 @@ const KlaydiceSpecialDice: AssetInfo = {
   addresses: {
     [BlockchainType.BNB]: "0x1dDB2C0897daF18632662E71fdD2dbDC0eB3a9Ec",
     [BlockchainType.Bifrost]: "0xdf98e88944be3bc7C861135dAc617AD562EBB8D0",
+  },
+
+  fetchBalance: async (chain, wallet) => {
+    const walletAddress = await wallet.getAddress();
+    if (!walletAddress) return 0n;
+
+    return await new Erc721Contract(
+      chain,
+      KlaydiceSpecialDice.addresses[chain],
+      wallet,
+    ).balanceOf(walletAddress);
   },
 
   fetchTokens: async (chain, wallet) => {

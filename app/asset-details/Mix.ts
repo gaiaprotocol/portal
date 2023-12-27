@@ -1,7 +1,7 @@
 import AssetInfo from "../asset/AssetInfo.js";
 import AssetType from "../asset/AssetType.js";
 import BlockchainType from "../blockchain/BlockchainType.js";
-import Erc20Contract from "../contracts/Erc20Contract.js";
+import Erc20Contract from "../contracts/standard/Erc20Contract.js";
 
 const Mix: AssetInfo = {
   type: AssetType.ERC20,
@@ -17,16 +17,19 @@ const Mix: AssetInfo = {
   },
   senderAddress: "0xDeE2b8539c2321450a99f6728633DEf8d069262F",
 
-  fetchTokens: async (chain, wallet) => {
+  fetchBalance: async (chain, wallet) => {
     const walletAddress = await wallet.getAddress();
-    if (!walletAddress) return [{ id: 0n, amount: 0n }];
+    if (!walletAddress) return 0n;
 
-    const balance = await new Erc20Contract(
+    return await new Erc20Contract(
       chain,
       Mix.addresses[chain],
       wallet,
     ).balanceOf(walletAddress);
+  },
 
+  fetchTokens: async (chain, wallet) => {
+    const balance = await Mix.fetchBalance(chain, wallet);
     return [{ id: 0n, amount: balance }];
   },
 

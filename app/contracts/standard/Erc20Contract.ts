@@ -1,8 +1,8 @@
-import BlockchainType from "../blockchain/BlockchainType.js";
-import WalletManager from "../wallet/WalletManager.js";
-import Contract from "./Contract.js";
-import { ERC20 } from "./abi/standard/ERC20.js";
-import Erc20Artifact from "./abi/standard/ERC20.json" assert {
+import BlockchainType from "../../blockchain/BlockchainType.js";
+import WalletManager from "../../wallet/WalletManager.js";
+import Contract from "../Contract.js";
+import { ERC20 } from "../abi/standard/ERC20.js";
+import Erc20Artifact from "../abi/standard/ERC20.json" assert {
   type: "json",
 };
 

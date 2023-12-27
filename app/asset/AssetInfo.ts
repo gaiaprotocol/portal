@@ -17,6 +17,11 @@ export default interface AssetInfo {
   addresses: { [chain: string]: string };
   senderAddress?: string;
 
+  fetchBalance: (
+    chain: BlockchainType,
+    wallet: WalletManager,
+  ) => Promise<bigint>;
+
   fetchTokens: (
     chain: BlockchainType,
     wallet: WalletManager,

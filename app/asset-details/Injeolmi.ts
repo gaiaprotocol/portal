@@ -1,7 +1,7 @@
 import AssetInfo from "../asset/AssetInfo.js";
 import AssetType from "../asset/AssetType.js";
 import BlockchainType from "../blockchain/BlockchainType.js";
-import Erc20Contract from "../contracts/Erc20Contract.js";
+import Erc20Contract from "../contracts/standard/Erc20Contract.js";
 
 const Injeolmi: AssetInfo = {
   type: AssetType.ERC20,
@@ -18,16 +18,19 @@ const Injeolmi: AssetInfo = {
   },
   senderAddress: "0x19f112c05Fad52e5C58E5A4628548aBB45bc8697",
 
-  fetchTokens: async (chain, wallet) => {
+  fetchBalance: async (chain, wallet) => {
     const walletAddress = await wallet.getAddress();
-    if (!walletAddress) return [{ id: 0n, amount: 0n }];
+    if (!walletAddress) return 0n;
 
-    const balance = await new Erc20Contract(
+    return await new Erc20Contract(
       chain,
       Injeolmi.addresses[chain],
       wallet,
     ).balanceOf(walletAddress);
+  },
 
+  fetchTokens: async (chain, wallet) => {
+    const balance = await Injeolmi.fetchBalance(chain, wallet);
     return [{ id: 0n, amount: balance }];
   },
 
