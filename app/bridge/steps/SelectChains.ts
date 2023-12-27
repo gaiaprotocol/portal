@@ -1,5 +1,6 @@
-import { MaterialIcon, Router } from "common-app-module";
+import { Debouncer, MaterialIcon, ObjectUtil, Router } from "common-app-module";
 import BlockchainType from "../../blockchain/BlockchainType.js";
+import BridgeSetup from "../BridgeSetup.js";
 import { default as ChainSelector } from "./ChainSelector.js";
 import StepDisplay from "./StepDisplay.js";
 
@@ -10,7 +11,7 @@ export default class SelectChains extends StepDisplay {
 
   constructor() {
     super(".select-chains", 2, "Select chains");
-    this.addAllowedEvents("complete");
+    this.addAllowedEvents("change");
 
     this.container.append(
       this.fromChainSelector = new ChainSelector(),
@@ -18,14 +19,24 @@ export default class SelectChains extends StepDisplay {
       this.toChainSelector = new ChainSelector(),
     );
 
-    this.fromChainSelector.on("select", () => this.route());
-    this.toChainSelector.on("select", () => this.route());
-
-    this.fromChainSelector.on("complete", () => this.checkComplete());
-    this.toChainSelector.on("complete", () => this.checkComplete());
+    this.fromChainSelector.on(
+      "change",
+      () => this.detectAndReflectChangesDebouncer.run(),
+    );
+    this.toChainSelector.on(
+      "change",
+      () => this.detectAndReflectChangesDebouncer.run(),
+    );
   }
 
-  private route() {
+  private detectAndReflectChangesDebouncer = new Debouncer(
+    100,
+    () => this.detectAndReflectChanges(),
+  );
+
+  private prevSetup: BridgeSetup = {};
+  private detectAndReflectChanges() {
+    // route
     if (!this.assetId) Router.go("/");
     else {
       const fromChain = this.fromChainSelector.chain;
@@ -34,48 +45,20 @@ export default class SelectChains extends StepDisplay {
       else if (!toChain) Router.go(`/${this.assetId}/${fromChain}`);
       else Router.go(`/${this.assetId}/${fromChain}/${toChain}`);
     }
-  }
 
-  private prevCompletedData: any = {};
-  private checkComplete() {
-    const fromChain = this.fromChainSelector.chain;
-    const fromWallet = this.fromChainSelector.wallet;
-    const fromWalletAddress = this.fromChainSelector.walletAddress;
-    const toChain = this.toChainSelector.chain;
-    const toWallet = this.toChainSelector.wallet;
-    const toWalletAddress = this.toChainSelector.walletAddress;
-
-    if (
-      this.assetId && fromChain && fromWallet && fromWalletAddress && toChain &&
-      toWallet && toWalletAddress &&
-      (
-        this.prevCompletedData.asset !== this.assetId ||
-        this.prevCompletedData.fromChain !== fromChain ||
-        this.prevCompletedData.fromWallet !== fromWallet ||
-        this.prevCompletedData.fromWalletAddress !== fromWalletAddress ||
-        this.prevCompletedData.toChain !== toChain ||
-        this.prevCompletedData.toWallet !== toWallet ||
-        this.prevCompletedData.toWalletAddress !== toWalletAddress
-      )
-    ) {
-      this.fireEvent(
-        "complete",
-        this.assetId,
-        fromChain,
-        fromWallet,
-        toChain,
-        toWallet,
-      );
-
-      this.prevCompletedData = {
-        asset: this.assetId,
-        fromChain,
-        fromWallet,
-        fromWalletAddress,
-        toChain,
-        toWallet,
-        toWalletAddress,
-      };
+    // detect change
+    const setup: BridgeSetup = {
+      asset: this.assetId,
+      fromChain: this.fromChainSelector.chain,
+      fromWallet: this.fromChainSelector.wallet,
+      fromWalletAddress: this.fromChainSelector.walletAddress,
+      toChain: this.toChainSelector.chain,
+      toWallet: this.toChainSelector.wallet,
+      toWalletAddress: this.toChainSelector.walletAddress,
+    };
+    if (!ObjectUtil.checkEqual(this.prevSetup, setup)) {
+      this.prevSetup = setup;
+      this.fireEvent("change", setup);
     }
   }
 
@@ -98,6 +81,6 @@ export default class SelectChains extends StepDisplay {
     if (
       this.fromChainSelector.chain !== fromChain ||
       this.toChainSelector.chain !== toChain
-    ) setTimeout(() => this.route());
+    ) setTimeout(() => this.detectAndReflectChangesDebouncer.run());
   }
 }

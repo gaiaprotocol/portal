@@ -31,18 +31,7 @@ export default class BridgeView extends View {
       params.toChain as BlockchainType | undefined,
     );
 
-    this.selectChains.on(
-      "complete",
-      (asset, fromChain, fromWallet, toChain, toWallet) => {
-        this.executeBridge.init(
-          asset,
-          fromChain,
-          fromWallet,
-          toChain,
-          toWallet,
-        );
-      },
-    );
+    this.selectChains.on("change", (setup) => this.executeBridge.setup = setup);
   }
 
   public changeParams(params: ViewParams): void {

@@ -1,3 +1,6 @@
+/*!******************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!../common-app-module/style/reset.css ***!
+  \******************************************************************************************************************/
 /***
     The new CSS reset - version 1.8.4 (last updated 14.2.2023)
     GitHub page: https://github.com/elad2412/the-new-css-reset
@@ -98,6 +101,9 @@ meter {
 :where(dialog:modal) {
     all: revert;
 }
+/*!*********************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/less-loader/dist/cjs.js!./public/style/main.less ***!
+  \*********************************************************************************************************************************************/
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
@@ -121,6 +127,7 @@ meter {
   --popup-bg-color: rgba(0, 0, 0, 0.5);
   --button-bg-color: rgba(193, 168, 125, 0.12);
   --hover-color: rgba(193, 168, 125, 0.12);
+  --disable-color: rgba(255, 255, 255, 0.5);
   width: 100%;
   height: 100%;
   background-color: var(--wrapper-bg-color);
@@ -591,6 +598,25 @@ button.component > .title {
   border-left: 1px solid var(--line-color);
   background-color: var(--content-bg-color);
 }
+.asset-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.asset-display > h4 {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+.asset-display > .amount {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.asset-display > .amount > .symbol {
+  font-size: 12px;
+  color: var(--disable-color);
+}
 .asset-list {
   padding-left: 16px;
   container-type: inline-size;
@@ -789,8 +815,5 @@ button.component > .title {
   display: flex;
   flex-direction: column;
   gap: 12px;
-}
-.chain-selector > .wallet-selector:empty {
-  display: none;
 }
 

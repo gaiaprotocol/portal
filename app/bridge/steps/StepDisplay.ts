@@ -1,6 +1,6 @@
 import { DomNode, el } from "common-app-module";
 
-export default class StepDisplay extends DomNode {
+export default abstract class StepDisplay extends DomNode {
   protected container: DomNode;
 
   constructor(tag: string, step: number, title: string) {

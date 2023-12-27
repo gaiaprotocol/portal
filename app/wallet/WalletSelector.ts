@@ -14,14 +14,19 @@ import WalletDisplay from "./WalletDisplay.js";
 import WalletManager from "./WalletManager.js";
 
 export default class WalletSelector extends DomNode {
-  private _chain: BlockchainType | undefined;
   public wallet: (WalletManager & EventContainer) | undefined;
   public address: string | undefined;
 
+  private _chain: BlockchainType | undefined;
+
   constructor() {
     super(".wallet-selector");
-    this.addAllowedEvents("complete");
+    this.addAllowedEvents("accountChanged");
     this.render();
+  }
+
+  public get chain() {
+    return this._chain;
   }
 
   public set chain(chain: BlockchainType | undefined) {
@@ -51,8 +56,13 @@ export default class WalletSelector extends DomNode {
   private async render() {
     this.empty();
     if (this.wallet) {
-      this.address = await this.wallet.getAddress();
-      if (!this.address) {
+      const address = await this.wallet.getAddress();
+      if (address !== this.address) {
+        this.address = address;
+        this.fireEvent("accountChanged");
+      }
+
+      if (!address) {
         this.append(
           new Button({
             title: "Connect Wallet",
@@ -60,7 +70,7 @@ export default class WalletSelector extends DomNode {
           }),
         );
       } else {
-        new WalletDisplay(this.address).appendTo(this).onDom(
+        new WalletDisplay(address).appendTo(this).onDom(
           "click",
           (event) => {
             if (this._chain) {
@@ -74,9 +84,7 @@ export default class WalletSelector extends DomNode {
                   icon: new MaterialIcon("content_copy"),
                   title: "Copy address",
                   click: () => {
-                    if (this.address) {
-                      navigator.clipboard.writeText(this.address);
-                    }
+                    navigator.clipboard.writeText(address);
                     new Snackbar({ message: "Address copied to clipboard" });
                   },
                 }, {
@@ -84,7 +92,7 @@ export default class WalletSelector extends DomNode {
                   title: `View on ${chain.blockExplorer.name}`,
                   click: () =>
                     window.open(
-                      `${chain.blockExplorer.url}/address/${this.address}`,
+                      `${chain.blockExplorer.url}/address/${address}`,
                       "_blank",
                     ),
                 }, {
@@ -96,8 +104,6 @@ export default class WalletSelector extends DomNode {
             }
           },
         );
-
-        this.fireEvent("complete");
       }
     }
   }

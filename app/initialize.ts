@@ -6,6 +6,7 @@ import {
 } from "common-app-module";
 import messages_en from "../locales/en.yml";
 import messages_ko from "../locales/ko.yml";
+import { initBlockchains } from "./blockchain/Blockchains.js";
 import BridgeView from "./bridge/BridgeView.js";
 import Config from "./Config.js";
 import Env from "./Env.js";
@@ -23,6 +24,7 @@ MaterialIconSystem.launch();
 export default async function initialize(config: Config) {
   Env.dev = config.dev;
   Env.infuraKey = config.infuraKey;
+  initBlockchains();
 
   AppInitializer.initialize(
     config.supabaseUrl,

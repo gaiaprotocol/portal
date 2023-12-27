@@ -1,4 +1,5 @@
-import { DomNode, el, Select } from "common-app-module";
+import { Debouncer, DomNode, el, Select } from "common-app-module";
+import AssetDisplay from "../../asset/AssetDisplay.js";
 import Assets from "../../asset/Assets.js";
 import BlockchainType from "../../blockchain/BlockchainType.js";
 import WalletSelector from "../../wallet/WalletSelector.js";
@@ -10,10 +11,11 @@ export default class ChainSelector extends DomNode {
 
   private select: Select<string>;
   private walletSelector: WalletSelector;
+  private balanceDisplay: DomNode;
 
   constructor() {
     super(".chain-selector");
-    this.addAllowedEvents("select", "complete");
+    this.addAllowedEvents("change");
 
     this.append(
       this.select = new Select({
@@ -21,18 +23,40 @@ export default class ChainSelector extends DomNode {
         options: [],
       }),
       this.walletSelector = new WalletSelector(),
+      this.balanceDisplay = el(".balance"),
     );
 
     this.select.on("change", (chain) => {
       if (chain === this._chain) return;
       this._chain = chain;
       this.walletSelector.chain = chain;
-      this.fireEvent("select", chain);
+      this.detectAndReflectChangesDebouncer.run();
     });
 
-    this.walletSelector.on("complete", () => {
-      if (this._chain) this.fireEvent("complete");
-    });
+    this.walletSelector.on(
+      "accountChanged",
+      () => this.detectAndReflectChangesDebouncer.run(),
+    );
+  }
+
+  private detectAndReflectChangesDebouncer = new Debouncer(
+    100,
+    () => this.detectAndReflectChanges(),
+  );
+
+  private async detectAndReflectChanges() {
+    this.fireEvent("change");
+
+    this.balanceDisplay.empty();
+    if (this.assetId && this._chain && this.wallet) {
+      const asset = Assets[this.assetId];
+      if (asset) {
+        const balance = await asset.fetchBalance(this._chain, this.wallet);
+        this.balanceDisplay.empty().append(
+          new AssetDisplay("Balance", asset, balance),
+        );
+      }
+    }
   }
 
   public get asset() {
@@ -51,6 +75,12 @@ export default class ChainSelector extends DomNode {
       }
     }
     this.select.options = options;
+
+    this.detectAndReflectChangesDebouncer.run();
+  }
+
+  public get except() {
+    return this._except;
   }
 
   public set except(chain: BlockchainType | undefined) {
@@ -66,13 +96,17 @@ export default class ChainSelector extends DomNode {
   }
 
   public set chain(chain: BlockchainType | undefined) {
+    // ignore if chain is not in the list
     if (chain && !this.select.options.find((o) => o.value === chain)) {
       chain = undefined;
     }
+
     if (this._chain === chain) return;
     this._chain = chain;
     this.select.value = chain;
     this.walletSelector.chain = chain;
+
+    this.detectAndReflectChangesDebouncer.run();
   }
 
   public get wallet() {

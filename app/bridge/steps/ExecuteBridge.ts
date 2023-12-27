@@ -1,9 +1,8 @@
-import { Button, DomNode, el } from "common-app-module";
+import { Button, DomNode, el, ObjectUtil } from "common-app-module";
 import Assets from "../../asset/Assets.js";
-import BlockchainType from "../../blockchain/BlockchainType.js";
 import TransactionList from "../../history/TransactionList.js";
 import TokenList from "../../token/TokenList.js";
-import WalletManager from "../../wallet/WalletManager.js";
+import BridgeSetup from "../BridgeSetup.js";
 import StepDisplay from "./StepDisplay.js";
 
 // input amount
@@ -11,6 +10,8 @@ import StepDisplay from "./StepDisplay.js";
 // send
 // receive
 export default class ExecuteBridge extends StepDisplay {
+  private _setup: BridgeSetup | undefined;
+
   private tokenListContainer: DomNode;
   private input: DomNode<HTMLInputElement>;
   private approveButton: Button;
@@ -36,18 +37,35 @@ export default class ExecuteBridge extends StepDisplay {
     );
   }
 
-  public async init(
-    assetId: string,
-    fromChain: BlockchainType,
-    fromWallet: WalletManager,
-    toChain: BlockchainType,
-    toWallet: WalletManager,
-  ) {
+  public get setup() {
+    return this._setup;
+  }
+
+  public set setup(setup: BridgeSetup | undefined) {
+    if (ObjectUtil.checkEqual(this._setup, setup)) return;
+    this._setup = setup;
+    this.render();
+  }
+
+  private clear() {
+    //TODO:
+    console.log("clear");
+  }
+
+  public async render() {
     this.tokenListContainer.empty();
-    const asset = Assets[assetId];
-    if (asset) {
-      const tokens = await asset.fetchTokens(fromChain, fromWallet);
-      this.tokenListContainer.append(new TokenList(asset, tokens));
+    if (!this._setup || Object.values(this._setup).some((v) => !v)) {
+      this.clear();
+    } else {
+      const asset = Assets[this._setup.asset!];
+      if (!asset) this.clear();
+      else {
+        const tokens = await asset.fetchTokens(
+          this._setup.fromChain!,
+          this._setup.fromWallet!,
+        );
+        this.tokenListContainer.append(new TokenList(asset, tokens));
+      }
     }
   }
 

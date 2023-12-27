@@ -1,5 +1,5 @@
-import { DomNode, el, StringUtil } from "common-app-module";
-import { ethers } from "ethers";
+import { DomNode, el } from "common-app-module";
+import AssetDisplay from "../asset/AssetDisplay.js";
 import AssetInfo, { AssetMetadata } from "../asset/AssetInfo.js";
 import AssetType from "../asset/AssetType.js";
 
@@ -24,18 +24,7 @@ export default class TokenListItem extends DomNode {
 
     if (asset.type === AssetType.ERC20 || asset.type === AssetType.ERC1155) {
       this.append(
-        el(
-          "h4",
-          el("b", "Your balance: "),
-          asset.decimals
-            ? `${
-              StringUtil.numberWithCommas(
-                ethers.formatUnits(token.amount, asset.decimals),
-                3,
-              )
-            } ${asset.symbol}`
-            : token.amount.toString(),
-        ),
+        new AssetDisplay("Your balance", asset, token.amount),
         el("input"),
       );
     }

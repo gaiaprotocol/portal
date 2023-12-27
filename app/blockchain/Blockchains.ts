@@ -5,10 +5,15 @@ import KlaytnWalletManager from "../wallet/KlaytnWalletManager.js";
 import BlockchainInfo from "./BlockchainInfo.js";
 import BlockchainType from "./BlockchainType.js";
 
+export function initBlockchains() {
+  Blockchains[BlockchainType.Ethereum].rpc =
+    `https://mainnet.infura.io/v3/${Env.infuraKey}`;
+}
+
 const Blockchains: { [chain: string]: BlockchainInfo } = {
   [BlockchainType.Ethereum]: {
     chainId: 1,
-    rpc: `https://mainnet.infura.io/v3/${Env.infuraKey}`,
+    rpc: "", // set in initBlockchains()
     blockExplorer: mainnet.blockExplorers.default,
     walletManager: EvmWalletManager,
   },
