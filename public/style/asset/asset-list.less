@@ -1,12 +1,7 @@
 .asset-list {
     padding-left  : 16px;
     container-type: inline-size;
-
-    &::after {
-        content: '';
-        display: table;
-        clear  : both;
-    }
+    .clearfix();
 
     >.asset-list-item {
         float        : left;

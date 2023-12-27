@@ -1,4 +1,10 @@
-import { Debouncer, MaterialIcon, ObjectUtil, Router } from "common-app-module";
+import {
+  Debouncer,
+  el,
+  MaterialIcon,
+  ObjectUtil,
+  Router,
+} from "common-app-module";
 import BlockchainType from "../../blockchain/BlockchainType.js";
 import BridgeSetup from "../BridgeSetup.js";
 import { default as ChainSelector } from "./ChainSelector.js";
@@ -15,7 +21,13 @@ export default class SelectChains extends StepDisplay {
 
     this.container.append(
       this.fromChainSelector = new ChainSelector(),
-      new MaterialIcon("arrow_forward"),
+      el("a", new MaterialIcon("arrow_forward"), {
+        click: () =>
+          this.selectChains(
+            this.toChainSelector.chain,
+            this.fromChainSelector.chain,
+          ),
+      }),
       this.toChainSelector = new ChainSelector(),
     );
 

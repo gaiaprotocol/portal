@@ -1,10 +1,11 @@
-import { Debouncer, DomNode, el } from "common-app-module";
+import { DomNode, el, Input } from "common-app-module";
+import { ethers } from "ethers";
 import AssetDisplay from "../asset/AssetDisplay.js";
 import AssetInfo, { AssetMetadata } from "../asset/AssetInfo.js";
 import AssetType from "../asset/AssetType.js";
 
 export default class TokenListItem extends DomNode {
-  private amountInput: DomNode<HTMLInputElement> | undefined;
+  private amountInput: Input | undefined;
   private selected = false;
 
   constructor(
@@ -22,9 +23,16 @@ export default class TokenListItem extends DomNode {
       this.append(
         el(
           ".info",
-          el("h3", token.metadata?.name),
-          el("h4", el("b", "ID: "), `#${token.id}`),
-          { backgroundImage: `url(${token.metadata?.image})` },
+          el(
+            "main",
+            el("h3", token.metadata?.name),
+            el("h4", el("b", "ID: "), `#${token.id}`),
+          ),
+          {
+            style: {
+              backgroundImage: `url(${token.metadata?.image})`,
+            },
+          },
         ),
       );
     }
@@ -34,11 +42,12 @@ export default class TokenListItem extends DomNode {
         el(
           ".form",
           new AssetDisplay("Your balance", asset, token.amount),
-          this.amountInput = el("input", {
-            keydown: () => this.changeDebouncer.run(),
+          this.amountInput = new Input({
+            placeholder: "Amount to send",
           }),
         ),
       );
+      this.amountInput.on("change", () => this.detectAndReflectChange());
     }
 
     if (asset.type === AssetType.ERC721) {
@@ -49,6 +58,8 @@ export default class TokenListItem extends DomNode {
           this.fireEvent("changeAmount");
         },
       );
+    } else if (asset.type === AssetType.ERC1155) {
+      this.addClass("multi-token");
     }
   }
 
@@ -63,13 +74,13 @@ export default class TokenListItem extends DomNode {
   }
 
   private prevAmount = 0n;
-  private changeDebouncer = new Debouncer(100, () => {
+  private async detectAndReflectChange() {
     const amount = this.amount;
     if (amount === this.prevAmount) return;
     this.prevAmount = amount;
     amount > 0n ? this.select() : this.unselect();
     this.fireEvent("changeAmount");
-  });
+  }
 
   public get tokenId(): bigint {
     return this.token.id;
@@ -80,8 +91,22 @@ export default class TokenListItem extends DomNode {
       return this.selected ? 1n : 0n;
     } else {
       try {
-        return BigInt(this.amountInput?.domElement.value ?? 0);
+        const amount = this.asset.type === AssetType.ERC20
+          ? ethers.parseUnits(
+            BigInt(this.amountInput?.value ?? 0).toString(),
+            this.asset.decimals,
+          )
+          : BigInt(this.amountInput?.value ?? 0);
+
+        if (amount > this.token.amount) {
+          this.addClass("invalid");
+          return 0n;
+        } else {
+          this.deleteClass("invalid");
+          return amount;
+        }
       } catch (e) {
+        this.addClass("invalid");
         console.error(e);
         return 0n;
       }
