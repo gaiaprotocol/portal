@@ -14,4 +14,11 @@ export default class Erc721Contract extends Contract<ERC721> {
   public async balanceOf(owner: string): Promise<bigint> {
     return await this.viewContract.balanceOf(owner);
   }
+
+  public async isApprovedForAll(
+    owner: string,
+    operator: string,
+  ): Promise<boolean> {
+    return await this.viewContract.isApprovedForAll(owner, operator);
+  }
 }

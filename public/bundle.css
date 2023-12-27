@@ -920,4 +920,9 @@ button.component > .title {
   flex-direction: column;
   gap: 12px;
 }
+.execute-bridge > main > .action-container {
+  padding: 0px 16px 16px 16px;
+  display: flex;
+  gap: 16px;
+}
 

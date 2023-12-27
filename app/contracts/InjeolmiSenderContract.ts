@@ -9,6 +9,11 @@ import InjeolmiSenderArtifact from "./abi/injeolmi/InjeolmiSender.json" assert {
 
 export default class InjeolmiSenderContract extends Contract<InjeolmiSender> {
   constructor(chain: BlockchainType, wallet: WalletManager) {
-    super(InjeolmiSenderArtifact.abi, chain, Injeolmi.senderAddress!, wallet);
+    super(
+      InjeolmiSenderArtifact.abi,
+      chain,
+      Injeolmi.senderAddresses[chain],
+      wallet,
+    );
   }
 }

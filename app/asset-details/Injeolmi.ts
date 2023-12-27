@@ -16,7 +16,12 @@ const Injeolmi: AssetInfo = {
     [BlockchainType.Polygon]: "0x9b23804ede399ebf86612b560Ac0451f1448185a",
     [BlockchainType.BNB]: "0xf258F061aE2D68d023eA6e7Cceef97962785c6c1",
   },
-  senderAddress: "0x19f112c05Fad52e5C58E5A4628548aBB45bc8697",
+  senderAddresses: {
+    [BlockchainType.Klaytn]: "0x19f112c05Fad52e5C58E5A4628548aBB45bc8697",
+    [BlockchainType.Ethereum]: "0xBeA76c71929788Ab20e17759eaC115798F9aEf27",
+    [BlockchainType.Polygon]: "0x9b23804ede399ebf86612b560Ac0451f1448185a",
+    [BlockchainType.BNB]: "0xf258F061aE2D68d023eA6e7Cceef97962785c6c1",
+  },
 
   fetchBalance: async (chain, wallet) => {
     const walletAddress = await wallet.getAddress();
@@ -32,6 +37,30 @@ const Injeolmi: AssetInfo = {
   fetchTokens: async (chain, wallet) => {
     const balance = await Injeolmi.fetchBalance(chain, wallet);
     return [{ id: 0n, amount: balance }];
+  },
+
+  checkApprovalToSender: async (chain, wallet, amounts) => {
+    if (!Injeolmi.senderAddresses[chain]) return false;
+    if (Injeolmi.senderAddresses[chain] === Injeolmi.addresses[chain]) {
+      return true;
+    }
+
+    const walletAddress = await wallet.getAddress();
+    if (!walletAddress) return false;
+
+    return await new Erc20Contract(
+      chain,
+      Injeolmi.addresses[chain],
+      wallet,
+    ).allowance(walletAddress, Injeolmi.senderAddresses[chain]) >= amounts[0];
+  },
+
+  approveToSender: async (chain, wallet, amounts) => {
+    await new Erc20Contract(
+      chain,
+      Injeolmi.addresses[chain],
+      wallet,
+    ).approve(Injeolmi.senderAddresses[chain], amounts[0]);
   },
 
   send: async (

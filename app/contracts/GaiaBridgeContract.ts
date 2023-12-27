@@ -6,7 +6,7 @@ import GaiaBridgeArtifact from "./abi/gaiabridge/GaiaBridge.json" assert {
   type: "json",
 };
 
-const addresses: { [chain: string]: string } = {
+export const addresses: { [chain: string]: string } = {
   [BlockchainType.Ethereum]: "0x2D28272eBfB04f21A675E9955Df09507C6b28b25",
   [BlockchainType.Polygon]: "0x8213c697F6EF3477ee33ebcaFC092c591679c24c",
   [BlockchainType.BNB]: "0x9f69C2a06c97fCAAc1E586b30Ea681c43975F052",

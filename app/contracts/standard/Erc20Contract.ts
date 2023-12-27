@@ -14,4 +14,12 @@ export default class Erc20Contract extends Contract<ERC20> {
   public async balanceOf(owner: string): Promise<bigint> {
     return await this.viewContract.balanceOf(owner);
   }
+
+  public async allowance(owner: string, spender: string): Promise<bigint> {
+    return await this.viewContract.allowance(owner, spender);
+  }
+
+  public async approve(spender: string, amount: bigint): Promise<void> {
+    //TODO: await this.sendContract.approve(spender, amount);
+  }
 }

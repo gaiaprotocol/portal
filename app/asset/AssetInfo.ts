@@ -15,7 +15,7 @@ export default interface AssetInfo {
   logo: string;
 
   addresses: { [chain: string]: string };
-  senderAddress?: string;
+  senderAddresses: { [chain: string]: string };
 
   fetchBalance: (
     chain: BlockchainType,
@@ -30,6 +30,18 @@ export default interface AssetInfo {
     amount: bigint;
     metadata?: AssetMetadata;
   }[]>;
+
+  checkApprovalToSender: (
+    chain: BlockchainType,
+    wallet: WalletManager,
+    amounts: { [tokenId: string]: bigint },
+  ) => Promise<boolean>;
+
+  approveToSender: (
+    chain: BlockchainType,
+    wallet: WalletManager,
+    amounts: { [tokenId: string]: bigint },
+  ) => Promise<void>;
 
   send: (
     toChainId: number,
