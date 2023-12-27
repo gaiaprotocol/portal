@@ -21,4 +21,17 @@ export default class Erc721Contract extends Contract<ERC721> {
   ): Promise<boolean> {
     return await this.viewContract.isApprovedForAll(owner, operator);
   }
+
+  public async setApprovalForAll(
+    operator: string,
+    approved: boolean,
+  ): Promise<void> {
+    const writeContract = await this.getWriteContract();
+    if (writeContract) {
+      const tx = await writeContract.setApprovalForAll(operator, approved);
+      await tx.wait();
+    } else {
+      await this.writeManual("setApprovalForAll", [operator, approved]);
+    }
+  }
 }

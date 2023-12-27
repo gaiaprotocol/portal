@@ -79,7 +79,14 @@ const KlaydiceSpecialDice: AssetInfo = {
   },
 
   approveToSender: async (chain, wallet, amounts) => {
-    throw new Error("Not implemented");
+    await new Erc721Contract(
+      chain,
+      KlaydiceSpecialDice.addresses[chain],
+      wallet,
+    ).setApprovalForAll(
+      KlaydiceSpecialDice.senderAddresses[chain],
+      true,
+    );
   },
 
   send: async (
