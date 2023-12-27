@@ -114,6 +114,7 @@ export default class ExecuteBridge extends StepDisplay {
                 toWalletAddress,
                 amounts,
               );
+              console.log("sendingId", sendingId);
               receiveButton.enable();
             } catch (e: any) {
               new ErrorAlert({

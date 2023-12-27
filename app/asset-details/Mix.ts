@@ -60,7 +60,7 @@ const Mix: AssetInfo = {
   },
 
   send: async (chain, wallet, toChain, receiver, amounts) => {
-    const toChainId = Blockchains[chain]?.chainId;
+    const toChainId = Blockchains[toChain]?.chainId;
     if (toChainId) {
       return await new MixSenderContract(chain, wallet).sendOverHorizon(
         toChainId,

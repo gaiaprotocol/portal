@@ -66,9 +66,9 @@ const Injeolmi: AssetInfo = {
   },
 
   send: async (chain, wallet, toChain, receiver, amounts) => {
-    const toChainId = Blockchains[chain]?.chainId;
+    const toChainId = Blockchains[toChain]?.chainId;
     if (toChainId) {
-      return await new InjeolmiSenderContract(toChain, wallet).sendOverHorizon(
+      return await new InjeolmiSenderContract(chain, wallet).sendOverHorizon(
         toChainId,
         receiver,
         amounts[0],
