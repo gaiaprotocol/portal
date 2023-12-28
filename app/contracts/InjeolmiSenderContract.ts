@@ -4,7 +4,7 @@ import WalletManager from "../wallet/WalletManager.js";
 import Contract from "./Contract.js";
 import { InjeolmiSender } from "./abi/injeolmi/InjeolmiSender.js";
 import InjeolmiSenderArtifact from "./abi/injeolmi/InjeolmiSender.json" assert {
-  type: "json"
+  type: "json",
 };
 
 export default class InjeolmiSenderContract extends Contract<InjeolmiSender> {
@@ -28,32 +28,30 @@ export default class InjeolmiSenderContract extends Contract<InjeolmiSender> {
       const receipt = await tx.wait();
       if (!receipt) throw new Error("No receipt");
 
-      const walletAddress = await this.wallet.getAddress();
-      const events = await writeContract.queryFilter(
+      const event = await this.fetchLastEvent(
+        writeContract,
         writeContract.filters.SendOverHorizon(
-          walletAddress,
+          await this.wallet.getAddress(),
           toChain,
           receiver,
         ),
         receipt.blockNumber,
-        receipt.blockNumber,
       );
-      if (!events || events.length === 0) throw new Error("No events");
-      return events[events.length - 1]?.args?.[3];
+      if (!event) throw new Error("No events");
+      return event.args?.[3];
     } else {
       await this.writeManual("sendOverHorizon", [toChain, receiver, amount]);
 
-      const walletAddress = await this.wallet.getAddress();
-      const events = await this.viewContract.queryFilter(
+      const event = await this.fetchLastEvent(
+        this.viewContract,
         this.viewContract.filters.SendOverHorizon(
-          walletAddress,
+          await this.wallet.getAddress(),
           toChain,
           receiver,
         ),
-        -2000,
       );
-      if (!events || events.length === 0) throw new Error("No events");
-      return events[events.length - 1]?.args?.[3];
+      if (!event) throw new Error("No events");
+      return event.args?.[3];
     }
   }
 

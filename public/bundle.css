@@ -384,6 +384,11 @@ button.component > .title {
 .snackbar.component > main > p {
   flex-grow: 1;
 }
+.error-alert.component > header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 .input.component > textarea,
 .input.component > input {
   width: 100%;

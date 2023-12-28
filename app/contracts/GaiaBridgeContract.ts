@@ -53,18 +53,17 @@ export default class GaiaBridgeContract extends Contract<GaiaBridge> {
       const receipt = await tx.wait();
       if (!receipt) throw new Error("No receipt");
 
-      const walletAddress = await this.wallet.getAddress();
-      const events = await writeContract.queryFilter(
+      const event = await this.fetchLastEvent(
+        writeContract,
         writeContract.filters.SendTokens(
-          walletAddress,
+          await this.wallet.getAddress(),
           toChainId,
           receiver,
         ),
         receipt.blockNumber,
-        receipt.blockNumber,
       );
-      if (!events || events.length === 0) throw new Error("No events");
-      return events[events.length - 1]?.args?.[4];
+      if (!event) throw new Error("No events");
+      return event.args?.[4];
     } else {
       await this.writeManual("approve", [
         toChainId,
@@ -74,17 +73,16 @@ export default class GaiaBridgeContract extends Contract<GaiaBridge> {
         sigs,
       ]);
 
-      const walletAddress = await this.wallet.getAddress();
-      const events = await this.viewContract.queryFilter(
+      const event = await this.fetchLastEvent(
+        this.viewContract,
         this.viewContract.filters.SendTokens(
-          walletAddress,
+          await this.wallet.getAddress(),
           toChainId,
           receiver,
         ),
-        -2000,
       );
-      if (!events || events.length === 0) throw new Error("No events");
-      return events[events.length - 1]?.args?.[4];
+      if (!event) throw new Error("No events");
+      return event.args?.[4];
     }
   }
 

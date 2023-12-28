@@ -130,7 +130,7 @@ export default class ExecuteBridge extends StepDisplay {
           title: "Receive",
           disabled: true,
           click: async () => {
-            if (sendingId) {
+            if (sendingId !== undefined) {
               receiveButton.disable();
               try {
                 await asset.receive(

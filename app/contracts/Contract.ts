@@ -2,13 +2,14 @@ import { BaseContract, ethers, Interface, InterfaceAbi } from "ethers";
 import Blockchains from "../blockchain/Blockchains.js";
 import BlockchainType from "../blockchain/BlockchainType.js";
 import WalletManager from "../wallet/WalletManager.js";
+import { TypedDeferredTopicFilter } from "./common.js";
 
 export default abstract class Contract<CT extends BaseContract> {
   protected viewContract!: CT;
 
   constructor(
     private abi: Interface | InterfaceAbi,
-    private chain: BlockchainType,
+    protected chain: BlockchainType,
     private address: string,
     protected wallet: WalletManager,
   ) {
@@ -37,5 +38,27 @@ export default abstract class Contract<CT extends BaseContract> {
       params,
       value,
     });
+  }
+
+  protected async fetchLastEvent(
+    contract: CT,
+    filter: TypedDeferredTopicFilter<any>,
+    blockNumber?: number,
+  ): Promise<ethers.EventLog | undefined> {
+    // fix for klaytn
+    if (
+      this.chain === BlockchainType.Klaytn &&
+      contract !== this.viewContract
+    ) {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+    }
+
+    const events = await contract.queryFilter(
+      filter,
+      blockNumber ?? -2000,
+      blockNumber,
+    );
+    if (!events || events.length === 0) return undefined;
+    return events[events.length - 1] as ethers.EventLog;
   }
 }
