@@ -74,16 +74,19 @@ export default class ActivityListItem extends DomNode {
     }
 
     this.append(
-      el("td.name", asset.name),
+      el("td.asset", asset.name),
       el(
-        "td",
-        el("img.chain-logo", {
-          src: `/images/blockchain-logos/${fromChainType}.svg`,
-        }),
-        fromChainType,
+        "td.from",
+        el(
+          "main",
+          el("img.chain-logo", {
+            src: `/images/blockchain-logos/${fromChainType}.svg`,
+          }),
+          fromChainType,
+        ),
       ),
       el(
-        "td",
+        "td.sender",
         new WalletDisplay(activity.sender, () => {
           window.open(
             `${
@@ -93,7 +96,7 @@ export default class ActivityListItem extends DomNode {
         }),
       ),
       el(
-        "td",
+        "td.send-tx",
         activity.send_tx
           ? new Button({
             icon: new MaterialIcon("open_in_new"),
@@ -104,14 +107,17 @@ export default class ActivityListItem extends DomNode {
           : "Not synced",
       ),
       el(
-        "td",
-        el("img.chain-logo", {
-          src: `/images/blockchain-logos/${toChainType}.svg`,
-        }),
-        toChainType,
+        "td.to",
+        el(
+          "main",
+          el("img.chain-logo", {
+            src: `/images/blockchain-logos/${toChainType}.svg`,
+          }),
+          toChainType,
+        ),
       ),
       el(
-        "td",
+        "td.receiver",
         new WalletDisplay(activity.receiver, () => {
           window.open(
             `${
@@ -120,10 +126,25 @@ export default class ActivityListItem extends DomNode {
           );
         }),
       ),
-      el("td", ...tokenDisplay),
-      el("td", activity.receive_tx === undefined ? "Pending" : "Received"),
+      el("td.tokens", el("main", ...tokenDisplay)),
       el(
-        "td",
+        "td.status" +
+          (activity.receive_tx === undefined ? ".pending" : ".received"),
+        el(
+          "main",
+          ...(activity.receive_tx === undefined
+            ? [
+              new MaterialIcon("pending"),
+              "Pending",
+            ]
+            : [
+              new MaterialIcon("done"),
+              "Received",
+            ]),
+        ),
+      ),
+      el(
+        "td.receive-tx",
         activity.receive_tx
           ? new Button({
             icon: new MaterialIcon("open_in_new"),
@@ -134,7 +155,7 @@ export default class ActivityListItem extends DomNode {
           : "",
       ),
       el(
-        "td",
+        "td.retry",
         !activity.receive_tx
           ? new Button({
             title: "Retry",

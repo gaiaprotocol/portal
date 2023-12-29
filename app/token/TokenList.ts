@@ -12,6 +12,7 @@ export default class TokenList extends DomNode {
   }[]) {
     super(".token-list");
     this.addAllowedEvents("changeAmount");
+    this.domElement.setAttribute("data-empty-message", "You have no tokens.");
 
     for (const token of tokens) {
       const item = new TokenListItem(asset, token).appendTo(this);

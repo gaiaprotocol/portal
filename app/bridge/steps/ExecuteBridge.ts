@@ -21,7 +21,7 @@ export default class ExecuteBridge extends StepDisplay {
   private _setup: BridgeSetup | undefined;
 
   private tokenListContainer: DomNode;
-  private tokneList: TokenList | undefined;
+  private tokenList: TokenList | undefined;
   private actionContainer: DomNode;
   private activityList: FilteredActivityList;
 
@@ -30,7 +30,11 @@ export default class ExecuteBridge extends StepDisplay {
     this.container.append(
       this.tokenListContainer = el(".token-list-container"),
       this.actionContainer = el(".action-container"),
-      this.activityList = new FilteredActivityList(),
+      el(
+        ".activity-container",
+        el("h3", "History"),
+        el("main", this.activityList = new FilteredActivityList()),
+      ),
     );
   }
 
@@ -62,16 +66,17 @@ export default class ExecuteBridge extends StepDisplay {
           this._setup.fromChain!,
           this._setup.fromWallet!,
         );
-        this.tokneList = new TokenList(asset, tokens).appendTo(
+        this.tokenList = new TokenList(asset, tokens).appendTo(
           this.tokenListContainer,
         ).on("changeAmount", () => this.checkApprove());
+        this.checkApprove();
       }
     }
   }
 
   private async checkApprove() {
     const asset = this._setup?.asset ? Assets[this._setup.asset] : undefined;
-    const amounts = this.tokneList?.amounts;
+    const amounts = this.tokenList?.amounts;
     const fromChain = this._setup?.fromChain;
     const fromWallet = this._setup?.fromWallet;
     const fromWalletAddress = this._setup?.fromWalletAddress;

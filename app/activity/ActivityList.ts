@@ -15,7 +15,7 @@ export default abstract class ActivityList extends DomNode {
   private tbody: DomNode;
 
   constructor(tag: string, options: ActivityListOptions) {
-    super("table.activity-list");
+    super("table.activity-list" + tag);
     this.store = options.storeName ? new Store(options.storeName) : undefined;
 
     this.append(
@@ -23,16 +23,16 @@ export default abstract class ActivityList extends DomNode {
         "thead",
         el(
           "tr",
-          el("th", "Asset"),
-          el("th", "From"),
-          el("th", "Sender"),
-          el("th", "Send Tx"),
-          el("th", "To"),
-          el("th", "Receiver"),
-          el("th", "Tokens"),
-          el("th", "Status"),
-          el("th", "Receive Tx"),
-          el("th", "Retry"),
+          el("th.asset", "Asset"),
+          el("th.from", "From"),
+          el("th.sender", "Sender"),
+          el("th.send-tx", "Send Tx"),
+          el("th.to", "To"),
+          el("th.receiver", "Receiver"),
+          el("th.tokens", "Tokens"),
+          el("th.status", "Status"),
+          el("th.receive-tx", "Receive Tx"),
+          el("th.retry", "Retry"),
         ),
       ),
       this.tbody = el("tbody"),
