@@ -1,0 +1,14 @@
+.history-view {
+    padding: 32px 16px;
+
+    @container (width < @safe-width) {
+        padding   : 16px;
+        width     : 100%;
+        overflow-x: scroll;
+    }
+
+    >.activity-list {
+        margin: auto;
+        width : 1158px;
+    }
+}

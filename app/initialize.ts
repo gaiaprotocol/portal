@@ -13,8 +13,6 @@ import Env from "./Env.js";
 import HistoryView from "./history/HistoryView.js";
 import Layout from "./layout/Layout.js";
 import EvmWalletManager from "./wallet/EvmWalletManager.js";
-import GaiaBridgeContract from "./contracts/GaiaBridgeContract.js";
-import BlockchainType from "./blockchain/BlockchainType.js";
 
 msg.setMessages({
   en: messages_en,
@@ -48,6 +46,4 @@ export default async function initialize(config: Config) {
     ["history"],
   );
   Router.route("history", HistoryView);
-
-  console.log(await new GaiaBridgeContract(BlockchainType.Ethereum, EvmWalletManager).getSigners());
 }

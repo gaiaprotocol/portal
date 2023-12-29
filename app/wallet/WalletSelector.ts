@@ -70,40 +70,37 @@ export default class WalletSelector extends DomNode {
           }),
         );
       } else {
-        new WalletDisplay(address).appendTo(this).onDom(
-          "click",
-          (event) => {
-            if (this._chain) {
-              event.stopPropagation();
-              const rect = this.rect;
-              const chain = Blockchains[this._chain];
-              new DropdownMenu({
-                left: rect.left,
-                top: rect.bottom,
-                items: [{
-                  icon: new MaterialIcon("content_copy"),
-                  title: "Copy address",
-                  click: () => {
-                    navigator.clipboard.writeText(address);
-                    new Snackbar({ message: "Address copied to clipboard" });
-                  },
-                }, {
-                  icon: new MaterialIcon("open_in_new"),
-                  title: `View on ${chain.blockExplorer.name}`,
-                  click: () =>
-                    window.open(
-                      `${chain.blockExplorer.url}/address/${address}`,
-                      "_blank",
-                    ),
-                }, {
-                  icon: new MaterialIcon("logout"),
-                  title: "Disconnect",
-                  click: () => this.wallet?.disconnect(),
-                }],
-              });
-            }
-          },
-        );
+        new WalletDisplay(address, (event) => {
+          if (this._chain) {
+            event.stopPropagation();
+            const rect = this.rect;
+            const chain = Blockchains[this._chain];
+            new DropdownMenu({
+              left: rect.left,
+              top: rect.bottom,
+              items: [{
+                icon: new MaterialIcon("content_copy"),
+                title: "Copy address",
+                click: () => {
+                  navigator.clipboard.writeText(address);
+                  new Snackbar({ message: "Address copied to clipboard" });
+                },
+              }, {
+                icon: new MaterialIcon("open_in_new"),
+                title: `View on ${chain.blockExplorer.name}`,
+                click: () =>
+                  window.open(
+                    `${chain.blockExplorer.url}/address/${address}`,
+                    "_blank",
+                  ),
+              }, {
+                icon: new MaterialIcon("logout"),
+                title: "Disconnect",
+                click: () => this.wallet?.disconnect(),
+              }],
+            });
+          }
+        }).appendTo(this);
       }
     }
   }

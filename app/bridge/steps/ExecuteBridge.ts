@@ -6,8 +6,9 @@ import {
   ErrorAlert,
   ObjectUtil,
 } from "common-app-module";
+import FilteredActivityList from "../../activity/FilteredActivityList.js";
 import Assets from "../../asset/Assets.js";
-import TransactionList from "../../history/TransactionList.js";
+import Blockchains from "../../blockchain/Blockchains.js";
 import TokenList from "../../token/TokenList.js";
 import BridgeSetup from "../BridgeSetup.js";
 import StepDisplay from "./StepDisplay.js";
@@ -22,14 +23,14 @@ export default class ExecuteBridge extends StepDisplay {
   private tokenListContainer: DomNode;
   private tokneList: TokenList | undefined;
   private actionContainer: DomNode;
-  private transactionList: TransactionList;
+  private activityList: FilteredActivityList;
 
   constructor() {
     super(".execute-bridge", 3, "Execute Bridge");
     this.container.append(
       this.tokenListContainer = el(".token-list-container"),
       this.actionContainer = el(".action-container"),
-      this.transactionList = new TransactionList(),
+      this.activityList = new FilteredActivityList(),
     );
   }
 
@@ -46,7 +47,7 @@ export default class ExecuteBridge extends StepDisplay {
   private clear() {
     this.tokenListContainer.empty();
     this.actionContainer.empty();
-    //TODO: this.transactionList.clear();
+    this.activityList.clearFilter();
   }
 
   public async render() {
@@ -82,6 +83,14 @@ export default class ExecuteBridge extends StepDisplay {
       asset && amounts && fromChain && fromWallet && fromWalletAddress &&
       toChain && toWallet && toWalletAddress
     ) {
+      this.activityList.setFilter(
+        this._setup!.asset!,
+        Blockchains[fromChain].chainId,
+        Blockchains[toChain].chainId,
+        fromWalletAddress,
+        toWalletAddress,
+      );
+
       const approved = await asset.checkApprovalToSender(
         fromChain,
         fromWallet,

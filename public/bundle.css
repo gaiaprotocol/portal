@@ -932,4 +932,42 @@ button.component > .title {
   display: flex;
   gap: 12px;
 }
+.activity-list {
+  text-transform: capitalize;
+}
+.activity-list > thead > tr > th {
+  border-bottom: 1px solid var(--line-color);
+  padding: 8px 12px;
+}
+.activity-list > tbody > tr > td {
+  border-bottom: 1px solid var(--line-color);
+  padding: 8px 12px;
+  vertical-align: middle;
+}
+.activity-list > tbody > tr > td.name {
+  max-width: 100px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.activity-list > tbody > tr > td > .chain-logo {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  margin-bottom: -3px;
+}
+.history-view {
+  padding: 32px 16px;
+}
+@container (width < 1280px) {
+  .history-view {
+    padding: 16px;
+    width: 100%;
+    overflow-x: scroll;
+  }
+}
+.history-view > .activity-list {
+  margin: auto;
+  width: 1158px;
+}
 
