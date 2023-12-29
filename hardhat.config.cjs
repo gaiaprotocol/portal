@@ -62,7 +62,7 @@ module.exports = {
       chainId: 137,
     },
     bnb: {
-      url: `https://bsc-dataseed.binance.org/`,
+      url: `https://bsc-dataseed.bnbchain.org`,
       accounts,
       chainId: 56,
     },
@@ -75,6 +75,11 @@ module.exports = {
       url: `https://polygon-mumbai.infura.io/v3/${process.env.INFURA_KEY}`,
       accounts,
       chainId: 80001,
+    },
+    klaytn: {
+      url: "https://public-en-cypress.klaytn.net",
+      accounts,
+      chainId: 8217,
     },
     baobab: {
       url: "https://public-node-api.klaytnapi.com/v1/baobab",
