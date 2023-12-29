@@ -7,12 +7,11 @@ import {
   LoadingSpinner,
   ObjectUtil,
 } from "common-app-module";
+import FilteredActivityList from "../../activity/FilteredActivityList.js";
 import Assets from "../../asset/Assets.js";
-import Blockchains from "../../blockchain/Blockchains.js";
 import TokenList from "../../token/TokenList.js";
 import BridgeSetup from "../BridgeSetup.js";
 import StepDisplay from "./StepDisplay.js";
-import FilteredActivityList from "../../activity/FilteredActivityList.js";
 
 // input amount
 // approve

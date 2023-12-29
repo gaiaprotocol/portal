@@ -1,4 +1,5 @@
 import { Supabase } from "common-app-module";
+import TrinityManager from "../TrinityManager.js";
 import AssetInfo from "../asset/AssetInfo.js";
 import AssetType from "../asset/AssetType.js";
 import BlockchainType from "../blockchain/BlockchainType.js";
@@ -69,11 +70,14 @@ const Injeolmi: AssetInfo = {
   send: async (chain, wallet, toChain, receiver, amounts) => {
     const toChainId = Blockchains[toChain]?.chainId;
     if (toChainId) {
-      return await new InjeolmiSenderContract(chain, wallet).sendOverHorizon(
-        toChainId,
-        receiver,
-        amounts[0],
-      );
+      const sendingId = await new InjeolmiSenderContract(chain, wallet)
+        .sendOverHorizon(
+          toChainId,
+          receiver,
+          amounts[0],
+        );
+      await TrinityManager.trackEvent(chain, 1);
+      return sendingId;
     }
   },
 
@@ -84,7 +88,7 @@ const Injeolmi: AssetInfo = {
     const fromChainId = Blockchains[fromChain]?.chainId;
     const toChainId = Blockchains[chain]?.chainId;
     if (fromChainId && toChainId) {
-      const { data: signature } = await Supabase.client.functions.invoke(
+      const { data } = await Supabase.client.functions.invoke(
         "sign-portal-send",
         {
           body: {
@@ -102,8 +106,9 @@ const Injeolmi: AssetInfo = {
         sender,
         sendingId,
         amounts[0],
-        signature,
+        data.signature,
       );
+      await TrinityManager.trackEvent(chain, 1);
     }
   },
 };

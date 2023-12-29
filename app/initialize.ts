@@ -12,6 +12,7 @@ import Config from "./Config.js";
 import Env from "./Env.js";
 import HistoryView from "./history/HistoryView.js";
 import Layout from "./layout/Layout.js";
+import TrinityManager from "./TrinityManager.js";
 import EvmWalletManager from "./wallet/EvmWalletManager.js";
 
 msg.setMessages({
@@ -33,6 +34,11 @@ export default async function initialize(config: Config) {
   );
 
   EvmWalletManager.init(config.walletConnectProjectId);
+  TrinityManager.init(
+    config.aosServerUrl,
+    config.backendUrl,
+    config.backendKey,
+  );
 
   Router.route("**", Layout);
   Router.route(

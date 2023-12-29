@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import TrinityManager from "../TrinityManager.js";
 import AssetInfo, { AssetMetadata } from "../asset/AssetInfo.js";
 import AssetType from "../asset/AssetType.js";
 import BlockchainType from "../blockchain/BlockchainType.js";
@@ -99,7 +100,7 @@ const KlaydiceSpecialDice: AssetInfo = {
   send: async (chain, wallet, toChain, receiver, amounts) => {
     const toChainId = Blockchains[toChain]?.chainId;
     if (toChainId) {
-      return await new GaiaBridgeContract(chain, wallet).sendTokens(
+      const sendingId = await new GaiaBridgeContract(chain, wallet).sendTokens(
         toChainId,
         receiver,
         {
@@ -112,6 +113,8 @@ const KlaydiceSpecialDice: AssetInfo = {
         "0x",
         [],
       );
+      await TrinityManager.trackEvent(chain, 0);
+      return sendingId;
     }
   },
 
@@ -126,12 +129,22 @@ const KlaydiceSpecialDice: AssetInfo = {
         signature: { r: string; _vs: string };
       }[] = [];
 
-      const signature = ""; //TODO: implement
-      const sSig = ethers.Signature.from(signature);
-      results.push({
-        address: "0x0",
-        signature: { r: sSig.r, _vs: sSig.yParityAndS },
-      });
+      const dataSet = await TrinityManager.sign(
+        "klaydice-special-dice-nft",
+        fromChainId,
+        sender,
+        Number(sendingId),
+        toChainId,
+        walletAddress,
+      );
+
+      for (const data of dataSet) {
+        const sSig = ethers.Signature.from(data.signature);
+        results.push({
+          address: data.address,
+          signature: { r: sSig.r, _vs: sSig.yParityAndS },
+        });
+      }
 
       results.sort((
         a,
@@ -153,6 +166,8 @@ const KlaydiceSpecialDice: AssetInfo = {
         "0x",
         results.map((result) => result.signature),
       );
+
+      await TrinityManager.trackEvent(chain, 0);
     }
   },
 };
