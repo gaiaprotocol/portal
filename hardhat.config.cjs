@@ -52,7 +52,7 @@ module.exports = {
   },
   networks: {
     mainnet: {
-      url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
+      url: `https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`,
       accounts,
       chainId: 1,
     },
@@ -67,12 +67,12 @@ module.exports = {
       chainId: 56,
     },
     goerli: {
-      url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`,
+      url: `https://goerli.infura.io/v3/${process.env.INFURA_KEY}`,
       accounts,
       chainId: 5,
     },
     mumbai: {
-      url: `https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`,
+      url: `https://polygon-mumbai.infura.io/v3/${process.env.INFURA_KEY}`,
       accounts,
       chainId: 80001,
     },
@@ -96,8 +96,8 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      mainnet: process.env.ETHERSCAN_API_KEY,
-      base: process.env.BASESCAN_API_KEY,
+      //mainnet: process.env.ETHERSCAN_API_KEY,
+      //base: process.env.BASESCAN_API_KEY,
       "base-goerli": "PLACEHOLDER_STRING",
     },
     customChains: [
@@ -120,6 +120,6 @@ module.exports = {
     ],
   },
   mocha: {
-    timeout: 600000,
+    //timeout: 600000,
   },
 };

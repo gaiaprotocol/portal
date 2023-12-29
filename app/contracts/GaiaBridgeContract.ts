@@ -34,6 +34,10 @@ export default class GaiaBridgeContract extends Contract<GaiaBridge> {
     super(GaiaBridgeArtifact.abi, chain, addresses[chain], wallet);
   }
 
+  public async getSigners() {
+    return await this.viewContract.getSigners();
+  }
+
   public async sendTokens(
     toChainId: number,
     receiver: string,

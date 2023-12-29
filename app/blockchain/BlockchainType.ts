@@ -2,8 +2,8 @@ enum BlockchainType {
   Ethereum = "ethereum",
   Polygon = "polygon",
   BNB = "bnb",
-  Bifrost = "bifrost",
   Klaytn = "klaytn",
+  Bifrost = "bifrost",
 }
 
 export default BlockchainType;

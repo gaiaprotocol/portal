@@ -29,17 +29,17 @@ const Blockchains: { [chain: string]: BlockchainInfo } = {
     blockExplorer: bsc.blockExplorers.default,
     walletManager: EvmWalletManager,
   },
-  [BlockchainType.Bifrost]: {
-    chainId: 3068,
-    rpc: bifrost.rpcUrls.default.http[0],
-    blockExplorer: bifrost.blockExplorers.default,
-    walletManager: EvmWalletManager,
-  },
   [BlockchainType.Klaytn]: {
     chainId: 8217,
     rpc: "https://public-en-cypress.klaytn.net",
     blockExplorer: klaytn.blockExplorers.default,
     walletManager: KlaytnWalletManager,
+  },
+  [BlockchainType.Bifrost]: {
+    chainId: 3068,
+    rpc: bifrost.rpcUrls.default.http[0],
+    blockExplorer: bifrost.blockExplorers.default,
+    walletManager: EvmWalletManager,
   },
 };
 
