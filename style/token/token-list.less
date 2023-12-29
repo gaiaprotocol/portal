@@ -7,4 +7,9 @@
         margin-right : 16px;
         margin-bottom: 16px;
     }
+
+    &:empty::before {
+        content: attr(data-empty-message);
+        color  : var(--disable-color);
+    }
 }

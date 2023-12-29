@@ -5,5 +5,27 @@
             display: flex;
             gap    : 12px;
         }
+
+        >.activity-container {
+            padding       : 16px;
+            display       : flex;
+            flex-direction: column;
+            gap           : 12px;
+
+            >h3 {
+                color: var(--accent-color);
+            }
+
+            >main {
+                overflow-x: auto;
+
+                >.activity-list {
+                    min-width       : 400px;
+                    width           : 100%;
+                    background-color: var(--content-bg-color);
+                    border-radius   : 8px;
+                }
+            }
+        }
     }
 }
