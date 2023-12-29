@@ -179,6 +179,7 @@ button.component {
 }
 button.component.disabled {
   cursor: not-allowed;
+  filter: grayscale(1);
 }
 button.component.contained {
   border: 1px solid var(--accent-color);
@@ -377,6 +378,11 @@ button.component > .title {
 .snackbar.component > main > p {
   flex-grow: 1;
 }
+.error-alert.component > header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 .input.component > textarea,
 .input.component > input {
   width: 100%;
@@ -566,6 +572,7 @@ button.component > .title {
   margin: 0 auto;
   padding-top: 56px;
   padding-left: 90px;
+  padding-bottom: 120px;
   background-color: var(--content-bg-color);
   border-right: 1px solid var(--line-color);
 }
@@ -573,7 +580,7 @@ button.component > .title {
   .layout > main {
     width: 100%;
     padding-left: 0;
-    padding-bottom: calc(90px + env(safe-area-inset-bottom));
+    padding-bottom: calc(120px + 90px + env(safe-area-inset-bottom));
     border-right: none;
   }
 }
@@ -917,6 +924,44 @@ button.component > .title {
 .execute-bridge > main > .action-container {
   padding: 0px 16px 16px 16px;
   display: flex;
-  gap: 16px;
+  gap: 12px;
+}
+.activity-list {
+  text-transform: capitalize;
+}
+.activity-list > thead > tr > th {
+  border-bottom: 1px solid var(--line-color);
+  padding: 8px 12px;
+}
+.activity-list > tbody > tr > td {
+  border-bottom: 1px solid var(--line-color);
+  padding: 8px 12px;
+  vertical-align: middle;
+}
+.activity-list > tbody > tr > td.name {
+  max-width: 100px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.activity-list > tbody > tr > td > .chain-logo {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  margin-bottom: -3px;
+}
+.history-view {
+  padding: 32px 16px;
+}
+@container (width < 1280px) {
+  .history-view {
+    padding: 16px;
+    width: 100%;
+    overflow-x: scroll;
+  }
+}
+.history-view > .activity-list {
+  margin: auto;
+  width: 1158px;
 }
 

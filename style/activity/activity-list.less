@@ -1,0 +1,36 @@
+.activity-list {
+    text-transform: capitalize;
+
+    >thead {
+        >tr {
+            >th {
+                border-bottom: 1px solid var(--line-color);
+                padding      : 8px 12px;
+            }
+        }
+    }
+
+    >tbody {
+        >tr {
+            >td {
+                border-bottom : 1px solid var(--line-color);
+                padding       : 8px 12px;
+                vertical-align: middle;
+
+                &.name {
+                    max-width    : 100px;
+                    white-space  : nowrap;
+                    text-overflow: ellipsis;
+                    overflow     : hidden;
+                }
+
+                >.chain-logo {
+                    width        : 16px;
+                    height       : 16px;
+                    margin-right : 8px;
+                    margin-bottom: -3px;
+                }
+            }
+        }
+    }
+}
