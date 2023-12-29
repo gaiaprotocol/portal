@@ -63,10 +63,10 @@ export default class SelectChains extends StepDisplay {
       asset: this.assetId,
       fromChain: this.fromChainSelector.chain,
       fromWallet: this.fromChainSelector.wallet,
-      fromWalletAddress: this.fromChainSelector.walletAddress,
+      sender: this.fromChainSelector.walletAddress,
       toChain: this.toChainSelector.chain,
       toWallet: this.toChainSelector.wallet,
-      toWalletAddress: this.toChainSelector.walletAddress,
+      receiver: this.toChainSelector.walletAddress,
     };
     if (!ObjectUtil.checkEqual(this.prevSetup, setup)) {
       this.prevSetup = setup;

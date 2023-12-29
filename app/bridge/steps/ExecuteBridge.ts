@@ -4,14 +4,15 @@ import {
   DomNode,
   el,
   ErrorAlert,
+  LoadingSpinner,
   ObjectUtil,
 } from "common-app-module";
-import FilteredActivityList from "../../activity/FilteredActivityList.js";
 import Assets from "../../asset/Assets.js";
 import Blockchains from "../../blockchain/Blockchains.js";
 import TokenList from "../../token/TokenList.js";
 import BridgeSetup from "../BridgeSetup.js";
 import StepDisplay from "./StepDisplay.js";
+import FilteredActivityList from "../../activity/FilteredActivityList.js";
 
 // input amount
 // approve
@@ -23,7 +24,7 @@ export default class ExecuteBridge extends StepDisplay {
   private tokenListContainer: DomNode;
   private tokenList: TokenList | undefined;
   private actionContainer: DomNode;
-  private activityList: FilteredActivityList;
+  private activityListContainer: DomNode;
 
   constructor() {
     super(".execute-bridge", 3, "Execute Bridge");
@@ -33,7 +34,7 @@ export default class ExecuteBridge extends StepDisplay {
       el(
         ".activity-container",
         el("h3", "History"),
-        el("main", this.activityList = new FilteredActivityList()),
+        this.activityListContainer = el("main"),
       ),
     );
   }
@@ -51,7 +52,7 @@ export default class ExecuteBridge extends StepDisplay {
   private clear() {
     this.tokenListContainer.empty();
     this.actionContainer.empty();
-    this.activityList.clearFilter();
+    this.activityListContainer.empty();
   }
 
   public async render() {
@@ -79,21 +80,17 @@ export default class ExecuteBridge extends StepDisplay {
     const amounts = this.tokenList?.amounts;
     const fromChain = this._setup?.fromChain;
     const fromWallet = this._setup?.fromWallet;
-    const fromWalletAddress = this._setup?.fromWalletAddress;
+    const fromWalletAddress = this._setup?.sender;
     const toChain = this._setup?.toChain;
     const toWallet = this._setup?.toWallet;
-    const toWalletAddress = this._setup?.toWalletAddress;
+    const toWalletAddress = this._setup?.receiver;
 
     if (
       asset && amounts && fromChain && fromWallet && fromWalletAddress &&
       toChain && toWallet && toWalletAddress
     ) {
-      this.activityList.setFilter(
-        this._setup!.asset!,
-        Blockchains[fromChain].chainId,
-        Blockchains[toChain].chainId,
-        fromWalletAddress,
-        toWalletAddress,
+      this.activityListContainer.empty().append(
+        new FilteredActivityList(this._setup!),
       );
 
       const approved = await asset.checkApprovalToSender(
@@ -119,7 +116,7 @@ export default class ExecuteBridge extends StepDisplay {
         const sendButton = new Button({
           title: "Send",
           click: async () => {
-            sendButton.disable();
+            sendButton.disable().title = new LoadingSpinner();
             try {
               sendingId = await asset.send(
                 fromChain,
@@ -129,13 +126,13 @@ export default class ExecuteBridge extends StepDisplay {
                 amounts,
               );
               console.log("sendingId", sendingId);
-              receiveButton.enable();
+              receiveButton.enable().title = "Receive";
             } catch (e: any) {
               new ErrorAlert({
                 title: "Send failed",
                 message: e.message,
               });
-              sendButton.enable();
+              sendButton.enable().title = "Send";
             }
           },
         });
@@ -145,7 +142,7 @@ export default class ExecuteBridge extends StepDisplay {
           disabled: true,
           click: async () => {
             if (sendingId !== undefined) {
-              receiveButton.disable();
+              receiveButton.disable().title = new LoadingSpinner();
               try {
                 await asset.receive(
                   toChain,
@@ -155,7 +152,7 @@ export default class ExecuteBridge extends StepDisplay {
                   sendingId,
                   amounts,
                 );
-                sendButton.enable();
+                sendButton.enable().title = "Send";
                 new Alert({
                   title: "Receive success",
                   message: "Receive success",
@@ -165,7 +162,7 @@ export default class ExecuteBridge extends StepDisplay {
                   title: "Receive failed",
                   message: e.message,
                 });
-                receiveButton.enable();
+                receiveButton.enable().title = "Receive";
               }
             }
           },

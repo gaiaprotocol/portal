@@ -5,8 +5,8 @@ export default interface BridgeSetup {
   asset?: string;
   fromChain?: BlockchainType;
   fromWallet?: WalletManager;
-  fromWalletAddress?: string;
+  sender?: string;
   toChain?: BlockchainType;
   toWallet?: WalletManager;
-  toWalletAddress?: string;
+  receiver?: string;
 }

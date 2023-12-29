@@ -1,3 +1,4 @@
+import { Supabase } from "common-app-module";
 import AssetInfo from "../asset/AssetInfo.js";
 import AssetType from "../asset/AssetType.js";
 import BlockchainType from "../blockchain/BlockchainType.js";
@@ -56,7 +57,11 @@ const Mix: AssetInfo = {
   },
 
   approveToSender: async (chain, wallet, amounts) => {
-    throw new Error("Not implemented");
+    await new Erc20Contract(
+      chain,
+      Mix.addresses[chain],
+      wallet,
+    ).approve(Mix.senderAddresses[chain], amounts[0]);
   },
 
   send: async (chain, wallet, toChain, receiver, amounts) => {
@@ -71,10 +76,25 @@ const Mix: AssetInfo = {
   },
 
   receive: async (chain, wallet, fromChain, sender, sendingId, amounts) => {
+    const walletAddress = await wallet.getAddress();
+    if (!walletAddress) throw new Error("No wallet address");
+
     const fromChainId = Blockchains[fromChain]?.chainId;
     const toChainId = Blockchains[chain]?.chainId;
     if (fromChainId && toChainId) {
-      const signature = ""; //TODO: implement
+      const { data: signature } = await Supabase.client.functions.invoke(
+        "sign-portal-send",
+        {
+          body: {
+            "asset": "mix",
+            "fromChainId": fromChainId,
+            "sender": sender,
+            "sendingId": sendingId,
+            "toChainId": toChainId,
+            "receiver": walletAddress,
+          },
+        },
+      );
       await new MixSenderContract(chain, wallet).receiveOverHorizon(
         fromChainId,
         toChainId,

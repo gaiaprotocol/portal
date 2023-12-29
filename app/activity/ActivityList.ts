@@ -1,10 +1,12 @@
 import { DomNode, el, ListLoadingBar, Store } from "common-app-module";
+import BridgeSetup from "../bridge/BridgeSetup.js";
 import Activity from "../database-interface/Activity.js";
 import ActivityListItem from "./ActivityListItem.js";
 
 export interface ActivityListOptions {
   storeName?: string;
   emptyMessage: string;
+  bridgeSetup?: BridgeSetup;
 }
 
 export default abstract class ActivityList extends DomNode {
@@ -14,7 +16,7 @@ export default abstract class ActivityList extends DomNode {
 
   private tbody: DomNode;
 
-  constructor(tag: string, options: ActivityListOptions) {
+  constructor(tag: string, private options: ActivityListOptions) {
     super("table.activity-list" + tag);
     this.store = options.storeName ? new Store(options.storeName) : undefined;
 
@@ -46,7 +48,7 @@ export default abstract class ActivityList extends DomNode {
     const cachedActivities = this.store?.get<Activity[]>("cached-activities");
     if (cachedActivities && cachedActivities.length > 0) {
       for (const e of cachedActivities) {
-        this.tbody.append(new ActivityListItem(e));
+        this.tbody.append(new ActivityListItem(e, options.bridgeSetup));
       }
     }
   }
@@ -63,7 +65,7 @@ export default abstract class ActivityList extends DomNode {
     if (!this.deleted) {
       this.tbody.empty();
       for (const a of activities) {
-        this.tbody.append(new ActivityListItem(a));
+        this.tbody.append(new ActivityListItem(a, this.options.bridgeSetup));
       }
       this.lastCreatedAt = activities[activities.length - 1]?.created_at;
       this.refreshed = true;

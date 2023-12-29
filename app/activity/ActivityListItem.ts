@@ -1,7 +1,10 @@
 import {
+  Alert,
   Button,
   DomNode,
   el,
+  ErrorAlert,
+  LoadingSpinner,
   MaterialIcon,
   StringUtil,
 } from "common-app-module";
@@ -12,22 +15,24 @@ import Mix from "../asset-details/Mix.js";
 import Assets from "../asset/Assets.js";
 import AssetType from "../asset/AssetType.js";
 import Blockchains from "../blockchain/Blockchains.js";
+import BlockchainType from "../blockchain/BlockchainType.js";
+import BridgeSetup from "../bridge/BridgeSetup.js";
 import Activity from "../database-interface/Activity.js";
 import WalletDisplay from "../wallet/WalletDisplay.js";
 
 export default class ActivityListItem extends DomNode {
-  constructor(activity: Activity) {
+  constructor(activity: Activity, bridgeSetup?: BridgeSetup) {
     super("tr.activity-list-item");
     const asset = Assets[activity.asset];
     if (!asset) return;
 
     const fromChainType = Object.keys(Blockchains).find(
       (type) => Blockchains[type].chainId === activity.from_chain_id,
-    )!;
+    ) as BlockchainType;
 
     const toChainType = Object.keys(Blockchains).find(
       (type) => Blockchains[type].chainId === activity.to_chain_id,
-    )!;
+    ) as BlockchainType;
 
     const amounts: { [tokenId: string]: bigint } = {};
     if (asset === Mix || asset === Injeolmi) {
@@ -72,6 +77,9 @@ export default class ActivityListItem extends DomNode {
         );
       }
     }
+
+    const isReceiver = bridgeSetup?.toChain === toChainType &&
+      bridgeSetup?.receiver === activity.receiver;
 
     this.append(
       el("td.asset", asset.name),
@@ -156,9 +164,33 @@ export default class ActivityListItem extends DomNode {
       ),
       el(
         "td.retry",
-        !activity.receive_tx
+        isReceiver && !activity.receive_tx
           ? new Button({
             title: "Retry",
+            click: async (event, retryButton) => {
+              retryButton.disable().title = new LoadingSpinner();
+              try {
+                await asset.receive(
+                  bridgeSetup.toChain!,
+                  bridgeSetup.toWallet!,
+                  fromChainType,
+                  activity.sender,
+                  activity.sending_id,
+                  amounts,
+                );
+                new Alert({
+                  title: "Receive success",
+                  message: "Receive success",
+                });
+                retryButton.delete();
+              } catch (e: any) {
+                new ErrorAlert({
+                  title: "Receive failed",
+                  message: e.message,
+                });
+                retryButton.enable().title = "Retry";
+              }
+            },
           })
           : "",
       ),

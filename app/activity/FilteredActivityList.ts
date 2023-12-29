@@ -1,59 +1,34 @@
+import Blockchains from "../blockchain/Blockchains.js";
+import BridgeSetup from "../bridge/BridgeSetup.js";
 import Activity from "../database-interface/Activity.js";
 import ActivityList from "./ActivityList.js";
 import ActivityService from "./ActivityService.js";
 
 export default class FilteredActivityList extends ActivityList {
-  private asset: string | undefined;
-  private fromChainId: number | undefined;
-  private toChainId: number | undefined;
-  private sender: string | undefined;
-  private receiver: string | undefined;
-
-  constructor() {
+  constructor(private bridgeSetup: BridgeSetup) {
     super(".filtered-activity-list", {
       emptyMessage: "No filtered activities.",
+      bridgeSetup,
     });
+    this.refresh();
   }
 
   protected async fetchActivities(): Promise<Activity[]> {
     if (
-      this.asset && this.fromChainId && this.toChainId && this.sender &&
-      this.receiver
+      this.bridgeSetup.asset && this.bridgeSetup.fromChain &&
+      this.bridgeSetup.toChain && this.bridgeSetup.sender &&
+      this.bridgeSetup.receiver
     ) {
       return await ActivityService.fetchFilteredActivities(
-        this.asset,
-        this.fromChainId,
-        this.toChainId,
-        this.sender,
-        this.receiver,
+        this.bridgeSetup.asset,
+        Blockchains[this.bridgeSetup.fromChain].chainId,
+        Blockchains[this.bridgeSetup.toChain].chainId,
+        this.bridgeSetup.sender,
+        this.bridgeSetup.receiver,
         this.lastCreatedAt,
       );
     } else {
       return [];
     }
-  }
-
-  public setFilter(
-    asset: string,
-    fromChainId: number,
-    toChainId: number,
-    sender: string,
-    receiver: string,
-  ) {
-    this.asset = asset;
-    this.fromChainId = fromChainId;
-    this.toChainId = toChainId;
-    this.sender = sender;
-    this.receiver = receiver;
-    this.refresh();
-  }
-
-  public clearFilter() {
-    this.asset = undefined;
-    this.fromChainId = undefined;
-    this.toChainId = undefined;
-    this.sender = undefined;
-    this.receiver = undefined;
-    this.refresh();
   }
 }
