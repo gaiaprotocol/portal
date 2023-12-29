@@ -125,7 +125,6 @@ export default class ExecuteBridge extends StepDisplay {
                 toWalletAddress,
                 amounts,
               );
-              console.log("sendingId", sendingId);
               receiveButton.enable().title = "Receive";
             } catch (e: any) {
               new ErrorAlert({
@@ -153,6 +152,7 @@ export default class ExecuteBridge extends StepDisplay {
                   amounts,
                 );
                 sendButton.enable().title = "Send";
+                receiveButton.title = "Receive";
                 new Alert({
                   title: "Receive success",
                   message: "Receive success",
