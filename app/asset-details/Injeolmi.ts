@@ -70,6 +70,9 @@ const Injeolmi: AssetInfo = {
   send: async (chain, wallet, toChain, receiver, amounts) => {
     const toChainId = Blockchains[toChain]?.chainId;
     if (toChainId) {
+      // check trackable
+      await TrinityManager.trackEvent(chain, 1);
+
       const sendingId = await new InjeolmiSenderContract(chain, wallet)
         .sendOverHorizon(
           toChainId,
@@ -88,19 +91,20 @@ const Injeolmi: AssetInfo = {
     const fromChainId = Blockchains[fromChain]?.chainId;
     const toChainId = Blockchains[chain]?.chainId;
     if (fromChainId && toChainId) {
-      const { data } = await Supabase.client.functions.invoke(
+      const { data, error } = await Supabase.client.functions.invoke(
         "sign-portal-send",
         {
           body: {
             "asset": "ijm",
             "fromChainId": fromChainId,
             "sender": sender,
-            "sendingId": sendingId,
+            "sendingId": Number(sendingId),
             "toChainId": toChainId,
             "receiver": walletAddress,
           },
         },
       );
+      if (error) throw error;
       await new InjeolmiSenderContract(chain, wallet).receiveOverHorizon(
         fromChainId,
         sender,

@@ -487,6 +487,9 @@ button.component > .title {
   align-items: center;
   gap: 8px;
 }
+.error-alert.component > main > p {
+  word-break: break-all;
+}
 .warning-message-box.component {
   display: flex;
   background-color: var(--warning-bg-color);
@@ -950,6 +953,9 @@ button.component > .title {
 }
 .execute-bridge > main > .token-selected-display {
   padding: 0px 16px 16px 16px;
+}
+.execute-bridge > main > .token-selected-display:empty {
+  display: none;
 }
 .execute-bridge > main > .action-container {
   padding: 0px 16px 16px 16px;

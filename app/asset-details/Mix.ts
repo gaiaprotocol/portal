@@ -68,6 +68,9 @@ const Mix: AssetInfo = {
   send: async (chain, wallet, toChain, receiver, amounts) => {
     const toChainId = Blockchains[toChain]?.chainId;
     if (toChainId) {
+      // check trackable
+      await TrinityManager.trackEvent(chain, 2);
+
       const sendingId = await new MixSenderContract(chain, wallet)
         .sendOverHorizon(
           toChainId,
@@ -86,19 +89,20 @@ const Mix: AssetInfo = {
     const fromChainId = Blockchains[fromChain]?.chainId;
     const toChainId = Blockchains[chain]?.chainId;
     if (fromChainId && toChainId) {
-      const { data } = await Supabase.client.functions.invoke(
+      const { data, error } = await Supabase.client.functions.invoke(
         "sign-portal-send",
         {
           body: {
             "asset": "mix",
             "fromChainId": fromChainId,
             "sender": sender,
-            "sendingId": sendingId,
+            "sendingId": Number(sendingId),
             "toChainId": toChainId,
             "receiver": walletAddress,
           },
         },
       );
+      if (error) throw error;
       await new MixSenderContract(chain, wallet).receiveOverHorizon(
         fromChainId,
         toChainId,

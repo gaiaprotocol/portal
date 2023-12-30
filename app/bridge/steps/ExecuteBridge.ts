@@ -117,6 +117,14 @@ export default class ExecuteBridge extends StepDisplay {
           new Button({
             title: "Approve",
             click: async (event, button) => {
+              if (Object.keys(amounts).length === 0) {
+                new ErrorAlert({
+                  title: "Approve failed",
+                  message: "Please select at least one token.",
+                });
+                return;
+              }
+
               button.disable().title = new LoadingSpinner();
               try {
                 await asset.approveToSender(fromChain, fromWallet, amounts);
