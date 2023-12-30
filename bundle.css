@@ -1012,6 +1012,10 @@ button.component > .title {
   flex-direction: column;
   gap: 4px;
 }
+.activity-list > tbody > tr > td.retry > button > .title > .loading-spinner:after {
+  width: 12px;
+  height: 12px;
+}
 .filtered-activity-list th.asset,
 .filtered-activity-list td.asset,
 .filtered-activity-list th.from,
