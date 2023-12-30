@@ -130,7 +130,7 @@ const KlaydiceSpecialDice: AssetInfo = {
       }[] = [];
 
       const dataSet = await TrinityManager.sign(
-        "klaydice-special-dice-nft",
+        TOKEN_NAME,
         fromChainId,
         sender,
         Number(sendingId),
@@ -150,6 +150,8 @@ const KlaydiceSpecialDice: AssetInfo = {
         a,
         b,
       ) => (BigInt(a.address) < BigInt(b.address) ? -1 : 1));
+
+      console.log(results, results.map((result) => result.signature));
 
       await new GaiaBridgeContract(chain, wallet).receiveTokens(
         sender,

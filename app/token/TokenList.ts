@@ -23,7 +23,9 @@ export default class TokenList extends DomNode {
   public get amounts(): { [tokenId: string]: bigint } {
     const amounts: { [tokenId: string]: bigint } = {};
     for (const child of this.children) {
-      amounts[child.tokenId.toString()] = child.amount;
+      if (child.amount > 0n) {
+        amounts[child.tokenId.toString()] = child.amount;
+      }
     }
     return amounts;
   }

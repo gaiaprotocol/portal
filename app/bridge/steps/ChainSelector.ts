@@ -1,6 +1,15 @@
-import { Debouncer, DomNode, el, Select } from "common-app-module";
+import {
+  Debouncer,
+  DomNode,
+  el,
+  Select,
+  StringUtil,
+  WarningMessageBox,
+} from "common-app-module";
+import { ethers } from "ethers";
 import AssetDisplay from "../../asset/AssetDisplay.js";
 import Assets from "../../asset/Assets.js";
+import Blockchains from "../../blockchain/Blockchains.js";
 import BlockchainType from "../../blockchain/BlockchainType.js";
 import WalletSelector from "../../wallet/WalletSelector.js";
 
@@ -12,6 +21,7 @@ export default class ChainSelector extends DomNode {
   private select: Select<string>;
   private walletSelector: WalletSelector;
   private balanceDisplay: DomNode;
+  private insufficientGasBalanceDisplay: DomNode;
 
   constructor() {
     super(".chain-selector");
@@ -24,6 +34,7 @@ export default class ChainSelector extends DomNode {
       }),
       this.walletSelector = new WalletSelector(),
       this.balanceDisplay = el(".balance"),
+      this.insufficientGasBalanceDisplay = el(".insufficient-gas-balance"),
     );
 
     this.select.on("change", (chain) => {
@@ -56,6 +67,23 @@ export default class ChainSelector extends DomNode {
         const balance = await asset.fetchBalance(this._chain, this.wallet);
         this.balanceDisplay.empty().append(
           new AssetDisplay("Balance", asset, balance),
+        );
+      }
+    }
+
+    this.insufficientGasBalanceDisplay.empty();
+    if (this._chain) {
+      const eth = await this.wallet?.getBalance();
+      if (eth && eth < Blockchains[this._chain].minimumGasBalance) {
+        this.insufficientGasBalanceDisplay.append(
+          new WarningMessageBox({
+            message: `Your current coin balance is ${
+              StringUtil.numberWithCommas(
+                ethers.formatEther(eth),
+                3,
+              )
+            }, which may be insufficient to cover the minimum gas payment. It is recommended that you replenish your funds.`,
+          }),
         );
       }
     }

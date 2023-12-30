@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { bsc, klaytn, mainnet, polygon } from "viem/chains";
 import Env from "../Env.js";
 import EvmWalletManager, { bifrost } from "../wallet/EvmWalletManager.js";
@@ -16,30 +17,35 @@ const Blockchains: { [chain: string]: BlockchainInfo } = {
     rpc: "", // set in initBlockchains()
     blockExplorer: mainnet.blockExplorers.default,
     walletManager: EvmWalletManager,
+    minimumGasBalance: ethers.parseEther("0.01"),
   },
   [BlockchainType.Polygon]: {
     chainId: 137,
     rpc: polygon.rpcUrls.default.http[0],
     blockExplorer: polygon.blockExplorers.default,
     walletManager: EvmWalletManager,
+    minimumGasBalance: ethers.parseEther("0.1"),
   },
   [BlockchainType.BNB]: {
     chainId: 56,
     rpc: bsc.rpcUrls.default.http[0],
     blockExplorer: bsc.blockExplorers.default,
     walletManager: EvmWalletManager,
+    minimumGasBalance: ethers.parseEther("0.1"),
   },
   [BlockchainType.Klaytn]: {
     chainId: 8217,
     rpc: "https://public-en-cypress.klaytn.net",
     blockExplorer: klaytn.blockExplorers.default,
     walletManager: KlaytnWalletManager,
+    minimumGasBalance: ethers.parseEther("0.1"),
   },
   [BlockchainType.Bifrost]: {
     chainId: 3068,
     rpc: bifrost.rpcUrls.default.http[0],
     blockExplorer: bifrost.blockExplorers.default,
     walletManager: EvmWalletManager,
+    minimumGasBalance: ethers.parseEther("1"),
   },
 };
 

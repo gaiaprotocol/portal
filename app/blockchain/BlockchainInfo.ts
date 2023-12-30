@@ -8,4 +8,5 @@ export default interface BlockchainInfo {
     url: string;
   };
   walletManager: WalletManager;
+  minimumGasBalance: bigint;
 }

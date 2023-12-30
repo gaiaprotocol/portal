@@ -58,6 +58,10 @@ class KlaytnWalletManager extends EventContainer implements WalletManager {
     return await this.internalWallet?.getSigner(chain);
   }
 
+  public async getBalance(): Promise<bigint | undefined> {
+    return await this.internalWallet?.getBalance();
+  }
+
   public async writeManual(
     address: string,
     abi: Interface | InterfaceAbi,

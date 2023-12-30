@@ -8,8 +8,12 @@
         margin-bottom: 16px;
     }
 
-    &:empty::before {
-        content: attr(data-empty-message);
-        color  : var(--disable-color);
+    &:empty {
+        padding-bottom: 16px;
+
+        &::before {
+            content: attr(data-empty-message);
+            color  : var(--disable-color);
+        }
     }
 }

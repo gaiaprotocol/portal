@@ -4,6 +4,7 @@ import BlockchainType from "../../blockchain/BlockchainType.js";
 export default interface KlaytnWalletManager {
   get installed(): boolean;
   getAddress(): Promise<string | undefined>;
+  getBalance(): Promise<bigint | undefined>;
   connect(): Promise<void>;
   disconnect(): Promise<void>;
   getSigner(chain: BlockchainType): Promise<JsonRpcSigner | undefined>;

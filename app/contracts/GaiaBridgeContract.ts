@@ -62,7 +62,6 @@ export default class GaiaBridgeContract extends Contract<GaiaBridge> {
         writeContract.filters.SendTokens(
           await this.wallet.getAddress(),
           toChainId,
-          receiver,
         ),
         receipt.blockNumber,
       );
@@ -82,7 +81,6 @@ export default class GaiaBridgeContract extends Contract<GaiaBridge> {
         this.viewContract.filters.SendTokens(
           await this.wallet.getAddress(),
           toChainId,
-          receiver,
         ),
       );
       if (!event) throw new Error("No events");

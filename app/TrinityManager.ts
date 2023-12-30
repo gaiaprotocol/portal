@@ -40,7 +40,7 @@ class TrinityManager {
       sender,
       sendingId,
       toChainId,
-      walletAddress,
+      receiver: walletAddress,
     };
     const [{ data: data1 }, { data: data2 }, data3] = await Promise.all([
       Supabase.client.functions.invoke("sign-portal-send", { body }),

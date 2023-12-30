@@ -16,6 +16,7 @@
 
     >tbody {
         &:empty::before {
+            display: block;
             content: attr(data-empty-message);
             color  : var(--disable-color);
             padding: 8px 12px;

@@ -8,10 +8,15 @@ import {
   ObjectUtil,
 } from "common-app-module";
 import FilteredActivityList from "../../activity/FilteredActivityList.js";
+import KlaydiceSpecialDice from "../../asset-details/KlaydiceSpecialDice.js";
 import Assets from "../../asset/Assets.js";
+import FeeDbContract from "../../contracts/FeeDbContract.js";
+import { TokenType } from "../../contracts/GaiaBridgeContract.js";
+import Erc721Contract from "../../contracts/standard/Erc721Contract.js";
 import TokenList from "../../token/TokenList.js";
 import BridgeSetup from "../BridgeSetup.js";
 import StepDisplay from "./StepDisplay.js";
+import AssetType from "../../asset/AssetType.js";
 
 // input amount
 // approve
@@ -22,6 +27,7 @@ export default class ExecuteBridge extends StepDisplay {
 
   private tokenListContainer: DomNode;
   private tokenList: TokenList | undefined;
+  private tokenSelectedDisplay: DomNode;
   private actionContainer: DomNode;
   private activityListContainer: DomNode;
 
@@ -29,6 +35,7 @@ export default class ExecuteBridge extends StepDisplay {
     super(".execute-bridge", 3, "Execute Bridge");
     this.container.append(
       this.tokenListContainer = el(".token-list-container"),
+      this.tokenSelectedDisplay = el(".token-selected-display"),
       this.actionContainer = el(".action-container"),
       el(
         ".activity-container",
@@ -50,6 +57,7 @@ export default class ExecuteBridge extends StepDisplay {
 
   private clear() {
     this.tokenListContainer.empty();
+    this.tokenSelectedDisplay.empty();
     this.actionContainer.empty();
     this.activityListContainer.empty();
   }
@@ -88,6 +96,12 @@ export default class ExecuteBridge extends StepDisplay {
       asset && amounts && fromChain && fromWallet && fromWalletAddress &&
       toChain && toWallet && toWalletAddress
     ) {
+      if (asset.type !== AssetType.ERC20) {
+        this.tokenSelectedDisplay.empty().text = `Selected tokens: ${
+          Object.keys(amounts).length
+        }`;
+      }
+
       this.activityListContainer.empty().append(
         new FilteredActivityList(this._setup!),
       );
@@ -103,9 +117,18 @@ export default class ExecuteBridge extends StepDisplay {
         this.actionContainer.append(
           new Button({
             title: "Approve",
-            click: async () => {
-              await asset.approveToSender(fromChain, fromWallet, amounts);
-              this.checkApprove();
+            click: async (event, button) => {
+              button.disable().title = new LoadingSpinner();
+              try {
+                await asset.approveToSender(fromChain, fromWallet, amounts);
+                this.checkApprove();
+              } catch (e: any) {
+                new ErrorAlert({
+                  title: "Approve failed",
+                  message: e.message,
+                });
+                button.enable().title = "Approve";
+              }
             },
           }),
         );
@@ -115,6 +138,14 @@ export default class ExecuteBridge extends StepDisplay {
         const sendButton = new Button({
           title: "Send",
           click: async () => {
+            if (Object.keys(amounts).length === 0) {
+              new ErrorAlert({
+                title: "Send failed",
+                message: "Please select at least one token.",
+              });
+              return;
+            }
+
             sendButton.disable().title = new LoadingSpinner();
             try {
               sendingId = await asset.send(
@@ -167,7 +198,36 @@ export default class ExecuteBridge extends StepDisplay {
           },
         });
 
-        this.actionContainer.append(sendButton, receiveButton);
+        this.actionContainer.append(
+          sendButton,
+          receiveButton,
+          new Button({
+            title: "TEST",
+            click: async () => {
+              //const tokenId = 100301090173n;
+              const tokenId = 999999999999n;
+              const contract = new Erc721Contract(
+                fromChain,
+                KlaydiceSpecialDice.addresses[fromChain],
+                fromWallet,
+              );
+              const feeDbContract = new FeeDbContract(fromChain, fromWallet);
+              console.log(
+                await feeDbContract.getFeeInfo(
+                  fromWalletAddress,
+                  TokenType.ERC721,
+                  KlaydiceSpecialDice.addresses[fromChain],
+                  [tokenId],
+                  [1n],
+                  "0x",
+                ),
+              );
+              await contract.burn(
+                tokenId,
+              );
+            },
+          }),
+        );
       }
     } else {
       this.actionContainer.empty();

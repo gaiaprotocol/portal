@@ -1,5 +1,5 @@
 import { EventContainer, Store } from "common-app-module";
-import { Interface, InterfaceAbi, JsonRpcSigner } from "ethers";
+import { ethers, Interface, InterfaceAbi, JsonRpcSigner } from "ethers";
 import QrCode from "qrcode";
 import BlockchainType from "../../blockchain/BlockchainType.js";
 import KlaytnWalletManager from "./KlaytnWalletManager.js";
@@ -7,6 +7,7 @@ import KlipQrPopup from "./KlipQrPopup.js";
 
 // @ts-ignore
 import { getResult, prepare, request } from "klip-sdk";
+import { klaytn } from "viem/chains";
 
 const BAPP_NAME = "Portal by Gaia Protocol";
 
@@ -63,6 +64,11 @@ class KlipManager extends EventContainer implements KlaytnWalletManager {
     chain: BlockchainType,
   ): Promise<JsonRpcSigner | undefined> {
     return undefined;
+  }
+
+  public async getBalance(): Promise<bigint | undefined> {
+    const provider = new ethers.JsonRpcProvider(klaytn.rpcUrls.default.http[0]);
+    return await provider.getBalance(this.store.get<string>("address") ?? "");
   }
 
   private processParams(param: any): any {

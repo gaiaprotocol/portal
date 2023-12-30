@@ -1,5 +1,5 @@
 import { EventContainer, Store } from "common-app-module";
-import { JsonRpcSigner, ethers } from "ethers";
+import { ethers, JsonRpcSigner } from "ethers";
 import BlockchainType from "../../blockchain/BlockchainType.js";
 import Blockchains from "../../blockchain/Blockchains.js";
 import KlaytnWalletManager from "./KlaytnWalletManager.js";
@@ -53,6 +53,12 @@ class KaikasManager extends EventContainer implements KlaytnWalletManager {
       });
     }
     return await this.provider?.getSigner();
+  }
+
+  public async getBalance(): Promise<bigint | undefined> {
+    const address = await this.getAddress();
+    if (!address) return undefined;
+    return await this.provider?.getBalance(address);
   }
 }
 
