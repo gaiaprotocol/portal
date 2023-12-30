@@ -46,15 +46,16 @@ export default class HistoryView extends View {
   }
 
   private renderActivityList(setup: BridgeSetup | undefined) {
-    this.activityList?.delete();
     if (
-      setup && Object.keys(setup || {}).length > 0 && setup.fromWallet &&
-      setup.toWallet
+      setup && Object.keys(setup || {}).length > 0 && setup.sender &&
+      setup.receiver
     ) {
+      this.activityList?.delete();
       this.activityList = new FilteredActivityList(setup).appendTo(
         this.activityListContainer,
       );
     } else if (!(this.activityList instanceof GlobalActivityList)) {
+      this.activityList?.delete();
       this.activityList = new GlobalActivityList().appendTo(
         this.activityListContainer,
       );
