@@ -1064,14 +1064,19 @@ button.component > .title {
   display: none;
 }
 .history-view {
-  padding: 32px 16px;
+  padding: 16px;
 }
 @container (width < 1280px) {
   .history-view {
-    padding: 16px;
     width: 100%;
     overflow-x: auto;
   }
+}
+.history-view > .select-chains {
+  border-radius: 16px;
+  background-color: var(--surface-bg-color);
+  padding-top: 16px;
+  margin-bottom: 16px;
 }
 .history-view > .activity-list {
   margin: auto;
