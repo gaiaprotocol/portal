@@ -1,11 +1,6 @@
 .history-view {
     padding: 16px;
 
-    @container (width < @safe-width) {
-        width     : 100%;
-        overflow-x: auto;
-    }
-
     >.select-chains {
         border-radius   : 16px;
         background-color: var(--surface-bg-color);
@@ -13,8 +8,15 @@
         margin-bottom   : 16px;
     }
 
-    >.activity-list {
-        margin: auto;
-        width : 1158px;
+    >.activity-list-container {
+        @container (width < @safe-width) {
+            width     : 100%;
+            overflow-x: auto;
+        }
+
+        >.activity-list {
+            margin: auto;
+            width : 1158px;
+        }
     }
 }

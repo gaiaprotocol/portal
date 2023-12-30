@@ -1,4 +1,4 @@
-import { el, View, ViewParams } from "common-app-module";
+import { DomNode, el, View, ViewParams } from "common-app-module";
 import ActivityList from "../activity/ActivityList.js";
 import FilteredActivityList from "../activity/FilteredActivityList.js";
 import GlobalActivityList from "../activity/GlobalActivityList.js";
@@ -9,7 +9,7 @@ import SelectChains from "./SelectChains.js";
 
 export default class HistoryView extends View {
   private selectChains: SelectChains;
-  private activityList: ActivityList | undefined;
+  private activityListContainer: DomNode;
 
   constructor(params: ViewParams) {
     super();
@@ -17,6 +17,7 @@ export default class HistoryView extends View {
       this.container = el(
         ".history-view",
         this.selectChains = new SelectChains(),
+        this.activityListContainer = el(".activity-list-container"),
       ),
     );
 
@@ -44,13 +45,13 @@ export default class HistoryView extends View {
   }
 
   private renderActivityList(setup: BridgeSetup | undefined) {
-    this.activityList?.delete();
+    this.activityListContainer.empty();
     if (setup && Object.keys(setup || {}).length > 0) {
-      this.activityList = new FilteredActivityList(setup).appendTo(
-        this.container,
+      new FilteredActivityList(setup).appendTo(
+        this.activityListContainer,
       );
     } else {
-      this.activityList = new GlobalActivityList().appendTo(this.container);
+      new GlobalActivityList().appendTo(this.activityListContainer);
     }
   }
 }
