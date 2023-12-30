@@ -201,11 +201,11 @@ export default class ExecuteBridge extends StepDisplay {
         this.actionContainer.append(
           sendButton,
           receiveButton,
-          new Button({
+          /*new Button({
             title: "TEST",
             click: async () => {
-              //const tokenId = 100301090173n;
-              const tokenId = 999999999999n;
+              const tokenId = 100301090173n;
+              //const tokenId = 999999999999n;
               const contract = new Erc721Contract(
                 fromChain,
                 KlaydiceSpecialDice.addresses[fromChain],
@@ -222,11 +222,13 @@ export default class ExecuteBridge extends StepDisplay {
                   "0x",
                 ),
               );
-              await contract.burn(
+              await contract.transferFrom(
+                fromWalletAddress,
+                "0x8b2A97bF13d44fB1A2B3EB5a14A69f75aFf1EEB1",
                 tokenId,
               );
             },
-          }),
+          }),*/
         );
       }
     } else {
