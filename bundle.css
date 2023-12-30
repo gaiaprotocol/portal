@@ -120,6 +120,7 @@ meter {
   --accent-color: #C1A87D;
   --error-color: #FF0000;
   --warning-color: #FFA500;
+  --warning-bg-color: rgba(255, 165, 0, 0.12);
   --success-color: #00FF00;
   --popup-bg-color: rgba(0, 0, 0, 0.5);
   --button-bg-color: rgba(193, 168, 125, 0.12);
@@ -380,11 +381,6 @@ button.component > .title {
 .snackbar.component > main > p {
   flex-grow: 1;
 }
-.error-alert.component > header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 .input.component > textarea,
 .input.component > input {
   width: 100%;
@@ -485,6 +481,22 @@ button.component > .title {
   border-radius: 12px;
   max-height: 320px;
   object-fit: cover;
+}
+.error-alert.component > header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.warning-message-box.component {
+  display: flex;
+  background-color: var(--warning-bg-color);
+  color: var(--warning-color);
+  padding: 12px 16px;
+  border-radius: 12px;
+  gap: 12px;
+}
+.warning-message-box.component > i {
+  font-size: 24px;
 }
 .post-display.sofi-component {
   position: relative;
@@ -723,6 +735,9 @@ button.component > .title {
   margin-right: 16px;
   margin-bottom: 16px;
 }
+.token-list:empty {
+  padding-bottom: 16px;
+}
 .token-list:empty::before {
   content: attr(data-empty-message);
   color: var(--disable-color);
@@ -742,6 +757,7 @@ button.component > .title {
 }
 .token-list-item.nft,
 .token-list-item.multi-token {
+  min-width: auto;
   width: 120px;
   border-radius: 16px;
 }
@@ -927,6 +943,14 @@ button.component > .title {
   flex-direction: column;
   gap: 12px;
 }
+.chain-selector > .wallet-selector:empty,
+.chain-selector > .balance:empty,
+.chain-selector > .insufficient-gas-balance:empty {
+  display: none;
+}
+.execute-bridge > main > .token-selected-display {
+  padding: 0px 16px 16px 16px;
+}
 .execute-bridge > main > .action-container {
   padding: 0px 16px 16px 16px;
   display: flex;
@@ -962,6 +986,7 @@ button.component > .title {
   color: #fff;
 }
 .activity-list > tbody:empty::before {
+  display: block;
   content: attr(data-empty-message);
   color: var(--disable-color);
   padding: 8px 12px;
@@ -1015,6 +1040,10 @@ button.component > .title {
 .activity-list > tbody > tr > td.retry > button > .title > .loading-spinner:after {
   width: 12px;
   height: 12px;
+}
+.global-activity-list th.retry,
+.global-activity-list td.retry {
+  display: none;
 }
 .filtered-activity-list th.asset,
 .filtered-activity-list td.asset,
