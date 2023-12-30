@@ -62,7 +62,10 @@ export default class Layout extends View {
   }
 
   private changeUri(uri: string): void {
-    if (Assets[uri] || Assets[uri.substring(0, uri.indexOf("/"))]) uri = "";
+    if (uri.substring(0, 7) === "history") uri = "history";
+    else if (Assets[uri] || Assets[uri.substring(0, uri.indexOf("/"))]) {
+      uri = "";
+    }
     this.navBar.active(
       uri === "" ? "bridge" : uri.substring(
         0,

@@ -1,34 +1,36 @@
 import {
   Debouncer,
+  DomNode,
   el,
   MaterialIcon,
   ObjectUtil,
   Router,
 } from "common-app-module";
-import BlockchainType from "../../blockchain/BlockchainType.js";
-import BridgeSetup from "../BridgeSetup.js";
+import BlockchainType from "../blockchain/BlockchainType.js";
+import BridgeSetup from "../bridge/BridgeSetup.js";
 import ChainSelector from "./ChainSelector.js";
-import StepDisplay from "./StepDisplay.js";
 
-export default class SelectChains extends StepDisplay {
-  private assetId: string | undefined;
+export default class SelectChains extends DomNode {
   private fromChainSelector: ChainSelector;
   private toChainSelector: ChainSelector;
 
   constructor() {
-    super(".select-chains", 2, "Select chains");
+    super(".select-chains");
     this.addAllowedEvents("change");
 
-    this.container.append(
-      this.fromChainSelector = new ChainSelector(),
-      el("a", new MaterialIcon("arrow_forward"), {
-        click: () =>
-          this.selectChains(
-            this.toChainSelector.chain,
-            this.fromChainSelector.chain,
-          ),
-      }),
-      this.toChainSelector = new ChainSelector(),
+    this.append(
+      el(
+        "main",
+        this.fromChainSelector = new ChainSelector(),
+        el("a", new MaterialIcon("arrow_forward"), {
+          click: () =>
+            this.selectChains(
+              this.toChainSelector.chain,
+              this.fromChainSelector.chain,
+            ),
+        }),
+        this.toChainSelector = new ChainSelector(),
+      ),
     );
 
     this.fromChainSelector.on(
@@ -46,21 +48,17 @@ export default class SelectChains extends StepDisplay {
     () => this.detectAndReflectChanges(),
   );
 
-  private prevSetup: BridgeSetup = {};
+  public prevSetup: BridgeSetup = {};
   private detectAndReflectChanges() {
     // route
-    if (!this.assetId) Router.go("/");
-    else {
-      const fromChain = this.fromChainSelector.chain;
-      const toChain = this.toChainSelector.chain;
-      if (!fromChain) Router.go(`/${this.assetId}`);
-      else if (!toChain) Router.go(`/${this.assetId}/${fromChain}`);
-      else Router.go(`/${this.assetId}/${fromChain}/${toChain}`);
-    }
+    const fromChain = this.fromChainSelector.chain;
+    const toChain = this.toChainSelector.chain;
+    if (!fromChain) Router.go("/history");
+    else if (!toChain) Router.go(`/history/${fromChain}`);
+    else Router.go(`/history/${fromChain}/${toChain}`);
 
     // detect change
     const setup: BridgeSetup = {
-      asset: this.assetId,
       fromChain: this.fromChainSelector.chain,
       fromWallet: this.fromChainSelector.wallet,
       sender: this.fromChainSelector.walletAddress,
@@ -72,14 +70,6 @@ export default class SelectChains extends StepDisplay {
       this.prevSetup = setup;
       this.fireEvent("change", setup);
     }
-  }
-
-  public selectAsset(assetId: string | undefined) {
-    if (this.assetId === assetId) return this;
-    this.assetId = assetId;
-    this.fromChainSelector.asset = assetId;
-    this.toChainSelector.asset = assetId;
-    return this;
   }
 
   public selectChains(

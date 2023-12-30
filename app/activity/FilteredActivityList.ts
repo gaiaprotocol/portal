@@ -15,9 +15,8 @@ export default class FilteredActivityList extends ActivityList {
 
   protected async fetchActivities(): Promise<Activity[]> {
     if (
-      this.bridgeSetup.asset && this.bridgeSetup.fromChain &&
-      this.bridgeSetup.toChain && this.bridgeSetup.sender &&
-      this.bridgeSetup.receiver
+      this.bridgeSetup.fromChain && this.bridgeSetup.toChain &&
+      this.bridgeSetup.sender && this.bridgeSetup.receiver
     ) {
       return await ActivityService.fetchFilteredActivities(
         this.bridgeSetup.asset,

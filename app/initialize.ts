@@ -49,7 +49,11 @@ export default async function initialize(config: Config) {
       "{asset}/{fromChain}/{toChain}",
     ],
     BridgeView,
-    ["history"],
+    ["history", "history/{fromChain}", "history/{fromChain}/{toChain}"],
   );
-  Router.route("history", HistoryView);
+  Router.route([
+    "history",
+    "history/{fromChain}",
+    "history/{fromChain}/{toChain}",
+  ], HistoryView);
 }

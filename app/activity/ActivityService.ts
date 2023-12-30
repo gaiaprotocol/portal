@@ -16,23 +16,33 @@ class ActivityService extends SupabaseService<Activity> {
   }
 
   public async fetchFilteredActivities(
-    asset: string,
+    asset: string | undefined,
     fromChainId: number,
     toChainId: number,
     sender: string,
     receiver: string,
     lastCreatedAt?: string,
   ) {
-    return await this.safeSelect((b) =>
-      b
-        .order("created_at", { ascending: false })
-        .eq("asset", asset)
-        .eq("from_chain_id", fromChainId)
-        .eq("to_chain_id", toChainId)
-        .eq("sender", sender)
-        .eq("receiver", receiver)
-        .gt("created_at", lastCreatedAt ?? Constants.UNIX_EPOCH_START_DATE)
-    );
+    return asset
+      ? await this.safeSelect((b) =>
+        b
+          .order("created_at", { ascending: false })
+          .eq("asset", asset)
+          .eq("from_chain_id", fromChainId)
+          .eq("to_chain_id", toChainId)
+          .eq("sender", sender)
+          .eq("receiver", receiver)
+          .gt("created_at", lastCreatedAt ?? Constants.UNIX_EPOCH_START_DATE)
+      )
+      : await this.safeSelect((b) =>
+        b
+          .order("created_at", { ascending: false })
+          .eq("from_chain_id", fromChainId)
+          .eq("to_chain_id", toChainId)
+          .eq("sender", sender)
+          .eq("receiver", receiver)
+          .gt("created_at", lastCreatedAt ?? Constants.UNIX_EPOCH_START_DATE)
+      );
   }
 }
 
