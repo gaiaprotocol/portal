@@ -10,6 +10,7 @@ import SelectChains from "./SelectChains.js";
 export default class HistoryView extends View {
   private selectChains: SelectChains;
   private activityListContainer: DomNode;
+  private activityList: ActivityList | undefined;
 
   constructor(params: ViewParams) {
     super();
@@ -45,13 +46,18 @@ export default class HistoryView extends View {
   }
 
   private renderActivityList(setup: BridgeSetup | undefined) {
-    this.activityListContainer.empty();
-    if (setup && Object.keys(setup || {}).length > 0) {
-      new FilteredActivityList(setup).appendTo(
+    this.activityList?.delete();
+    if (
+      setup && Object.keys(setup || {}).length > 0 && setup.fromWallet &&
+      setup.toWallet
+    ) {
+      this.activityList = new FilteredActivityList(setup).appendTo(
         this.activityListContainer,
       );
-    } else {
-      new GlobalActivityList().appendTo(this.activityListContainer);
+    } else if (!(this.activityList instanceof GlobalActivityList)) {
+      this.activityList = new GlobalActivityList().appendTo(
+        this.activityListContainer,
+      );
     }
   }
 }
