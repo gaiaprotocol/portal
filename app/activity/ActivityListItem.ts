@@ -21,6 +21,8 @@ import Activity from "../database-interface/Activity.js";
 import WalletDisplay from "../wallet/WalletDisplay.js";
 
 export default class ActivityListItem extends DomNode {
+  private status!: DomNode;
+
   constructor(activity: Activity, bridgeSetup?: BridgeSetup) {
     super("tr.activity-list-item");
     const asset = Assets[activity.asset];
@@ -135,7 +137,7 @@ export default class ActivityListItem extends DomNode {
         }),
       ),
       el("td.tokens", el("main", ...tokenDisplay)),
-      el(
+      this.status = el(
         "td.status" +
           (activity.receive_tx === undefined ? ".pending" : ".received"),
         el(
@@ -182,6 +184,14 @@ export default class ActivityListItem extends DomNode {
                   title: "Receive success",
                   message: "Receive success",
                 });
+                this.status.addClass("received").deleteClass("pending").empty()
+                  .append(
+                    el(
+                      "main",
+                      new MaterialIcon("done"),
+                      "Received",
+                    ),
+                  );
                 retryButton.delete();
               } catch (e: any) {
                 new ErrorAlert({

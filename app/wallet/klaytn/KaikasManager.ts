@@ -55,7 +55,7 @@ class KaikasManager extends EventContainer implements KlaytnWalletManager {
     return await this.provider?.getSigner();
   }
 
-  public async getBalance(): Promise<bigint | undefined> {
+  public async getBalance(chain: BlockchainType): Promise<bigint | undefined> {
     const address = await this.getAddress();
     if (!address) return undefined;
     return await this.provider?.getBalance(address);

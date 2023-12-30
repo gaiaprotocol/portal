@@ -66,7 +66,7 @@ class KlipManager extends EventContainer implements KlaytnWalletManager {
     return undefined;
   }
 
-  public async getBalance(): Promise<bigint | undefined> {
+  public async getBalance(chain: BlockchainType): Promise<bigint | undefined> {
     const provider = new ethers.JsonRpcProvider(klaytn.rpcUrls.default.http[0]);
     return await provider.getBalance(this.store.get<string>("address") ?? "");
   }

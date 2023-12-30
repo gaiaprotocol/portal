@@ -81,9 +81,7 @@ const GaiaTokenV1: AssetInfo = {
         "0x",
         [],
       );
-      console.log(sendingId);
       await TrinityManager.trackEvent(chain, 0);
-      console.log("tracked");
       return sendingId;
     }
   },

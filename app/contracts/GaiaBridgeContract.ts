@@ -3,7 +3,7 @@ import WalletManager from "../wallet/WalletManager.js";
 import Contract from "./Contract.js";
 import { GaiaBridge } from "./abi/gaiabridge/GaiaBridge.js";
 import GaiaBridgeArtifact from "./abi/gaiabridge/GaiaBridge.json" assert {
-  type: "json",
+  type: "json"
 };
 
 export const addresses: { [chain: string]: string } = {
@@ -47,26 +47,47 @@ export default class GaiaBridgeContract extends Contract<GaiaBridge> {
   ): Promise<bigint> {
     const writeContract = await this.getWriteContract();
     if (writeContract) {
-      const tx = await writeContract.sendTokens(
+      const estimation = await writeContract.sendTokens.estimateGas(
         toChainId,
         receiver,
         tokenData,
         data,
         sigs,
       );
+      const tx = await writeContract.sendTokens(
+        toChainId,
+        receiver,
+        tokenData,
+        data,
+        sigs,
+        { gasLimit: estimation * 12n / 10n }, // 20% more gas (for safety)
+      );
       const receipt = await tx.wait();
       if (!receipt) throw new Error("No receipt");
 
-      const event = await this.fetchLastEvent(
-        writeContract,
-        writeContract.filters.SendTokens(
-          await this.wallet.getAddress(),
-          toChainId,
-        ),
-        receipt.blockNumber,
-      );
-      if (!event) throw new Error("No events");
-      return event.args?.[4];
+      try {
+        const event = await this.fetchLastEvent(
+          writeContract,
+          writeContract.filters.SendTokens(
+            await this.wallet.getAddress(),
+            toChainId,
+          ),
+          receipt.blockNumber,
+        );
+        if (!event) throw new Error("No events");
+        return event.args?.[4];
+      } catch (e) {
+        console.error(e);
+        const event = await this.fetchLastEvent(
+          this.viewContract,
+          this.viewContract.filters.SendTokens(
+            await this.wallet.getAddress(),
+            toChainId,
+          ),
+        );
+        if (!event) throw new Error("No events");
+        return event.args?.[4];
+      }
     } else {
       await this.writeManual("approve", [
         toChainId,

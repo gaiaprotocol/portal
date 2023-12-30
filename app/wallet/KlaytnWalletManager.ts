@@ -58,8 +58,8 @@ class KlaytnWalletManager extends EventContainer implements WalletManager {
     return await this.internalWallet?.getSigner(chain);
   }
 
-  public async getBalance(): Promise<bigint | undefined> {
-    return await this.internalWallet?.getBalance();
+  public async getBalance(chain: BlockchainType): Promise<bigint | undefined> {
+    return await this.internalWallet?.getBalance(chain);
   }
 
   public async writeManual(

@@ -8,15 +8,11 @@ import {
   ObjectUtil,
 } from "common-app-module";
 import FilteredActivityList from "../../activity/FilteredActivityList.js";
-import KlaydiceSpecialDice from "../../asset-details/KlaydiceSpecialDice.js";
 import Assets from "../../asset/Assets.js";
-import FeeDbContract from "../../contracts/FeeDbContract.js";
-import { TokenType } from "../../contracts/GaiaBridgeContract.js";
-import Erc721Contract from "../../contracts/standard/Erc721Contract.js";
+import AssetType from "../../asset/AssetType.js";
 import TokenList from "../../token/TokenList.js";
 import BridgeSetup from "../BridgeSetup.js";
 import StepDisplay from "./StepDisplay.js";
-import AssetType from "../../asset/AssetType.js";
 
 // input amount
 // approve
@@ -64,6 +60,8 @@ export default class ExecuteBridge extends StepDisplay {
 
   public async render() {
     this.tokenListContainer.empty();
+    this.activityListContainer.empty();
+
     if (!this._setup || Object.values(this._setup).some((v) => !v)) {
       this.clear();
     } else {
@@ -74,10 +72,15 @@ export default class ExecuteBridge extends StepDisplay {
           this._setup.fromChain!,
           this._setup.fromWallet!,
         );
+
         this.tokenList = new TokenList(asset, tokens).appendTo(
           this.tokenListContainer,
         ).on("changeAmount", () => this.checkApprove());
         this.checkApprove();
+
+        this.activityListContainer.append(
+          new FilteredActivityList(this._setup),
+        );
       }
     }
   }
@@ -101,10 +104,6 @@ export default class ExecuteBridge extends StepDisplay {
           Object.keys(amounts).length
         }`;
       }
-
-      this.activityListContainer.empty().append(
-        new FilteredActivityList(this._setup!),
-      );
 
       const approved = await asset.checkApprovalToSender(
         fromChain,
@@ -155,6 +154,7 @@ export default class ExecuteBridge extends StepDisplay {
                 toWalletAddress,
                 amounts,
               );
+              sendButton.title = "Send";
               receiveButton.enable().title = "Receive";
             } catch (e: any) {
               new ErrorAlert({
@@ -181,12 +181,11 @@ export default class ExecuteBridge extends StepDisplay {
                   sendingId,
                   amounts,
                 );
-                sendButton.enable().title = "Send";
-                receiveButton.title = "Receive";
                 new Alert({
                   title: "Receive success",
                   message: "Receive success",
                 });
+                this.render();
               } catch (e: any) {
                 new ErrorAlert({
                   title: "Receive failed",
@@ -205,7 +204,6 @@ export default class ExecuteBridge extends StepDisplay {
             title: "TEST",
             click: async () => {
               const tokenId = 100301090173n;
-              //const tokenId = 999999999999n;
               const contract = new Erc721Contract(
                 fromChain,
                 KlaydiceSpecialDice.addresses[fromChain],
@@ -222,11 +220,7 @@ export default class ExecuteBridge extends StepDisplay {
                   "0x",
                 ),
               );
-              await contract.transferFrom(
-                fromWalletAddress,
-                "0x8b2A97bF13d44fB1A2B3EB5a14A69f75aFf1EEB1",
-                tokenId,
-              );
+              await contract.burn(tokenId);
             },
           }),*/
         );

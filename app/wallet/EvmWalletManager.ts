@@ -126,9 +126,12 @@ class EvmWalletManager extends EventContainer implements WalletManager {
     });
   }
 
-  public async getBalance(): Promise<bigint> {
+  public async getBalance(chain: BlockchainType): Promise<bigint> {
     if (!this.address) throw new Error("Wallet is not connected");
-    const result = await fetchBalance({ address: this.address });
+    const result = await fetchBalance({
+      address: this.address,
+      chainId: Blockchains[chain].chainId,
+    });
     return result.value;
   }
 
@@ -157,13 +160,14 @@ class EvmWalletManager extends EventContainer implements WalletManager {
       throw new Error("Invalid network");
     }
 
-    if (chain.id !== Blockchains[_chain].chainId) {
-      await switchNetwork({ chainId: Blockchains[_chain].chainId });
+    const toChainId = Blockchains[_chain].chainId;
+    if (chain.id !== toChainId) {
+      await switchNetwork({ chainId: toChainId });
     }
 
     return new JsonRpcSigner(
       new BrowserProvider(walletClient.transport, {
-        chainId: chain.id,
+        chainId: toChainId,
         name: chain.name,
         ensAddress: chain.contracts?.ensRegistry?.address,
       }),

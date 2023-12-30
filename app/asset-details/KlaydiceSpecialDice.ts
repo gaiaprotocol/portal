@@ -151,8 +151,6 @@ const KlaydiceSpecialDice: AssetInfo = {
         b,
       ) => (BigInt(a.address) < BigInt(b.address) ? -1 : 1));
 
-      console.log(results, results.map((result) => result.signature));
-
       await new GaiaBridgeContract(chain, wallet).receiveTokens(
         sender,
         fromChainId,

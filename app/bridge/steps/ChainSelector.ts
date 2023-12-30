@@ -73,7 +73,7 @@ export default class ChainSelector extends DomNode {
 
     this.insufficientGasBalanceDisplay.empty();
     if (this._chain) {
-      const eth = await this.wallet?.getBalance();
+      const eth = await this.wallet?.getBalance(this._chain);
       if (eth && eth < Blockchains[this._chain].minimumGasBalance) {
         this.insufficientGasBalanceDisplay.append(
           new WarningMessageBox({
