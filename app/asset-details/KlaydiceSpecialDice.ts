@@ -100,6 +100,9 @@ const KlaydiceSpecialDice: AssetInfo = {
   send: async (chain, wallet, toChain, receiver, amounts) => {
     const toChainId = Blockchains[toChain]?.chainId;
     if (toChainId) {
+      // check trackable
+      await TrinityManager.trackEvent(chain, 0);
+
       const sendingId = await new GaiaBridgeContract(chain, wallet).sendTokens(
         toChainId,
         receiver,
