@@ -1066,19 +1066,19 @@ button.component > .title {
 .history-view {
   padding: 16px;
 }
-@container (width < 1280px) {
-  .history-view {
-    width: 100%;
-    overflow-x: auto;
-  }
-}
 .history-view > .select-chains {
   border-radius: 16px;
   background-color: var(--surface-bg-color);
   padding-top: 16px;
   margin-bottom: 16px;
 }
-.history-view > .activity-list {
+@container (width < 1280px) {
+  .history-view > .activity-list-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+.history-view > .activity-list-container > .activity-list {
   margin: auto;
   width: 1158px;
 }
