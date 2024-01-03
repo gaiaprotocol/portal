@@ -5,7 +5,7 @@ export default interface Config {
   supabaseUrl: string;
   supabaseAnonKey: string;
 
-  aosServerUrl: string;
+  webServerUrl: string;
   backendUrl: string;
   backendKey: string;
 

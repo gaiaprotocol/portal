@@ -5,7 +5,7 @@ import {
   MaterialIcon,
   ObjectUtil,
   Router,
-} from "common-app-module";
+} from "@common-module/app";
 import BlockchainType from "../blockchain/BlockchainType.js";
 import BridgeSetup from "../bridge/BridgeSetup.js";
 import ChainSelector from "./ChainSelector.js";

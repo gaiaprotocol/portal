@@ -1,4 +1,4 @@
-import { DomNode } from "common-app-module";
+import { DomNode } from "@common-module/app";
 import AssetListItem from "./AssetListItem.js";
 import Assets from "./Assets.js";
 

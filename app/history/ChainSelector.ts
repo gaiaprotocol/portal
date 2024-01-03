@@ -1,4 +1,4 @@
-import { DomNode, el, Select } from "common-app-module";
+import { DomNode, el, Select } from "@common-module/app";
 import BlockchainType from "../blockchain/BlockchainType.js";
 import WalletSelector from "../wallet/WalletSelector.js";
 

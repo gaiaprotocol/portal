@@ -1,4 +1,4 @@
-import { Router } from "common-app-module";
+import { Router } from "@common-module/app";
 import AssetList from "../../asset/AssetList.js";
 import StepDisplay from "./StepDisplay.js";
 

@@ -1,4 +1,4 @@
-import { DomNode } from "common-app-module";
+import { DomNode } from "@common-module/app";
 import AssetInfo, { AssetMetadata } from "../asset/AssetInfo.js";
 import TokenListItem from "./TokenListItem.js";
 

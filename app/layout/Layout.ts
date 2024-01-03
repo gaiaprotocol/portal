@@ -7,7 +7,7 @@ import {
   NavBar,
   View,
   ViewParams,
-} from "common-app-module";
+} from "@common-module/app";
 import TitleBar from "./TitleBar.js";
 import Assets from "../asset/Assets.js";
 

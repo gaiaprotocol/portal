@@ -1,4 +1,4 @@
-import { DomNode, el, View, ViewParams } from "common-app-module";
+import { DomNode, el, View, ViewParams } from "@common-module/app";
 import ActivityList from "../activity/ActivityList.js";
 import FilteredActivityList from "../activity/FilteredActivityList.js";
 import GlobalActivityList from "../activity/GlobalActivityList.js";

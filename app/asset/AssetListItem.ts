@@ -1,4 +1,4 @@
-import { Checkbox, DomNode, el } from "common-app-module";
+import { Checkbox, DomNode, el } from "@common-module/app";
 import AssetInfo from "./AssetInfo.js";
 
 export default class AssetListItem extends DomNode {

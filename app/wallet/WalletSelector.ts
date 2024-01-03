@@ -5,7 +5,7 @@ import {
   EventContainer,
   MaterialIcon,
   Snackbar,
-} from "common-app-module";
+} from "@common-module/app";
 import BlockchainType from "../blockchain/BlockchainType.js";
 import Blockchains from "../blockchain/Blockchains.js";
 import EvmWalletManager from "./EvmWalletManager.js";

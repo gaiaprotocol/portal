@@ -1,4 +1,4 @@
-import { EventContainer, Store } from "common-app-module";
+import { EventContainer, Store } from "@common-module/app";
 import { ethers, Interface, InterfaceAbi, JsonRpcSigner } from "ethers";
 import QrCode from "qrcode";
 import BlockchainType from "../../blockchain/BlockchainType.js";

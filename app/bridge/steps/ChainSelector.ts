@@ -5,7 +5,7 @@ import {
   Select,
   StringUtil,
   WarningMessageBox,
-} from "common-app-module";
+} from "@common-module/app";
 import { ethers } from "ethers";
 import AssetDisplay from "../../asset/AssetDisplay.js";
 import Assets from "../../asset/Assets.js";

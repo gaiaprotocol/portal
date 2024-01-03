@@ -1,4 +1,4 @@
-import { DomNode, el, Input } from "common-app-module";
+import { DomNode, el, Input } from "@common-module/app";
 import { ethers } from "ethers";
 import AssetDisplay from "../asset/AssetDisplay.js";
 import AssetInfo, { AssetMetadata } from "../asset/AssetInfo.js";

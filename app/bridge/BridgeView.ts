@@ -1,4 +1,4 @@
-import { el, View, ViewParams } from "common-app-module";
+import { el, View, ViewParams } from "@common-module/app";
 import BlockchainType from "../blockchain/BlockchainType.js";
 import Layout from "../layout/Layout.js";
 import ExecuteBridge from "./steps/ExecuteBridge.js";

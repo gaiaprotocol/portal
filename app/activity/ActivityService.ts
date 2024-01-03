@@ -1,4 +1,4 @@
-import { Constants, SupabaseService } from "common-app-module";
+import { Constants, SupabaseService } from "@common-module/app";
 import Activity from "../database-interface/Activity.js";
 
 class ActivityService extends SupabaseService<Activity> {

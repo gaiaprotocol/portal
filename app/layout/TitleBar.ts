@@ -1,4 +1,4 @@
-import { DomNode, el, msg } from "common-app-module";
+import { DomNode, el, msg } from "@common-module/app";
 
 export default class TitleBar extends DomNode {
   private titleDisplay: DomNode;

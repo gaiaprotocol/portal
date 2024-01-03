@@ -3,7 +3,7 @@ import {
   MaterialIconSystem,
   msg,
   Router,
-} from "common-app-module";
+} from "@common-module/app";
 import messages_en from "../locales/en.yml";
 import messages_ko from "../locales/ko.yml";
 import { initBlockchains } from "./blockchain/Blockchains.js";
@@ -35,7 +35,7 @@ export default async function initialize(config: Config) {
 
   EvmWalletManager.init(config.walletConnectProjectId);
   TrinityManager.init(
-    config.aosServerUrl,
+    config.webServerUrl,
     config.backendUrl,
     config.backendKey,
   );

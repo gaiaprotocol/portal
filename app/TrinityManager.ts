@@ -1,5 +1,5 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
-import { Supabase } from "common-app-module";
+import { Supabase } from "@common-module/app";
 import BlockchainType from "./blockchain/BlockchainType.js";
 
 class TrinityManager {

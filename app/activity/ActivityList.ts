@@ -1,4 +1,4 @@
-import { DomNode, el, ListLoadingBar, Store } from "common-app-module";
+import { DomNode, el, ListLoadingBar, Store } from "@common-module/app";
 import BridgeSetup from "../bridge/BridgeSetup.js";
 import Activity from "../database-interface/Activity.js";
 import ActivityListItem from "./ActivityListItem.js";

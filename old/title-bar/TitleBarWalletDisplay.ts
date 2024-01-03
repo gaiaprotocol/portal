@@ -1,4 +1,4 @@
-import { DomNode, el, Jazzicon, StringUtil } from "common-app-module";
+import { DomNode, el, Jazzicon, StringUtil } from "@common-module/app";
 import SidePanel from "../SidePanel.js";
 
 export default class TitleBarWalletDisplay extends DomNode {

@@ -17,7 +17,7 @@ import {
   w3mProvider,
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/html";
-import { ErrorAlert, EventContainer, msg } from "common-app-module";
+import { ErrorAlert, EventContainer, msg } from "@common-module/app";
 import { BrowserProvider, JsonRpcSigner } from "ethers";
 import { defineChain } from "viem";
 import { bsc, polygon } from "viem/chains";

@@ -5,7 +5,7 @@ import {
   el,
   Icon,
   Popup,
-} from "common-app-module";
+} from "@common-module/app";
 
 export default class KlipQrPopup extends Popup {
   constructor(title: string, qr: string) {

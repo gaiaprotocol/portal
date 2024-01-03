@@ -7,8 +7,8 @@ import {
   LoadingSpinner,
   MaterialIcon,
   StringUtil,
-} from "common-app-module";
-import { DomChild } from "common-app-module/lib/dom/DomNode.js";
+} from "@common-module/app";
+import { DomChild } from "@common-module/app/lib/dom/DomNode.js";
 import { ethers } from "ethers";
 import Injeolmi from "../asset-details/Injeolmi.js";
 import Mix from "../asset-details/Mix.js";

@@ -1,4 +1,4 @@
-import { Button, DomNode, el, msg } from "common-app-module";
+import { Button, DomNode, el, msg } from "@common-module/app";
 import WalletManager from "../wallet/WalletManager.js";
 import TitleBarWalletDisplay from "./title-bar/TitleBarWalletDisplay.js";
 

@@ -6,7 +6,7 @@ import {
   ErrorAlert,
   LoadingSpinner,
   ObjectUtil,
-} from "common-app-module";
+} from "@common-module/app";
 import FilteredActivityList from "../../activity/FilteredActivityList.js";
 import Assets from "../../asset/Assets.js";
 import AssetType from "../../asset/AssetType.js";

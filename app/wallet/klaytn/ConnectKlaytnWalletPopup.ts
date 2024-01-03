@@ -6,7 +6,7 @@ import {
   Icon,
   Popup,
   ResponsiveImage,
-} from "common-app-module";
+} from "@common-module/app";
 import KaikasManager from "./KaikasManager.js";
 import KlipManager from "./KlipManager.js";
 

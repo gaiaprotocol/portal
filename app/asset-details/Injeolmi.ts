@@ -1,4 +1,4 @@
-import { Supabase } from "common-app-module";
+import { Supabase } from "@common-module/app";
 import TrinityManager from "../TrinityManager.js";
 import AssetInfo from "../asset/AssetInfo.js";
 import AssetType from "../asset/AssetType.js";

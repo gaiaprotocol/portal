@@ -1,4 +1,4 @@
-import { DomNode, el, Jazzicon, StringUtil } from "common-app-module";
+import { DomNode, el, Jazzicon, StringUtil } from "@common-module/app";
 
 export default class WalletDisplay extends DomNode {
   constructor(walletAddress: string, click: (evnet: MouseEvent) => void) {

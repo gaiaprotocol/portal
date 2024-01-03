@@ -1,4 +1,4 @@
-import { DomNode, el, StringUtil } from "common-app-module";
+import { DomNode, el, StringUtil } from "@common-module/app";
 import { ethers } from "ethers";
 import AssetInfo from "./AssetInfo.js";
 import AssetType from "./AssetType.js";

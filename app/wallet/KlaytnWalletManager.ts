@@ -1,4 +1,4 @@
-import { EventContainer } from "common-app-module";
+import { EventContainer } from "@common-module/app";
 import { Interface, InterfaceAbi, JsonRpcSigner } from "ethers";
 import BlockchainType from "../blockchain/BlockchainType.js";
 import WalletManager from "./WalletManager.js";
