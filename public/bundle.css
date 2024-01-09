@@ -117,7 +117,7 @@ meter {
   --content-bg-color: #141414;
   --text-color: #fff;
   --line-color: #252527;
-  --accent-color: #C1A87D;
+  --primary-color: #C1A87D;
   --error-color: #FF0000;
   --warning-color: #FFA500;
   --warning-bg-color: rgba(255, 165, 0, 0.12);
@@ -176,7 +176,7 @@ button.component {
   align-items: center;
   justify-content: center;
   padding: 8px 16px;
-  color: var(--accent-color);
+  color: var(--primary-color);
   line-height: 1em;
   gap: 8px;
 }
@@ -185,7 +185,7 @@ button.component.disabled {
   filter: grayscale(1);
 }
 button.component.contained {
-  border: 1px solid var(--accent-color);
+  border: 1px solid var(--primary-color);
   border-radius: 6px;
   background-color: var(--button-bg-color);
 }
@@ -252,7 +252,7 @@ button.component > .title {
   font-size: 42px;
 }
 .nav-bar.component > a.menu.active {
-  color: var(--accent-color);
+  color: var(--primary-color);
 }
 .splash-screen.component {
   position: fixed;
@@ -331,7 +331,7 @@ button.component > .title {
 .dropdown-menu.component {
   position: fixed;
   z-index: 999998;
-  border: 1px solid var(--accent-color);
+  border: 1px solid var(--primary-color);
   border-radius: 6px;
   background-color: var(--content-bg-color);
   min-width: 120px;
@@ -352,7 +352,7 @@ button.component > .title {
   width: 100%;
 }
 .dropdown-menu.component > ul > li > button:hover {
-  background-color: var(--accent-color);
+  background-color: var(--primary-color);
 }
 .snackbar.component {
   position: fixed;
@@ -391,7 +391,7 @@ button.component > .title {
 }
 .input.component > textarea:focus,
 .input.component > input:focus {
-  border: 1px solid var(--accent-color);
+  border: 1px solid var(--primary-color);
 }
 .select.component {
   position: relative;
@@ -416,7 +416,7 @@ button.component > .title {
   top: 100%;
   left: -1px;
   z-index: 1;
-  border: 1px solid var(--accent-color);
+  border: 1px solid var(--primary-color);
   border-radius: 6px;
   background-color: var(--content-bg-color);
   min-width: 120px;
@@ -426,10 +426,10 @@ button.component > .title {
   text-transform: capitalize;
 }
 .select.component > .option-container > .option:hover {
-  background-color: var(--accent-color);
+  background-color: var(--primary-color);
 }
 .select.component.open {
-  border: 1px solid var(--accent-color);
+  border: 1px solid var(--primary-color);
 }
 .select.component.open > .option-container {
   display: block;
@@ -445,7 +445,7 @@ button.component > .title {
   left: 0;
   height: 25px;
   width: 25px;
-  border: 1px solid var(--accent-color);
+  border: 1px solid var(--primary-color);
   border-radius: 50%;
 }
 .checkbox.component > .checkmark:after {
@@ -456,7 +456,7 @@ button.component > .title {
   top: 5px;
   width: 5px;
   height: 10px;
-  border: solid var(--accent-color);
+  border: solid var(--primary-color);
   border-width: 0 3px 3px 0;
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
@@ -573,7 +573,8 @@ button.component > .title {
   --content-bg-color: #131313;
   --text-color: #fff;
   --line-color: #242424;
-  --accent-color: #9B4CFF;
+  --primary-color: #9B4CFF;
+  --secondary-color: #00b5e2;
   --popup-bg-color: rgba(0, 0, 0, 0.5);
   --button-bg-color: rgba(155, 76, 255, 0.12);
   --hover-color: rgba(155, 76, 255, 0.12);
@@ -646,7 +647,7 @@ button.component > .title {
   gap: 8px;
 }
 .asset-display > h4 {
-  color: var(--accent-color);
+  color: var(--primary-color);
   font-weight: bold;
 }
 .asset-display > .amount {
@@ -689,7 +690,7 @@ button.component > .title {
   }
 }
 .asset-list-item.selected {
-  outline: 1px solid var(--accent-color);
+  outline: 1px solid var(--primary-color);
 }
 .asset-list-item > main {
   position: absolute;
@@ -766,7 +767,7 @@ button.component > .title {
 }
 .token-list-item.nft.selected,
 .token-list-item.multi-token.selected {
-  outline: 1px solid var(--accent-color);
+  outline: 1px solid var(--primary-color);
 }
 .token-list-item > .info {
   position: relative;
@@ -823,7 +824,7 @@ button.component > .title {
   cursor: pointer;
 }
 .wallet-display:hover {
-  background-color: var(--accent-color);
+  background-color: var(--primary-color);
 }
 .wallet-display > .avatar {
   width: 26px;
@@ -901,7 +902,7 @@ button.component > .title {
   width: 32px;
   height: 32px;
   border-radius: 16px;
-  background-color: var(--accent-color);
+  background-color: var(--primary-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -969,7 +970,7 @@ button.component > .title {
   gap: 12px;
 }
 .execute-bridge > main > .activity-container > h3 {
-  color: var(--accent-color);
+  color: var(--primary-color);
 }
 .execute-bridge > main > .activity-container > main {
   overflow-x: auto;
