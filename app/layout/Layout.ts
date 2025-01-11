@@ -12,10 +12,10 @@ import TitleBar from "./TitleBar.js";
 import Assets from "../asset/Assets.js";
 
 export default class Layout extends View {
-  private static current: Layout;
+  private static _current: Layout;
 
   public static append(node: DomNode): void {
-    Layout.current.content.append(node);
+    Layout._current.content.append(node);
   }
 
   private navBar: NavBar;
@@ -24,7 +24,7 @@ export default class Layout extends View {
 
   constructor(params: ViewParams, uri: string) {
     super();
-    Layout.current = this;
+    Layout._current = this;
 
     BodyNode.append(
       this.container = el(
